@@ -1,0 +1,34 @@
+in engine.h
+
+
+_get_joystick
+set as 0
+G A $05AD _get_joystick (section code_user)
+_get_joystick = $6751 ; G objects
+
+set as 86CB
+G A $05AD _get_joystick (section code_user)
+_get_joystick = $6751 ; G objects
+
+-------------------------
+
+Ship_Collision
+
+set as 0
+G A $04F7 _Ship_Collision (section code_user)
+_Ship_Collision = $669B ; G objects
+
+set as $8615
+G A $04F7 _Ship_Collision (section code_user)
+_Ship_Collision = $669B ; G objects
+
+
+-------------------------
+
+
+
+
+
+
+
+
