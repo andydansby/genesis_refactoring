@@ -1,0 +1,8 @@
+RAM 0
+-----		
+Start   End	Size	Name				Compressed?	Comments
+
+C000				WYZ player, music
+
+ram0.bin: ProPlay37a.asm genesis_sfx.asm
+	pasmo ProPlay37a.asm ram0.bin wyzplayer.sym
