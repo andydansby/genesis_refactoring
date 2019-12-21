@@ -1,0 +1,5 @@
+RAM 3
+- Static screen$
+-----
+Start   End		Size	Name			Compressed?	Comments
+$C000	C23B	572		background.bin	YES
