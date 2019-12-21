@@ -35,7 +35,7 @@ copy "LoadSprBlock.asm" "..\"
 copy "LoadLevel.asm" "..\"
 copy "create_shifted_tables.asm"  "..\"
 copy "im2.asm" "..\"
-
+copy "starfield.asm" "..\"
 
 cd ..
 
@@ -74,7 +74,7 @@ del "LoadSprBlock.asm"
 del "LoadLevel.asm"
 del "create_shifted_tables.asm"
 del "im2.asm"
-
+del "starfield.asm"
 
 
 move "compiled.map" "codemaps\"

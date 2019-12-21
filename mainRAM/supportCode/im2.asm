@@ -51,6 +51,7 @@ BASICISR:
 	push af
 	ex af, af'
 
+	;;ATTENTION WTF is this - call 0
 israddr:
 	call 0 	; to be substituted with the actual ISR handler address
 

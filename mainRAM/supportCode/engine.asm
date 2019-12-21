@@ -10,7 +10,7 @@ include "drawsprite.asm";;DONE
 include "input.asm";;DONE
 include "create_shifted_tables.asm";;DONE
 include "im2.asm"
-;include "starfield.asm"
+include "starfield.asm"
 
 
 ;;These 3 variables are already assigned in create_shifted_tables.asm

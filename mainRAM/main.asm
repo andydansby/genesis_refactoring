@@ -1,6 +1,8 @@
 ;;main below 49152
 SECTION code_user
 
+
+;;ATTENTION these are direct memory reads and have to be fixed
 ;#BEGIN_ASM	;; global variables
 ;; global variables
 defc SPRITE_START = $9000
@@ -768,7 +770,6 @@ ret
 
 ;#BEGIN_ASM
 ;#END_ASM
-
 
 ;#BEGIN_ASM
 ;#END_ASM
