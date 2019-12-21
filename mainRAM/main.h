@@ -3,16 +3,20 @@
 
 extern void __FASTCALL__ clean_screen_asm(void);
 
+extern void __FASTCALL__ setrambank(void);
+extern void __FASTCALL__ switchscreen(void);
+
+
 extern void __FASTCALL__ depack(void);
 
 extern void __FASTCALL__ loadLevelRamBank(void);
 
 extern void __FASTCALL__ loadPrepTiles(void);
 
+extern int __FASTCALL__ read_joystick();
 
 
-
-int __FASTCALL__ read_joystick(int joytype)
+/*int __FASTCALL__ read_joystick(int joytype)
 {
 #asm
 	ld a, l
@@ -21,7 +25,7 @@ int __FASTCALL__ read_joystick(int joytype)
 	ld h,0
 	ld l,a
 #endasm
-}
+}*/
 
 // WYZ player functions
 void wyz_load_music (unsigned char mzk_number)
@@ -77,7 +81,7 @@ void wyz_effect(unsigned char effect)
 		push af			; save current state
 		ld b, 0
 		di
-		call setrambank		; go to ram bank 0 to play FX
+		call _setrambank		; go to ram bank 0 to play FX
 		ei
 
 		ld hl, 4
@@ -88,7 +92,7 @@ void wyz_effect(unsigned char effect)
 		di
 		pop af			; recover RAM bank state
 		ld b, a
-		call setrambank		; go back to normal state
+		call _setrambank		; go back to normal state
 		ei
 	#endasm
 }
@@ -100,7 +104,7 @@ void gameISR(void)
 	#asm
 		ld a,r
 		jp p, noscreenswitch	; the highest bit of R is 0, no screen switch yet
-		call switchscreen	; switch screen
+		call _switchscreen	; switch screen yabba
 		ld a, r
 		and $7f
 		ld r,a	; clear the highest bit of the R register. It will be used to flag for a screen switch
@@ -109,11 +113,11 @@ void gameISR(void)
 		and $07			; keep low bits
 		push af			; save current state
 		ld b, 0
-		call setrambank		; go to ram bank 0 for the music ISR
+		call _setrambank		; go to ram bank 0 for the music ISR
 		call WYZ_PLAY
 		pop af
 		ld b, a
-		call setrambank		; go back to normal state
+		call _setrambank		; go back to normal state
 		ld a, (_frameskip_counter)
 		inc a
 		ld (_frameskip_counter), a
@@ -187,7 +191,7 @@ void load_level(unsigned char level)
 			ld bc, (_dummy_i)
 			ldir
 		ld b, 0
-		call setrambank		; vuelta a la normalidad
+		call _setrambank		; vuelta a la normalidad
 		ei
 	__endasm
 }

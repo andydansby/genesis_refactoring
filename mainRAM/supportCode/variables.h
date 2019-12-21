@@ -44,7 +44,10 @@ unsigned char ship0spr;
 // Temporary definition of structs. If they work as-is, we will move them to an include file
 unsigned char CurLevel_XLength;		// Length in X of the current level
 unsigned char CurLevel_NTiles;		// Number of tiles for the current level
+
 unsigned int keys[]={KEY_Q,KEY_A,KEY_O,KEY_P,KEY_SPACE};
+
+
 unsigned char joy;
 unsigned char joystick_type;            // Which joystick are we using
 unsigned char inertia_cheat;		// are we cheating?

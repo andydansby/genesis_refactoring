@@ -9,20 +9,20 @@
 
 
 #asm
-DEFC get_joystick = 0
-DEFC Ship_Collision = 0
-DEFC CreaTablaTiles = 0
-DEFC setrambank = 0
-DEFC DrawMap = 0
-DEFC drawsprite = 0
-DEFC drawsprite_ship = 0
-DEFC switchscreen = 0
-DEFC InitSprCacheList = 0
-DEFC SetIM2 = 0
-DEFC Display_starfield = 0
-DEFC GenStarfield = 0
-DEFC MoveStarfield = 0
-DEFC GET_KEY_STATE = 0
+;//DEFC get_joystick = 0
+;//DEFC Ship_Collision = 0
+;//DEFC CreaTablaTiles = 0
+;//DEFC setrambank = 0
+;//DEFC DrawMap = 0
+;//DEFC drawsprite = 0
+;//DEFC drawsprite_ship = 0
+;//DEFC switchscreen = 0
+;//DEFC InitSprCacheList = 0
+;//DEFC SetIM2 = 0
+;//DEFC Display_starfield = 0
+;//DEFC GenStarfield = 0
+;//DEFC MoveStarfield = 0
+;//DEFC GET_KEY_STATE = 0
 #endasm
 
 /*#asm
