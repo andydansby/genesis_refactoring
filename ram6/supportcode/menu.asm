@@ -1,4 +1,4 @@
-;org 49152
+;;org 49152
 
 
 ;;NSTARS	EQU 32		; number of stars per plane
@@ -7,12 +7,18 @@ defc NSTARS	= 32
 ;;ATTENTION
 ;;include "maindefs.asm"//placed in ram6.asm
 
-; INPUT:
-;	DE: last score. If higher than any of the current high scores
-;	    we will ask the player to enter his-her name
 
-mainmenu:
-	call check_hiscore
+
+
+PUBLIC _mainmenu
+_mainmenu:
+;#BEGIN_ASM
+	;; INPUT:
+	;; DE: last score. If higher than any of the
+	;; current high scores
+	;; we will ask the player to enter his-her name
+
+	call _check_hiscore
 	;  generate starfield
 	call generate_starfield
 
@@ -144,16 +150,18 @@ menu_continue:
 
 	ld a, (screen_to_show)
 	and a
-	jp nz, menu_loop		; only update the animation if we are on the title screen
+	jp nz, menu_loop		
+	;; only update the animation if we are on the title screen
 
-	ld a, (anim_frame)	; This little piece of code will change the animation position every 8 frames
+	ld a, (anim_frame)	
+	;; This little piece of code will change the animation position every 8 frames
 	inc a
 	ld (anim_frame), a
 	and $3F
 	call DrawStarAnim
 
 	jp menu_loop
-	ret
+ret
 
 menu_display_inertia_status:
 	ld a, (inertia_cheat)
@@ -163,7 +171,7 @@ menu_display_inertia_status:
 	ld c, 160
 	ld ix, string_on
 	call PrintString
-	ret
+ret
 
 menu_display_sound_status:
 	ld a, (sound_selection)
@@ -179,35 +187,37 @@ menu_print_music_and_sound:
 	ld c, 184
 	ld ix, string_music_and_fx
 	call PrintString	
-	ret
+ret
 	
 menu_print_sfxonly:
 	ld b, 80
 	ld c, 184
 	ld ix, string_fx
 	call PrintString	
-	ret
+ret
 	
 menu_print_musiconly:
 	ld b, 80
 	ld c, 184
 	ld ix, string_music
 	call PrintString	
-	ret
+ret
 	
 menu_print_silence:
 	ld b, 80
 	ld c, 184
 	ld ix, string_silence
 	call PrintString
-	ret
+ret
 	
 start_inertia_off:
 	ld b, 160
 	ld c, 160
 	ld ix, string_off
 	call PrintString
-	ret
+ret
+;#END_ASM
+
 
 screen_to_show:
 	defb 0
@@ -232,8 +242,13 @@ hiscore_values:
 hiscore_string:
 	defs 5
 
-; INPUT:  DE: new potential hi score
-check_hiscore:
+
+PUBLIC _check_hiscore
+_check_hiscore:
+;#BEGIN_ASM
+
+	;; INPUT:  DE: new potential hi score
+	;;check_hiscore:
 	ld hl, hiscore_values
 	ld a, 6
 	
@@ -253,7 +268,7 @@ loop_hiscores:
 	jr nz, loop_hiscores
 	
 nohiscore_found:
-	ret			; no new high score, just exit
+ret			; no new high score, just exit
 	
 hiscore_found:
 	; in this case, we found the high score. We have to push the high scores down
@@ -449,35 +464,40 @@ showhiscores_loop:
 	ld hl, (hiscore_values)
 	ld ix, hiscore_string
 	ld c, 64
-	call printhi
+	call _printhi
 	ld hl, (hiscore_values+2)
 	ld ix, hiscore_string
 	ld c, 80
-	call printhi
+	call _printhi
 	ld hl, (hiscore_values+4)
 	ld ix, hiscore_string
 	ld c, 96
-	call printhi
+	call _printhi
 	ld hl, (hiscore_values+6)
 	ld ix, hiscore_string
 	ld c, 112
-	call printhi
+	call _printhi
 	ld hl, (hiscore_values+8)
 	ld ix, hiscore_string
 	ld c, 128
-	call printhi
+	call _printhi
 	ld hl, (hiscore_values+10)
 	ld ix, hiscore_string
 	ld c, 144
-	call printhi
+	call _printhi
 ret
+;#END_ASM
 
 
-; INPUT:
-;	HL: hi score value
-;	IX: hiscore_string
-;	C: value in Y
-printhi:
+
+PUBLIC _printhi
+_printhi:
+;#BEGIN_ASM
+	;; INPUT:
+	;;	HL: hi score value
+	;;	IX: hiscore_string
+	;;	C: value in Y
+	;;printhi:
 	push bc
 	call decompose_5digit
 	pop bc
@@ -504,17 +524,17 @@ printhi:
 	ld b, 184
 	ld a, (ix+4)
 	call PrintNumber
-	ret
+ret
+;#END_ASM
 
 
-
-
-; Divide HL by BC
-;
-; HL: number
-; BC: divider
-; DE: result (HL / BC)
-; HL: remainder
+;#BEGIN_ASM
+	; Divide HL by BC
+	;
+	; HL: number
+	; BC: divider
+	; DE: result (HL / BC)
+	; HL: remainder
 
 divide_large:
     xor a
@@ -529,7 +549,9 @@ divide_loop:
 divide_completed:
     add hl, bc
 ret
+;#END_ASM
 
+;#BEGIN_ASM
 ; INPUT: HL: number
 ; 	 IX: string with the number to print
 
@@ -548,6 +570,7 @@ decompose_5digit:
 	ld (ix+3), e
 	ld (ix+4), l		; L has the last remainder
 ret	
+;#END_ASM
 
 anim_frame:
 	defb $0
@@ -569,6 +592,8 @@ selected_joystick:
 inertia_cheat:
 	defb 0
 
+
+;#BEGIN_ASM
 ; Read joysticks, set carry if fire is pressed
 check_firepress:
 read_sinclair1_joystick:
@@ -584,7 +609,9 @@ sinclair1_fire:
 	ld (selected_joystick),a
 	scf 
 ret
-		
+;#END_ASM
+
+;#BEGIN_ASM	
 read_sinclair2_joystick:
 	ld bc, $f7fe
 
@@ -597,7 +624,9 @@ read_sinclair2_joystick:
 	ld (selected_joystick),a
 	scf 
 ret
-		
+;#END_ASM
+
+;#BEGIN_ASM		
 read_kempston:
 	ld c, 31
 	in c, (c)		
@@ -612,7 +641,9 @@ read_kempston:
 	ld (selected_joystick),a
 	scf 
 ret
-		
+;#END_ASM
+
+;#BEGIN_ASM		
 read_keyb:
 	ld bc, $7ffe	; ready to read!
 	in a,(c)	; get the row in e
@@ -627,12 +658,15 @@ ret
 no_fire:
 	xor a	; clear carry
 ret		
+;#END_ASM
+
 
 ; Read certain keys to enable cheats, set carry if any cheat was enabled
 
 key_i_pressed:
 	defb 0
 
+;#BEGIN_ASM
 check_cheats:
 	ld bc, $dffe	; read row containing I
 	in a, (c)
@@ -661,12 +695,15 @@ no_cheat_pressed:
 	xor a	; clear carry		
 	ld (key_i_pressed), a
 ret
+;#END_ASM
+
 
 ; Read keyboard to find if we want to change sound
 
 key_s_pressed:
 	defb 0
-	
+
+;#BEGIN_ASM
 check_sound:
 	ld bc, $fdfe	; read row containing S
 	in a, (c)
@@ -695,7 +732,11 @@ no_sound_pressed:
 	xor a	; clear carry		
 	ld (key_s_pressed), a
 ret
+;#END_ASM
 
+
+
+;#BEGIN_ASM
 ; the starfield will be randomly generated. Y will be 32-160, X will be 0-255
 
 ; Supporting function
@@ -717,7 +758,9 @@ genstars:
 	inc de
 	djnz genstars
 ret
+;#END_ASM
 
+;#BEGIN_ASM
 ; Another supporting function
 genpixels:
 	ld a, (hl)		; we have the byte in A
@@ -734,8 +777,9 @@ genpix_shiftloop:
 	inc de
 	djnz genpixels
 ret
+;#END_ASM
 
-
+;#BEGIN_ASM
 generate_starfield:	
 	ld hl, starsx_slow
 	ld de, starsy_slow
@@ -769,10 +813,10 @@ generate_starfield:
 	ld b, NSTARS
 	call genpixels
 ret
+;#END_ASM
 
 ; ERASE STARS
-
-
+;#BEGIN_ASM
 erase_starfield:
 	ld ix, starsx_slow
 	ld iy, starsy_slow
@@ -787,8 +831,9 @@ erase_starfield:
 	ld d, NSTARS
 	call EraseLoop
 ret
+;#END_ASM
 
-
+;#BEGIN_ASM
 EraseLoop:
 	ld a, (iy)	; Y position
 	rlca
@@ -827,10 +872,11 @@ erase_donterase:
 	dec d
 	jp nz, EraseLoop		; continue with loop
 ret
+;#END_ASM
 
 
 ; UPDATE STAR POSITION
-
+;#BEGIN_ASM
 move_starfield:
 	ld ix, starsx_slow
 	ld hl, stars_pixels_slow
@@ -880,14 +926,16 @@ updatefast_loop:
 	djnz updatefast_loop
 
 ret
-
+;#END_ASM
 
 ; DISPLAY STARFIELD
 
 starfield_variable:
 	defb 0
 
+
 display_starfield:
+;#BEGIN_ASM
 	ld ix, starsx_slow
 	ld iy, starsy_slow
 	ld de, stars_pixels_slow
@@ -909,8 +957,11 @@ display_starfield:
 	ld (starfield_variable), a
 	call DisplayLoop
 ret
+;#END_ASM
+
 
 DisplayLoop:
+;#BEGIN_ASM
 	ld a, (iy)	; Y position
 	rlca
 	rlca		; multiply by 4
@@ -952,7 +1003,7 @@ disp_dontdraw:
 	ld (starfield_variable), a
 	jp nz, DisplayLoop		; continue with loop
 ret
-
+;#END_ASM
 
 	
 
@@ -1018,6 +1069,7 @@ anim_order:
 ; 	A: Animation position (0-7)
 
 DrawStarAnim:	;  draw the animation
+;#BEGIN_ASM
 	ld hl, anim_order
 	ld d,0
 	ld e,a
@@ -1070,11 +1122,14 @@ noadd:
 	call PrintTile
 	pop de
 ret
+;#END_ASM
+
 
 ; DE = puntero al tile
 ; B  = X (0-31)
 ; C  = Y (0-23)
 PrintTile:
+;#BEGIN_ASM
 	ld hl, TileScAddress	; address table
 	ld a, c
 	add a,c			; C = 2*Y, to address the table
@@ -1119,9 +1174,11 @@ PrintTile:
 	ld a, (de)
 	ld (hl), a	
 ret
+;#END_ASM
 
-
-TileScAddress:	; Screen address for each tile start
+TileScAddress:
+;#BEGIN_ASM
+	; Screen address for each tile start
 	defw 16384 ; Y = 0
 	defw 16416 ; Y = 1
 	defw 16448 ; Y = 2
@@ -1149,17 +1206,19 @@ TileScAddress:	; Screen address for each tile start
 	defw 20640 ; Y = 21
 	defw 20672 ; Y = 22
 	defw 20704 ; Y = 23
+;#END_ASM
 
 
 
+
+CalcScreenPos:
+;#BEGIN_ASM
 ; Input:
 ;	B: X position
 ;	C: Y position
 ; Output:
 ;        HL: screen address
 ;        B:  bit position
-
-CalcScreenPos:
 	ld a, c
 	and $07			; 7  <-the 3 lowest bits are the line within a char
 	ld h,a			; 4
@@ -1205,7 +1264,7 @@ shiftloop:
 postloop:
 	ld b, a
 ret
-
+;#END_ASM
 
 
 
@@ -1216,7 +1275,7 @@ ret
 
 ;hl = source
 ;de = dest
-
+;#BEGIN_ASM
 depack:
 	ld	ixl,128
 apbranch1:
@@ -1343,12 +1402,14 @@ ap_getgammaloop:
 	call 	ap_getbit
 	jr 	c,ap_getgammaloop
 	ret
+;#END_ASM
+
 
 rand_seed:
 	defw 12345
 
 ; Blatant copy from the z88dk RAND routine
-
+;#BEGIN_ASM
 rand:
    ld   hl,(rand_seed)
    ld   a,h
@@ -1365,15 +1426,15 @@ rand:
    add  hl,bc                   ;Add $7415 to HL
    ld   (rand_seed),hl
    res     7,h                  ;force to be +ve
-   ret
-
+ret
+;#END_ASM
 
 ; Input:
 ;	B: X position
 ;	C: Y position
 ; Output:
 ;        HL: screen address
-
+;#BEGIN_ASM
 CalcScreenPos_Char:
      ld a,c			; 4  <- the top 2 bits are the screen third
      rra			; 4
@@ -1396,14 +1457,16 @@ CalcScreenPos_Char:
      or l			;4
      ld l,a			;4 (total 54 t-states) L has the low byte of the address
                                 ; HL has the address in RAM of the char
-     ret
+ret
+;#END_ASM
+
 
 ; Print normal char on screen (1x1), from a base number 0..9
 ; INPUT:
 ;		B: position in X (pixels)
 ;		C: position in Y (pixels)
 ;		A: number to print
-
+;#BEGIN_ASM
 PrintNumber:
 	push af
 	call CalcScreenPos_Char	; Screen position in HL
@@ -1425,8 +1488,8 @@ printnum_loop:
 	ld (hl), a
 	inc h
 	djnz printnum_loop
-	ret
-
+ret
+;#END_ASM
 
 
 
@@ -1435,7 +1498,7 @@ printnum_loop:
 ;		B: position in X (pixels)
 ;		C: position in Y (pixels)
 ;		IX: pointer to string, terminated by 0
-
+;#BEGIN_ASM
 
 PrintString:
 	call CalcScreenPos_Char	; Screen position in HL
@@ -1472,7 +1535,7 @@ string_innerloop:
 	jp string_outerloop
 
 ret
-
+;#END_ASM
 
 string_on:
 	defb "n",91,0
@@ -1490,6 +1553,7 @@ string_music:
 string_fx:
 	defb 91,91,"fx",91,"only",91,91,91,0
 
+;#BEGIN_ASM
 ; Character font
 charfont:
 	defb	  0,127,  1,127, 65,127,  0,  0
@@ -1552,9 +1616,12 @@ KeyCodes:
    defb 'p','o','i','u','y'      ; P, O, I, U, Y
    defb 13,'l','k','j','h'       ; ENTER, L, K, J, H
    defb ' ',254,'m','n','b'      ; SPACE, SYM SHIFT, M, N, B
+;#END_ASM
+
 
 
 SCAN_KEYBOARD:
+;#BEGIN_ASM
 	LD BC, $FEFE	; This is the first row, we will later scan all of them
 	LD HL,KeyCodes  ; Let's go to the KeyCode table
 	LD A,8		; loop counter
@@ -1586,7 +1653,7 @@ waitforrelease:
 	JR NZ, waitforrelease ; some key in this row is still pressed                   
 	POP AF
 RET       
-
+;#END_ASM
 
 fire_pressed_wait:
 	defb 0
