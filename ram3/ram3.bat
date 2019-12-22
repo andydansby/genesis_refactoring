@@ -3,16 +3,22 @@ SET PATH=c:\z88dk199b;c:\z88dk199b\bin;c:\z88dk199b\lib\;c:\z88dk199b\lib\clibs;
 cls
 
 echo on
-rem ram3.bin: ram3.asm background.bin
-rem	pasmo ram3.asm ram3.bin ram3.sym
 
-rem background.bin: background.scr
-rem apack background.scr background.bin
+
+cd codemaps
+	del objects.o
+cd ..
+
 
 cd images
-apack c background.scr background.bin
-move "background.bin" "..\"
-
+	apack c alien.scr 			alien.bin
+	apack c background.scr		background.bin
+	apack c gameend.scr 		gameend.bin
+	apack c gameover.scr		gameover.bin
+	apack c ship_pieces.scr		ship_pieces.bin
+	apack c alienattr.att		alienattr.bin
+	apack c gameend.att			endattr.bin
+	move "*.bin" "..\"
 cd ..
 
 
@@ -26,7 +32,7 @@ zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zp
 
 
 rem cleanup
-rem echo off
+echo off
 move "compiled.map" "codemaps\"
 move "objects.o" "codemaps\"
 
@@ -37,7 +43,12 @@ del compiled.tmp
 del zcc_opt.def
 del zcc_proj.lst
 
+del alien.bin
 del background.bin
+del gameend.bin
+del gameover.bin
+del ship_pieces.bin
+del endattr.bin
 
 cd codemaps
 	echo on
