@@ -1,0 +1,119 @@
+
+alien.bin				OK	Game image - RAM 3
+alien.scr				OK	Game image - RAM 3
+alienattr.att			OK	Game image - RAM 3
+alienattr.bin			OK	Game image - RAM 3
+apack.exe					compression tool in all directories
+appack.exe					compression tool in all directories
+background.bin			OK	Game image - RAM 3
+background.scr			OK	Game image - RAM 3
+behav.asm					behavior code -  RAM 6
+behav.bin					behavior compiled - not needed
+behav.sym					behavior symbol file not needed
+behavior.c					behavior code - MAIN RAM
+behavior.h					behavior code - MAIN RAM
+behavior.o					behavior object file not needed
+buildtzx.exe				building utility
+compile.bat					compiing string
+constants.h					#included in behavior MAIN RAM
+create_shifted_tables.asm	#included in engine.asm MAIN RAM
+credits_bkg.bin			OK	Game image - RAM 6
+credits_bkg.scr			OK	Game image - RAM 6
+diskload.asm				+3 routine
+drawmap.asm					#included in engine.asm MAIN RAM
+drawsprite.asm				#included in engine.asm MAIN RAM
+endattr.bin					game image - RAM 3
+engine.asm					game engine - MAIN RAM
+engine.bin					game engine compied code not needed
+engine.h					game engine header
+engine.sym					game engine symbol file not needed
+gameend.att					game image attribute - RAM 3
+gameend.bin				OK	Game image - RAM 3
+gameend.scr				OK	Game image - RAM 3
+gameover.bin			OK	Game image - RAM 3
+gameover.scr			OK	Game image - RAM 3
+genesis.tzx					final output
+genesis_alice.mus.bin		Game song - RAM 0
+genesis_compote.mus.bin		Game song - RAM 0
+Genesis_equinox_v2.mus.bin	Game song - RAM 0
+genesis_fin.mus.bin			Game song - RAM 0
+genesis_gangway.mus.bin		Game song - RAM 0
+genesis_hoc.mus.bin			Game song - RAM 0
+genesis_homage.mus.bin		Game song - RAM 0
+genesis_jeff2.mus.bin		Game song - RAM 0
+genesis_line.mus.bin		Game song - RAM 0
+genesis_microint.mus.bin	Game song - RAM 0
+genesis_sfx.asm				sound effect enging - RAM 0
+genesis_title.bin		OK	Game image - RAM 6
+genesis_title.scr		OK	Game image - RAM 6
+genesis_town.mus.bin		Game song - RAM 0
+Genesis_warrior.mus.bin		Game song - RAM 0
+genesis_words.mus.bin		Game song - RAM 0
+iloveretroworks_a.mus.asm	+3 song
+im2.asm						#included in engine.asm MAIN RAM
+input.asm					#included in engine.asm MAIN RAM
+level1.map					game levels - RAM 4
+level1_enemies.asm			enemies logic - RAM 4
+level2.map					game levels - RAM 4
+level2_enemies.asm			enemies logic - RAM 4
+level3.map					game levels - RAM 4
+level3_enemies.asm			enemies logic - RAM 4
+level4.map					game levels - RAM 4
+level4_enemies.asm			enemies logic - RAM 4
+level5.map					game levels - RAM 4
+level5_enemies.asm			enemies logic - RAM 4
+level6.map					game levels - RAM 4
+level6_enemies.asm			enemies logic - RAM 4
+level7.map					game levels - RAM 4
+level7_enemies.asm			enemies logic - RAM 4
+levels.asm					level logic - RAM 4
+levels.sym					levels symbol file
+libiconv2.dll				used for make.exe
+libintl3.dll				used for make.exe
+loading.scr					Game image - loading
+maindefs - Copy.asm
+maindefs.asm				used for hard coded addresses - RAM 6
+make.exe					used for makefile GNU - not needed
+makefile					makefile - not needed
+makefile.gnu				makefile - not needed
+makefile.win				makefile - used for research
+makefile_disk				makefile - not needed
+memory_map.txt				HELP document
+menu.asm					menu code - RAM 6
+menu.bin					menu compiled code 	- RAM 6 - not needed
+menu.sym					menu symbol code 	- RAM 6 - not needed
+move.asm					movment code - RAM 6
+move.bin					movement compiled code - RAM 6 - not needed
+move.sym					movement symbol code - RAM 6 - not needed
+movement.c					movement c code - MAIN
+movement.h					movement c code - MAIN
+movement.o					movement object code - not needed
+parasol.mus.bin				Game song - RAM 0
+parasol_a.mus.asm			MUSIC instruments - RAM 0
+pasmo.exe				assembly compiler - replacing with z88dk
+ProPlay37a.asm				music engine - RAM 0
+ProPlay37a_intro.asm		+3 routine
+ram0.bin					RAM 0 output
+ram3.asm					RAM 3 code
+ram3.bin					RAM 3 output
+ram3.sym					RAM 3 symbol file
+ram4.bin					RAM 4 output
+ram6.bin					RAM 6 output
+rambanks.asm				#included in engine.asm MAIN RAM
+rwks_logo.scr				Game image - loading
+ship_pieces.bin			OK	Game image - RAM 3
+ship_pieces.scr			OK	Game image - RAM 3
+sprdefs.h					sprite definitions - MAIN RAM
+sprites.asm					sprites code - MAIN RAM
+sprites.bin					sprites output - not needed
+sprites.sym					sprites symbol file - not needed
+starfield.asm				#included in engine.asm MAIN RAM
+structs.h					game structures - MAIN RAM
+template.txt				used in buildtzx
+test.bin					output of MAIN RAM
+test.c						MAIN() - MAIN RAM
+test.map					symbol file MAIN() 
+title_hiscores.bin		OK	Game image - RAM 6
+title_hiscores.scr		OK	Game image - RAM 6
+wyzplayer.sym				ProPlay37a - symbol file - not needed
+zcc_opt.def					z88dk definitions file

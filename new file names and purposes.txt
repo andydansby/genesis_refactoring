@@ -1,0 +1,35 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RAM 3
+
+alien.scr				OK	Game image - RAM 3
+alienattr.att			OK	Game image - RAM 3
+background.scr			OK	Game image - RAM 3
+gameend.att					game engine - RAM 3
+gameend.scr				OK	Game image - RAM 3
+gameover.scr			OK	Game image - RAM 3
+ship_pieces.scr			OK	Game image - RAM 3
+ram3.asm					RAM 3 code
+
+
+G A $0000 _main (section code_compiler)
+G A $0000 _background (section BANK_03)
+G A $023C _gameover (section BANK_03)
+G A $0D69 _ship_pieces (section BANK_03)
+G A $1A91 _gameend (section BANK_03)
+G A $2213 _game_end_attr (section BANK_03)
+G A $229C _alien (section BANK_03)
+G A $2BA4 _alien_end_attr (section BANK_03)
