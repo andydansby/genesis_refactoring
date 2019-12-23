@@ -1,52 +1,9 @@
-;;bank 6 above 49152
-SECTION BANK_06
-org 0xc000;;believe this is assumed with target ZX
+#ifndef NEWENEMY_H
+#define NEWENEMY_H
 
-
-;;ATTENTION import from object code found in main.c in MAINRAM
-extern _fenemy_defeat
-extern _active_enemies
-extern _enemy_sprites
-extern _NewEnemy
-extern _map_xpos
-
-extern _map_displacement
-extern _behavior_types
-
-INCLUDE "maindefs.asm"
-INCLUDE "menu.asm"
-INCLUDE "move.asm"
-INCLUDE "behav.asm"
-
-defc MAX_ENEMIES = 8
-
-
-
-
-
-
-
-PUBLIC _genesis_title
-_genesis_title:
-	BINARY "genesis_title.bin"
-
-PUBLIC _title_hiscores
-_title_hiscores:
-	BINARY "title_hiscores.bin"
-
-PUBLIC _credits_bkg
-_credits_bkg:
-	BINARY "credits_bkg.bin"
-
-;;PUBLIC _blackout2
-;;_blackout2:
-;#BEGIN_ASM
-;#END_ASM
-
-;;ATTENTION THIS is supposed to be in MAIN RAM
-PUBLIC _NewEnemy
-_NewEnemy:
-;#BEGIN_ASM
+struct Entity * NewEnemy(struct Enemy *e, unsigned char first)
+{
+__asm
 
 	ld hl, 2
 	add hl, sp
@@ -65,7 +22,7 @@ _NewEnemy:
 	
 gotofirst:
 	add hl, de
-	djnz gotofirst
+	djnz, gotofirst
 
 	ld b, a
 	inc hl
@@ -164,28 +121,35 @@ enemynotempty:
 	jp nc, findemptyenemy
 
 	ld hl, 0		; return 0 if no empty enemy was found
-;#END_ASM
+__endasm
+}
 
 
 
+/*
+	for(i=first;i<MAX_ENEMIES;i++)
+	{
+		if(active_enemies[i].sprnum == 0)
+		{
+			active_enemies[i].sprnum=enemy_sprites[e->enemy_type];
+			active_enemies[i].type= e->enemy_type;
+			active_enemies[i].behavior = behavior_types[e->enemy_type];
+			active_enemies[i].x=((e->x - map_xpos) * 24) + e->x_desp - (map_displacement<<1);
+			active_enemies[i].y=e->y;
+			active_enemies[i].energy = e->energy;
+			active_enemies[i].movement=e->movement;
+			active_enemies[i].param1=e->param1;
+			active_enemies[i].param2=e->param2;
+			active_enemies[i].param3=0;
+			active_enemies[i].param4=0;
+			active_enemies[i].behav_param=0;
+			return &(active_enemies[i]);
+		}
+	}
+	return (struct Entity *)0;*/
+  
+  
+  
+#endif
 
 
-;;below are examples on how to include
-;; we have 4k for sprites, $9000 - $9FFF
-;;SPRITE_START EQU $9000
-;;defc SPRITE_START = $9000
-
-;;INCLUDE "drawsprite.asm";;rambanks.asm
-
-;PUBLIC _blackout2
-;/BEGIN_ASM
-;_blackout2:
-;   ld hl, 22528
-;   ld (hl), 0
-;   push hl
-;   pop de
-;   inc de
-;   ld bc, 767
-;   ldir
-;   ret
-;/END_ASM

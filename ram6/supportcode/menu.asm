@@ -8,8 +8,6 @@ defc NSTARS	= 32
 ;;include "maindefs.asm"//placed in ram6.asm
 
 
-
-
 PUBLIC _mainmenu
 _mainmenu:
 ;#BEGIN_ASM

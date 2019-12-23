@@ -58,11 +58,10 @@ del genesis_title.bin
 del title_hiscores.bin
 
 @rem -----------------
-del menu.asm
-del move.asm
+del "menu.asm"
+del "move.asm"
 del "behav.asm"
 del "maindefs.asm"
-
 
 
 cd codemaps

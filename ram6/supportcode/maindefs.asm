@@ -8,20 +8,24 @@
 ;; I believe these can be handled using the PUBIC
 ;;KEYWORD.  as I think that these reference non 
 ;;banked memory
-defc _active_enemies 	=	$7D9B
-defc _enemy_sprites 		=	$60D1
-defc _fenemy_defeat 		=	$7D9A
-defc _NewEnemy		=	$68E1
+;defc _active_enemies 	=	$7D9B
+;defc _enemy_sprites	=	$60D1
+;defc _fenemy_defeat		=	$7D9A
+;defc _NewEnemy			=	$68E1
 defc _NewEnemyShoot		=	$689E
 defc _NewEnemyShoot_FX 	=	$6896
 defc _ship_x			=	$7F02
 defc _ship_y			=	$7F03
-defc _power_up		=	$7F05
-defc _wyz_effect     	=     $622E
+defc _power_up			=	$7F05
+defc _wyz_effect     	=	$622E
 ;;ATTENTION
 ;;THESE are hard coded addresses
 ;; need to fix
 
+;PUBLIC _mainmenu
+;_mainmenu:
+;#BEGIN_ASM
+;#END_ASM
 
 
 

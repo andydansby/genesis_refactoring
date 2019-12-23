@@ -2,6 +2,13 @@
 
 ;;include	"maindefs.asm"
 
+
+
+;PUBLIC _mainmenu
+;_mainmenu:
+;#BEGIN_ASM
+;#END_ASM
+
 ; Simple go left movement
 ; param1: speed
 
@@ -1296,6 +1303,7 @@ move_follow_downright:
 	inc a
 	ld hl, 	_active_enemies-12
 	ld bc, 12
+	
 fdownright_loop:
 	add hl, bc
 	dec a

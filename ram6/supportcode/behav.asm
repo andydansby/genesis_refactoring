@@ -4,6 +4,9 @@
 
 ; Simple global variable to hold created entities, allowing modification
 
+
+
+
 _new_e:
 	defs 8		; struct Enemy new_e
 
