@@ -14,20 +14,19 @@ PUBLIC _ship_pieces
 _ship_pieces:
 	BINARY "ship_pieces.bin"
 	
-PUBLIC _gameend
-_gameend:
+PUBLIC _game_end
+_game_end:
 	BINARY "gameend.bin"
 
 PUBLIC _game_end_attr
 _game_end_attr:
 	BINARY "endattr.bin"
 
-PUBLIC _alien
-_alien:
+PUBLIC _alien_end
+_alien_end:
 	BINARY "alien.bin"
 
 PUBLIC _alien_end_attr
 _alien_end_attr:
 	BINARY "alienattr.bin"
-
 
