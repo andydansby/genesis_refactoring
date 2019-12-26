@@ -26,41 +26,49 @@ PUBLIC _GET_KEY_STATE
 	ret		; the key is pressed if A = 0, and not pressed if A != 0
 
 ; Here are all the key definitions
+;;ATTENTION
 defc KEY_CAPS 	= $fe01
 defc KEY_Z 		= $fe02 	
 defc KEY_X 		= $fe04
 defc KEY_C 		= $fe08
 defc KEY_V 		= $fe10
+
 defc KEY_A 		= $fd01
 defc KEY_S 		= $fd02
 defc KEY_D 		= $fd04
 defc KEY_F 		= $fd08
 defc KEY_G 		= $fd10
+
 defc KEY_Q 		= $fb01
 defc KEY_W 		= $fb02
 defc KEY_E 		= $fb04
 defc KEY_R 		= $fb08
 defc KEY_T 		= $fb10
+
 defc KEY_1 		= $f701
 defc KEY_2 		= $f702
 defc KEY_3 		= $f704
 defc KEY_4 		= $f708
 defc KEY_5 		= $f710
+
 defc KEY_0 		= $ef01
 defc KEY_9 		= $ef02
 defc KEY_8 		= $ef04
 defc KEY_7 		= $ef08
 defc KEY_6 		= $ef10
+
 defc KEY_P 		= $df01
 defc KEY_O 		= $df02
 defc KEY_I 		= $df04
 defc KEY_U 		= $df08
 defc KEY_Y 		= $df10
+
 defc KEY_ENTER 	= $bf01
 defc KEY_L 		= $bf02
 defc KEY_K 		= $bf04
 defc KEY_J 		= $bf08
 defc KEY_H 		= $bf10
+
 defc KEY_SPACE 	= $7f01
 defc KEY_SS 	= $7f02
 defc KEY_M 		= $7f04

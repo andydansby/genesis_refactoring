@@ -50,7 +50,7 @@ zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
 
 zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
-pause
+rem pause
 rem cleanup
 echo off
 

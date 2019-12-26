@@ -2,7 +2,7 @@
 
 
 PUBLIC _DrawMap
-	_DrawMap:
+_DrawMap:
 ;#BEGIN_ASM
 ;;DrawMap:
 

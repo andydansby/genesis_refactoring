@@ -1,7 +1,7 @@
 ;;create_shifted_tables.asm
 
 PUBLIC _CreaTablaTiles
-	_CreaTablaTiles:
+_CreaTablaTiles:
 ;#BEGIN_ASM
 ;;CreaTablaTiles:
 
