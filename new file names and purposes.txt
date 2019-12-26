@@ -14,11 +14,10 @@
 
 
 RAM 3
-
 alien.scr				OK	Game image - RAM 3
 alienattr.att			OK	Game image - RAM 3
 background.scr			OK	Game image - RAM 3
-gameend.att					game engine - RAM 3
+gameend.att					Game image - RAM 3
 gameend.scr				OK	Game image - RAM 3
 gameover.scr			OK	Game image - RAM 3
 ship_pieces.scr			OK	Game image - RAM 3
@@ -29,7 +28,47 @@ G A $0000 _main (section code_compiler)
 G A $0000 _background (section BANK_03)
 G A $023C _gameover (section BANK_03)
 G A $0D69 _ship_pieces (section BANK_03)
-G A $1A91 _gameend (section BANK_03)
+G A $1A91 _game_end (section BANK_03)
 G A $2213 _game_end_attr (section BANK_03)
-G A $229C _alien (section BANK_03)
+G A $229C _alien_end (section BANK_03)
 G A $2BA4 _alien_end_attr (section BANK_03)
+
+
+---------
+ram6.bin: menu.asm genesis_title.bin title_hiscores.bin credits_bkg.bin move.asm behav.asm maindefs.asm
+	pasmo menu.asm menu.bin menu.sym
+	pasmo move.asm move.bin move.sym
+	pasmo behav.asm behav.bin behav.sym
+	copy /b menu.bin+move.bin+behav.bin  ram6.bin
+
+---------
+RAM 6
+
+
+
+credits_bkg.scr			OK	Game image - RAM 6
+genesis_title.scr		OK	Game image - RAM 6
+title_hiscores.scr		OK	Game image - RAM 6
+
+====================
+analyze
+menu.asm					menu code - RAM 6
+====================
+
+
+
+behav.asm					behavior code -  RAM 6
+maindefs.asm				used for hard coded addresses - RAM 6
+menu.bin					menu compiled code 	- RAM 6 - not needed
+menu.sym					menu symbol code 	- RAM 6 - not needed
+move.asm					movment code - RAM 6
+move.bin					movement compiled code - RAM 6 - not needed
+move.sym					movement symbol code - RAM 6 - not needed
+ram6.bin					RAM 6 output
+
+
+
+
+
+
+

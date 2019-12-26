@@ -1,0 +1,318 @@
+About your issue, there are a lot of hardcoded addresses in some areas. That was my fault, when mixing C and ASM code with z88dk, I had to do some weird stuff (I'd probably do it better now). So, you'll have to check the .sym files and update constants in:
+
+- constants.h  (info from levels.sym, wyzplayer.sym, menu.sym and ram3.sym)
+
+ There are many addresses in there: 3 arrays at the beginning, and addresses for the main menu, compressed screens, etc.
+
+- behavior.c (info from behav.sym)
+
+All the behav_* constants you see at the beginning should match the same names in behav.sym
+
+- engine.h (info from engine.sym)
+
+There are also many constants at the beginning, pointing to addresses in the engine ASM code.
+
+- maindefs.asm (info from test.map)
+
+Probably this is where you're having trouble. There are several addresses from the C code, that are used in some places from the ASM code. If you used a different z88dk version, most probably some of these have changed.
+
+- movement.c (info from move.sym)
+
+Same as in behavior.c, you should check the addresses for the movement actions in the ASM code.
+
+I know it's a pain, sorry for that :). And good luck with the code!
+
+
+==========================================
+constants.h 
+(in main.c), 
+so main can see objects in other banks
+==========================================
+unsigned int level_address[]={0xC000,0xC65E,0xCD82,0xD31C,0xDADC,0xE3A3,0xEC43};	// Level addresses
+
+unsigned int enemy_address[]={0xC31D,0xCB29,0xCF7B,0xD7A3,0xDFEA,0xE8A2,0xF04B};        // Enemy addresses
+
+unsigned int finalenemy_address[]={0xF3CC,0xF3ED,0xF426,0xF447,0xF478,0xF499,0xF4BA};  // Addresses of final enemy definitions
+
+
+
+
+// WYZ player addresses
+// LOAD_SONG in the wyzplayer sym file
+#define CARGA_CANCION 	0xC000	=	BANK 0 (ProPlay37a.asm)
+
+// It is INICIO in the wyzplayer sym file
+#define WYZ_PLAY	0xC009		=	BANK 0 (ProPlay37a.asm)
+
+// PLAYER_OFF
+#define STOP_PLAYER	0xC116		=	BANK 0 (ProPlay37a.asm)
+-----------------------------------------
+#define LOAD_FX				0xE073	=	BANK 0 (genesis_sfx.asm)
+// INICIA_EFECTO
+#define PLAY_FX				0xE083	=	BANK 0 (genesis_sfx.asm)
+// REPRODUCE_EFECTO
+#define STOP_FX				0xE0D7	=	BANK 0 (genesis_sfx.asm)
+// FIN_EFECTO
+#define FX_CHANNEL			0xE072	=	BANK 0 (genesis_sfx.asm)
+// CANAL_EFECTOS
+#define ASSEMBLE_EFFECT		0xE0DD	=	BANK 0 (genesis_sfx.asm)
+// ASSEMBLE_EFFECT
+-------------------
+#define SOUND_SFX			0xE44C	=	BANK 0 (ProPlay37a.asm)
+
+// Menu addresses
+
+#define MAINMENU			0xC000	=	BANK 6 (menu.asm)	OK
+#define SELECTED_JOYSTICK	0xC393	=	BANK 6 (menu.asm)	OK
+#define INERTIA_CHEAT		0xC394	=	BANK 6 (menu.asm)	OK
+#define HIGH_SCORE			0xC187 ** ATTENTION unknown
+#define SOUND_SELECTION		0xCB77	=	BANK 6 (menu.asm)	OK
+
+// Screen addresses
+
+#define GAMEOVER_SCR		0xC2FB	=	BANK 3	OK
+#define SHIP_PIECES_SCR		0xCE28	=	BANK 3	OK
+#define GAME_END_SCR		0xDB50	=	BANK 3	OK
+#define GAME_END_ATTR		0xE2D2	=	BANK 3	OK
+#define ALIEN_END_SCR		0xE35B	=	BANK 3	OK
+#define ALIEN_END_ATTR		0xEC63	=	BANK 3	OK
+----------------------------------------------------------------
+
+==========================================
+behavior.c
+(in main.c), 
+so main can see objects in other banks
+==========================================
+#define behav_asteroid		0xF2AB	=	BANK 6 (behav.asm)
+#define behav_casco			0xF80A	=	BANK 6 (behav.asm)
+#define behav_casco_bis		0xF859	=	BANK 6 (behav.asm)
+#define behav_egg			0xF8A8	=	BANK 6 (behav.asm)
+#define behav_fenemy1		0xF2C0	=	BANK 6 (behav.asm)
+#define behav_fenemy2		0xF46B	=	BANK 6 (behav.asm)
+#define behav_fenemy3		0xF643	=	BANK 6 (behav.asm)
+#define behav_fenemy4		0xF371	=	BANK 6 (behav.asm)
+#define behav_fenemy5		0xF8D5	=	BANK 6 (behav.asm)
+#define behav_fenemy6		0xF9E7	=	BANK 6 (behav.asm)
+#define behav_fenemy7		0xFC50	=	BANK 6 (behav.asm)
+#define behav_final1_l7		0xFC0B	=	BANK 6 (behav.asm)
+#define behav_follow		0xFBDB	=	BANK 6 (behav.asm)
+#define behav_none			0xF077	=	BANK 6 (behav.asm)
+#define behav_powerup		0xF1EA	=	BANK 6 (behav.asm)
+#define behav_saltarin		0xF754	=	BANK 6 (behav.asm)
+#define behav_saltarin_bis	0xF7AF	=	BANK 6 (behav.asm)
+#define behav_shoot_left 	0xF078	=	BANK 6 (behav.asm)
+#define behav_shoot_left_Y	0xF09F	=	BANK 6 (behav.asm)
+#define behav_shoot_left_wait 0xF0DA=	BANK 6 (behav.asm)
+#define behav_shoot_target	0xF196	=	BANK 6 (behav.asm)
+#define behav_shoot_target_left 0xF102=	BANK 6 (behav.asm)
+#define behav_shoot_target_right 0xF14C=BANK 6 (behav.asm)
+#define behav_turret		0xF21C	=	BANK 6 (behav.asm)
+#define behav_uglyguy		0xF8C0	=	BANK 6 (behav.asm)
+
+
+----------------------------------------------------------------
+
+==========================================
+engine.h
+==========================================
+DEFC get_joystick			$86CB	=	MAIN RAM
+(input.asm)
+
+DEFC Ship_Collision			$8615	=	MAIN RAM 
+(drawsprite.asm)
+
+DEFC CreaTablaTiles			$879F	=	MAIN RAM 
+(create_shifted_tables.asm)
+
+DEFC setrambank				$82ee	=	MAIN RAM
+(main.asm)
+
+DEFC DrawMap				$8101	=	MAIN RAM
+(drawmap.asm)
+
+DEFC drawsprite				$830B	=	MAIN RAM
+(drawsprite.asm)
+
+DEFC drawsprite_ship		$8400	=	MAIN RAM
+(drawsprite.asm)
+
+DEFC switchscreen			$82fd	=	MAIN RAM
+(main.asm)
+
+DEFC InitSprCacheList		$85B5	=	MAIN RAM
+(drawsprite.asm)
+
+DEFC SetIM2					$887A	=	MAIN RAM
+(im2.asm)
+
+
+DEFC Display_starfield		$899E	=	MAIN RAM
+(starfield.asm)
+
+DEFC GenStarfield			$8985	=	MAIN RAM
+(starfield.asm)
+
+DEFC MoveStarfield			$8964	=	MAIN RAM
+
+DEFC GET_KEY_STATE			$86C4	=	MAIN RAM
+(input.asm)
+
+
+Key definitions
+The ZX Spectrum KeyMatrix:
+C= &FE
+B=...		0		1		2		3		4
+		bit	1		2		4		8		16	bit
+%11111110	SHIFT	Z		X		C		V
+%11111101	A		S		D		F		G
+%11111011	Q		W		E		R		T
+%11110111	1		2		3		4		5
+%11101111	0		9		8		7		6
+%11011111	P		O		I		U		Y
+%10111111	ENTR	L		K		J		H
+%01111111	SPC		DEL		M		N		B 
+
+ATTENTION might have trouble with these
+#define KEY_CAPS 			0xfe01	=	MAIN RAM (input.asm)
+#define KEY_Z 				0xfe02	=	MAIN RAM (input.asm)
+#define KEY_X 				0xfe04	=	MAIN RAM (input.asm)
+#define KEY_C 				0xfe08	=	MAIN RAM (input.asm)
+#define KEY_V 				0xfe10	=	MAIN RAM (input.asm)
+
+#define KEY_A 				0xfd01	=	MAIN RAM (input.asm)
+#define KEY_S 				0xfd02	=	MAIN RAM (input.asm)
+#define KEY_D 				0xfd04	=	MAIN RAM (input.asm)
+#define KEY_F 				0xfd08	=	MAIN RAM (input.asm)
+#define KEY_G 				0xfd10	=	MAIN RAM (input.asm)
+
+#define KEY_Q 				0xfb01	=	MAIN RAM (input.asm)
+#define KEY_W 				0xfb02	=	MAIN RAM (input.asm)
+#define KEY_E 				0xfb04	=	MAIN RAM (input.asm)
+#define KEY_R 				0xfb08	=	MAIN RAM (input.asm)
+#define KEY_T 				0xfb10	=	MAIN RAM (input.asm)
+
+#define KEY_1 				0xf701	=	MAIN RAM (input.asm)
+#define KEY_2 				0xf702	=	MAIN RAM (input.asm)
+#define KEY_3 				0xf704	=	MAIN RAM (input.asm)
+#define KEY_4 				0xf708	=	MAIN RAM (input.asm)
+#define KEY_5 				0xf710	=	MAIN RAM (input.asm)
+
+#define KEY_0 				0xef01	=	MAIN RAM (input.asm)
+#define KEY_9 				0xef02	=	MAIN RAM (input.asm)
+#define KEY_8 				0xef04	=	MAIN RAM (input.asm)
+#define KEY_7 				0xef08	=	MAIN RAM (input.asm)
+#define KEY_6 				0xef10	=	MAIN RAM (input.asm)
+
+#define KEY_P 				0xdf01	=	MAIN RAM (input.asm)
+#define KEY_O 				0xdf02	=	MAIN RAM (input.asm)
+#define KEY_I 				0xdf04	=	MAIN RAM (input.asm)
+#define KEY_U 				0xdf08	=	MAIN RAM (input.asm)
+#define KEY_Y 				0xdf10	=	MAIN RAM (input.asm)
+
+#define KEY_ENTER 			0xbf01	=	MAIN RAM (input.asm)
+#define KEY_L 				0xbf02	=	MAIN RAM (input.asm)
+#define KEY_K 				0xbf04	=	MAIN RAM (input.asm)
+#define KEY_J 				0xbf08	=	MAIN RAM (input.asm)
+#define KEY_H 				0xbf10	=	MAIN RAM (input.asm)
+
+#define KEY_SPACE 			0x7f01	=	MAIN RAM (input.asm)
+#define KEY_SS 				0x7f02	=	MAIN RAM (input.asm)
+#define KEY_M 				0x7f04	=	MAIN RAM (input.asm)
+#define KEY_N 				0x7f08	=	MAIN RAM (input.asm)
+#define KEY_B 				0x7f10	=	MAIN RAM (input.asm)
+
+----------------------------------------------------------------
+
+==========================================
+maindefs.asm
+==========================================
+; These definitions are from main.c
+; It is a bit of a pain, but we have to link
+; by hand
+_active_enemies 	EQU	$7D9B
+_enemy_sprites 		EQU	$60D1
+_fenemy_defeat 		EQU	$7D9A
+_NewEnemy		EQU	$68E1
+_NewEnemyShoot		EQU	$689E
+_NewEnemyShoot_FX 	EQU	$6896
+_ship_x			EQU	$7F02
+_ship_y			EQU	$7F03
+_power_up		EQU	$7F05
+_wyz_effect     	EQU     $622E
+
+----------------------------------------------------------------
+
+==========================================
+movement.c
+==========================================
+// Definition for the movement functions
+#define move_downleft	0xE2B1
+#define move_downright	0xE2CC
+#define move_explosion	0xE0AB
+#define move_find_enemy_to_follow 0xE480
+#define move_follow_down 0xE4E1
+#define move_follow_downright 0xE506
+#define move_follow_right 0xE4BC
+#define move_furby	0xE0C1
+#define move_homing	0xE1A6
+#define move_kamikaze	0xE152
+#define move_kamikaze_2	0xE43D
+#define move_kamikaze_noanim 0xE37B
+#define move_left	0xE000
+#define move_left_accel	0xE52D
+#define move_left_expire 0xE014
+#define move_leftanim	0xE218
+#define move_missile	0xE3D4
+#define move_none	0xE560
+#define move_pingpong	0xE043
+#define move_pingpong_final4 0xE077
+#define move_right	0xE02C
+#define move_right_accel 0xE545
+#define move_target	0xE2FB
+#define move_up		0xE2EA
+#define move_upleft	0xE278
+#define move_upright	0xE290
+#define move_wave	0xE1E4
+#define move_wave_nogoneleft 0xE3A8
+
+----------------------------------------------------------------
+
+==========================================
+behavior.c
+==========================================
+
+#define behav_asteroid	0xF2AB
+#define behav_casco	0xF80A
+#define behav_casco_bis	0xF859
+#define behav_egg	0xF8A8
+#define behav_fenemy1	0xF2C0
+#define behav_fenemy2	0xF46B
+#define behav_fenemy3	0xF643
+#define behav_fenemy4	0xF371
+#define behav_fenemy5	0xF8D5
+#define behav_fenemy6	0xF9E7
+#define behav_fenemy7	0xFC50
+#define behav_final1_l7	0xFC0B
+#define behav_follow	0xFBDB
+#define behav_none	0xF077
+#define behav_powerup	0xF1EA
+#define behav_saltarin	0xF754
+#define behav_saltarin_bis 0xF7AF
+#define behav_shoot_left 0xF078
+#define behav_shoot_left_Y 0xF09F
+#define behav_shoot_left_wait 0xF0DA
+#define behav_shoot_target 0xF196
+#define behav_shoot_target_left 0xF102
+#define behav_shoot_target_right 0xF14C
+#define behav_turret	0xF21C
+#define behav_uglyguy	0xF8C0
+----------------------------------------------------------------
+
+
+
+
+
+
+
+
+----------------------------------------------------------------
