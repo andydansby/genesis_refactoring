@@ -10,45 +10,45 @@ struct Entity active_enemies[MAX_ENEMIES];
 
 //#include "newEnemy.h"
 
-#define ENEMY_EYE		22
+#define ENEMY_EYE				22
 #define ENEMY_CANNON_DOWN_LEFT	23
 #define ENEMY_CANNON_DOWN_RIGHT 24
-#define ENEMY_CANNON_UP		25
-#define ENEMY_1			29
-#define ENEMY_KAMIKAZE		33
-#define ENEMY_FURBY		37
+#define ENEMY_CANNON_UP			25
+#define ENEMY_1					29
+#define ENEMY_KAMIKAZE			33
+#define ENEMY_FURBY				37
 #define ENEMY_FINAL4_EYE        26
-#define ENEMY_POWERUP		56
-#define ENEMY_SHIP1		22
-#define ENEMY_SHIP2		23
-#define ENEMY_SHIP3		24
-#define ENEMY_SHIP4		25
-#define ENEMY_TURRET		26
-#define ENEMY_FINAL1_SHOOT	38
-#define ENEMY_ASTEROID		22
-#define ENEMY_TRASH1		26
-#define ENEMY_TRASH2		27
-#define ENEMY_TRASH3		28
-#define ENEMY_TRASH4		29
-#define ENEMY_TRASH5		30
-#define ENEMY_SALTARIN		22
-#define ENEMY_CASCO		26
-#define ENEMY_EGG		30
-#define ENEMY_UGLYGUY		40
-#define ENEMY_1_BIS		46
-#define ENEMY_SHIP2_BIS		22
-#define ENEMY_SHIP3_BIS		23
-#define ENEMY_SALTARIN_BIS	24
-#define ENEMY_CASCO_BIS		28
-#define ENEMY_EGG_BIS		32
-#define ENEMY_UGLYGUY_BIS	42
-#define ENEMY_SHIP1_LEVEL7	22
-#define ENEMY_SHIP2_LEVEL7	23
-#define ENEMY_SHIP3_LEVEL7	24
-#define ENEMY_SHIP4_LEVEL7	25
-#define ENEMY_TURRET_LEVEL7	26
-#define ENEMY_PACOSHIP_1	29
-#define ENEMY_PACOSHIP_2	30
+#define ENEMY_POWERUP			56
+#define ENEMY_SHIP1				22
+#define ENEMY_SHIP2				23
+#define ENEMY_SHIP3				24
+#define ENEMY_SHIP4				25
+#define ENEMY_TURRET			26
+#define ENEMY_FINAL1_SHOOT		38
+#define ENEMY_ASTEROID			22
+#define ENEMY_TRASH1			26
+#define ENEMY_TRASH2			27
+#define ENEMY_TRASH3			28
+#define ENEMY_TRASH4			29
+#define ENEMY_TRASH5			30
+#define ENEMY_SALTARIN			22
+#define ENEMY_CASCO				26
+#define ENEMY_EGG				30
+#define ENEMY_UGLYGUY			40
+#define ENEMY_1_BIS				46
+#define ENEMY_SHIP2_BIS			22
+#define ENEMY_SHIP3_BIS			23
+#define ENEMY_SALTARIN_BIS		24
+#define ENEMY_CASCO_BIS			28
+#define ENEMY_EGG_BIS			32
+#define ENEMY_UGLYGUY_BIS		42
+#define ENEMY_SHIP1_LEVEL7		22
+#define ENEMY_SHIP2_LEVEL7		23
+#define ENEMY_SHIP3_LEVEL7		24
+#define ENEMY_SHIP4_LEVEL7		25
+#define ENEMY_TURRET_LEVEL7		26
+#define ENEMY_PACOSHIP_1		29
+#define ENEMY_PACOSHIP_2		30
 #define ENEMY_FINAL1_LEVEL7_UL	31
 #define ENEMY_FINAL1_LEVEL7_UR	32
 #define ENEMY_FINAL1_LEVEL7_DL	33
@@ -57,24 +57,24 @@ struct Entity active_enemies[MAX_ENEMIES];
 
 // Behaviors are directly associated to the enemy sprite with the same index
 
-#define BEHAV_DO_NOTHING 0
-#define BEHAV_SHOOT_LEFT 1
-#define BEHAV_SHOOT_TARGET 2
-#define BEHAV_SHOOT_TARGET_LEFT 3
-#define BEHAV_SHOOT_TARGET_RIGHT 4
-#define BEHAV_POWERUP 	5
-#define BEHAV_TURRET 	6
-#define BEHAV_SHOOT_LEFT_Y 7
-#define BEHAV_SHOOT_LEFT_WAIT 8
-#define BEHAV_ASTEROID 	9
-#define BEHAV_SALTARIN 	10
-#define BEHAV_CASCO 	11
-#define BEHAV_EGG	12
-#define BEHAV_UGLYGUY	13
-#define BEHAV_SALTARIN_BIS 	14
-#define BEHAV_CASCO_BIS 	15
-#define BEHAV_FOLLOW	16
-#define BEHAV_FINAL1_L7	17
+#define BEHAV_DO_NOTHING 			0
+#define BEHAV_SHOOT_LEFT 			1
+#define BEHAV_SHOOT_TARGET 			2
+#define BEHAV_SHOOT_TARGET_LEFT		3
+#define BEHAV_SHOOT_TARGET_RIGHT	4
+#define BEHAV_POWERUP 				5
+#define BEHAV_TURRET 				6
+#define BEHAV_SHOOT_LEFT_Y 			7
+#define BEHAV_SHOOT_LEFT_WAIT 		8
+#define BEHAV_ASTEROID 				9
+#define BEHAV_SALTARIN 				10
+#define BEHAV_CASCO 				11
+#define BEHAV_EGG					12
+#define BEHAV_UGLYGUY				13
+#define BEHAV_SALTARIN_BIS 			14
+#define BEHAV_CASCO_BIS 			15
+#define BEHAV_FOLLOW				16
+#define BEHAV_FINAL1_L7				17
 
 
 
@@ -195,10 +195,8 @@ unsigned char map_displacement;  // Displacement in tile: 0000YYXX, where XX is 
 #include "ram6.h"
 
 
-
-void main(void)
+void ram6(void)
 {
 }
-
 
 

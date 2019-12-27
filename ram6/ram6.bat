@@ -6,15 +6,15 @@ rem 	pasmo move.asm move.bin move.sym
 rem 	pasmo behav.asm behav.bin behav.sym
 rem 	copy /b menu.bin+move.bin+behav.bin  ram6.bin
 	
-	
+cls
+
+echo on
+
+rem a little cleanup first
 
 cd codemaps
 	del objects.o
 cd ..
-
-cls
-
-echo on
 
 cd images
 	apack c credits_bkg.scr credits_bkg.bin
@@ -37,19 +37,17 @@ cd ..
 
 zcc +zx -v -c -clib=new --fsigned-char -o objects @ram6.lst
 
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+@rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
 
 
 rem cleanup
-echo off
-move "compiled.map" "codemaps\"
+ echo off
 move "objects.o" "codemaps\"
 
-move "compiled_BANK_06.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
+rem move "compiled_BANK_06.bin" "binary\"
+rem move "compiled_CODE.bin" "binary\"
 
-del compiled.tmp
 del zcc_opt.def
 del zcc_proj.lst
 

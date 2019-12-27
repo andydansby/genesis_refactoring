@@ -115,7 +115,7 @@ menu_nofirepressed:
 		;;call _wyz_effect;;;;ATTENTION
 	pop hl
 
-	ld a, (inertia_cheat)
+	ld a, (_inertia_cheat)
 	and a
 	jr nz, menu_inertia_off
 	ld b, 160
@@ -162,7 +162,7 @@ menu_continue:
 ret
 
 menu_display_inertia_status:
-	ld a, (inertia_cheat)
+	ld a, (_inertia_cheat)
 	and a
 	jr nz, start_inertia_off
 	ld b, 160
@@ -172,7 +172,7 @@ menu_display_inertia_status:
 ret
 
 menu_display_sound_status:
-	ld a, (sound_selection)
+	ld a, (_sound_selection)
 	and a
 	jr z, menu_print_silence
 	dec a
@@ -226,13 +226,12 @@ timer:
 
 
 hiscore_names:
-		defb 93,94,94,95,96,91,91,91,0
-		defb "sejuan",91,91,0
-		defb "anjuel",91,91,0
-		defb "pagantip",0
-		defb "wyz",91,91,91,91,91,0
-		defb "tbrazil",91,0		; 6 high scores for now
-
+	defb 93,94,94,95,96,91,91,91,0
+	defb "sejuan",91,91,0
+	defb "anjuel",91,91,0
+	defb "pagantip",0
+	defb "wyz",91,91,91,91,91,0
+	defb "tbrazil",91,0		; 6 high scores for now
 
 hiscore_values:
 	defw 2000, 1500, 1000, 500, 250, 100
@@ -584,10 +583,14 @@ defc JOY_KEYS = 3
 ;;		;JOY_KEYS	EQU 3
 
 
-selected_joystick:
+PUBLIC _selected_joystick
+_selected_joystick:
+	;selected_joystick:
 	defb 0
 
-inertia_cheat:
+PUBLIC _inertia_cheat
+_inertia_cheat:
+	;inertia_cheat:
 	defb 0
 
 
@@ -604,7 +607,7 @@ sinclair1_fire:
 	jr c,read_sinclair2_joystick
 	; Sinclair 1 fire detected
 	ld a, JOY_SINCLAIR1
-	ld (selected_joystick),a
+	ld (_selected_joystick),a
 	scf 
 ret
 ;#END_ASM
@@ -619,7 +622,7 @@ read_sinclair2_joystick:
 	jr nz, read_kempston
 	       	; Sinclair 2 fire detected
 	ld a, JOY_SINCLAIR2
-	ld (selected_joystick),a
+	ld (_selected_joystick),a
 	scf 
 ret
 ;#END_ASM
@@ -636,7 +639,7 @@ read_kempston:
 	jr z, read_keyb
 	       	; Kempston fire detected
 	ld a, JOY_KEMPSTON
-	ld (selected_joystick),a
+	ld (_selected_joystick),a
 	scf 
 ret
 ;#END_ASM
@@ -649,7 +652,7 @@ read_keyb:
 	jr nz, no_fire
 	; Keyboard fire (SPACE) detected
 	ld a, JOY_KEYS
-	ld (selected_joystick),a
+	ld (_selected_joystick),a
 	scf 
 ret
 
@@ -677,9 +680,9 @@ check_cheats:
 ret
 		
 cheat_pressed:
-	ld a, (inertia_cheat)
+	ld a, (_inertia_cheat)
 	xor 1
-	ld (inertia_cheat), a
+	ld (_inertia_cheat), a
 	ld a, 1
 	ld (key_i_pressed), a
 	scf
@@ -714,10 +717,10 @@ check_sound:
 ret
 		
 sound_pressed:
-	ld a, (sound_selection)
+	ld a, (_sound_selection)
 	inc a
 	and 3
-	ld (sound_selection), a
+	ld (_sound_selection), a
 	ld a, 1
 	ld (key_s_pressed), a
 	scf
@@ -1063,11 +1066,13 @@ anim_order:
 	defb	0,0,0,0,0,0,0,0
 	defb	0,0,0,0,0,0,0,0
 
-; INPUT: 
-; 	A: Animation position (0-7)
+
 
 DrawStarAnim:	;  draw the animation
 ;#BEGIN_ASM
+	;; INPUT: 
+	;; 	A: Animation position (0-7)
+
 	ld hl, anim_order
 	ld d,0
 	ld e,a
@@ -1123,11 +1128,12 @@ ret
 ;#END_ASM
 
 
-; DE = puntero al tile
-; B  = X (0-31)
-; C  = Y (0-23)
+
 PrintTile:
 ;#BEGIN_ASM
+	;; DE = puntero al tile
+	;; B  = X (0-31)
+	;; C  = Y (0-23)
 	ld hl, TileScAddress	; address table
 	ld a, c
 	add a,c			; C = 2*Y, to address the table
@@ -1427,13 +1433,17 @@ rand:
 ret
 ;#END_ASM
 
-; Input:
-;	B: X position
-;	C: Y position
-; Output:
-;        HL: screen address
+
 ;#BEGIN_ASM
 CalcScreenPos_Char:
+
+	;; Input:
+	;;	B: X position
+	;;	C: Y position
+	;; Output:
+	;;        HL: screen address
+
+
      ld a,c			; 4  <- the top 2 bits are the screen third
      rra			; 4
      rra			; 4
@@ -1459,13 +1469,15 @@ ret
 ;#END_ASM
 
 
-; Print normal char on screen (1x1), from a base number 0..9
-; INPUT:
-;		B: position in X (pixels)
-;		C: position in Y (pixels)
-;		A: number to print
+
 ;#BEGIN_ASM
 PrintNumber:
+	;; Print normal char on screen (1x1), 
+	;; from a base number 0..9
+	;; INPUT:
+	;;		B: position in X (pixels)
+	;;		C: position in Y (pixels)
+	;;		A: number to print
 	push af
 	call CalcScreenPos_Char	; Screen position in HL
 	ex de, hl
@@ -1491,14 +1503,16 @@ ret
 
 
 
-; Print string on screen
-; INPUT:
-;		B: position in X (pixels)
-;		C: position in Y (pixels)
-;		IX: pointer to string, terminated by 0
+
 ;#BEGIN_ASM
 
 PrintString:
+	;; Print string on screen
+	;; INPUT:
+	;;		B: position in X (pixels)
+	;;		C: position in Y (pixels)
+	;;		IX: pointer to string, terminated by 0
+
 	call CalcScreenPos_Char	; Screen position in HL
 	ex de, hl
 
@@ -1656,9 +1670,14 @@ RET
 fire_pressed_wait:
 	defb 0
 	;; If we have pressed fire, wait for two seconds before exiting (to allow effect to play)
-sound_selection:
+
+PUBLIC _sound_selection
+_sound_selection:
+	;;sound_selection:
 	defb 3
 	;; 0: Silence; 1: Music only; 2: SFX ony; 3: Musix+SFX
+
+
 
 ;;ATTENTION
 ;;genesis_title INCBIN "genesis_title.bin"//placed in ram6.asm

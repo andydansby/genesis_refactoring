@@ -10,17 +10,18 @@
 _new_e:
 	defs 8		; struct Enemy new_e
 
-; Supporting functions
+;; Supporting functions
+;#BEGIN_ASM
+	;; INPUT
+	;;	H: x_ship
+	;;	L: y_ship
+	;;	D: x_enemy	
+	;;	E: y_enemy
 
-; INPUT
-;	H: x_ship
-;	L: y_ship
-;	D: x_enemy	
-;	E: y_enemy
+	;; OUTPUT
+	;;	HL: speed_x   ( H: integer part, L fractional part). Bit 0 of H defines sign (0: positive, 1: negative)
+	;;	DE: speed_y   ( D: integer part, E fractional part). Bit 0 of D defines sign (0: positive, 1: negative)
 
-; OUTPUT
-;	HL: speed_x   ( H: integer part, L fractional part). Bit 0 of H defines sign (0: positive, 1: negative)
-;	DE: speed_y   ( D: integer part, E fractional part). Bit 0 of D defines sign (0: positive, 1: negative)
 calcdirectshoot:
    	ld iy, 0
    	ld a, h
@@ -66,9 +67,12 @@ dx_greater_dy:
 	ld e, d
 	or iyh
 	ld d, a			; speed_y
-	ret
+ret
+;#END_ASM
+
 
 dy_greater_dx:
+;#BEGIN_ASM
 	ld a, c
 	and a
 	jr z, dy_is_zero
@@ -88,21 +92,27 @@ dy_greater_dx:
 	ld a, 2
 	or iyh
 	ld d, a			; speed_y = 1 (dy/dy)
-	ret
+ret
+;#END_ASM
+
 
 dy_is_zero:
+;#BEGIN_ASM
 	ld a, 4
 	or iyl
 	ld h, a
 	ld l, 0
 	ld de, 0
-	ret			; Special case when x_ship equals x_enemy
+ret			; Special case when x_ship equals x_enemy
+;#END_ASM
 
-;Divide 8-bit values
-;In: Divide E by divider D
-;Out: A = result, D = rest
-;
+
 Div8:
+;#BEGIN_ASM
+	;;Divide 8-bit values
+	;;In: Divide E by divider D
+	;;Out: A = result, D = rest
+
     xor a
     ld b,8
 	
@@ -120,514 +130,20 @@ Div8_NoAdd:
     rla
     cpl
 ret
+;#END_ASM
 
 
-; Dummy behavior, does nothing
 
-behav_none:
-ret
-
-; Shoot once, left direction
-
-behav_shoot_left:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	and a
-	ret nz			; if e->behav_param is not zero, just return
-
-	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
-
-	push hl
-	ld a, (de)
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_LEFT
-	push bc			; MOVE_LEFT
-	ld bc, SHOT_ENEMY
-	push bc			; SHOT_ENEMY
-	call _NewEnemyShoot
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	pop hl			; HL is pointing to e->behav_param
-	ld a, 1
-	ld (hl), a
-ret
-
-; Shoot once, left direction, when the ship is within a (-10,+10) Y distance
-
-behav_shoot_left_Y:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	and a
-	ret nz			; if e->behav_param is not zero, just return
-
-	inc de
-	ld a, (de)		; A = e->y
-	ld hl, _ship_y
-	sub (hl)
-	jr nc, y_nocarry
-	neg
+PUBLIC _behav_asteroid
+_behav_asteroid:
+;#BEGIN_ASM
+	;; Behavior for asteroids
+	;; It is pretty stupid, 
+	;; just check if we are in the 
+	;;first frame of an explosion
+	;; and if so, change the sprite 
+	;;for the asteroid explosion one
 	
-y_nocarry:
-	cp 10
-	ret nc			; if the distance is greater than 10, do not shoot
-
-	dec de
-	ld h, d
-	ld l, e
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-
-	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
-
-	push hl
-	ld a, (de)
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_LEFT
-	push bc			; MOVE_LEFT
-	ld bc, SHOT_ENEMY
-	push bc			; SHOT_ENEMY
-	call _NewEnemyShoot
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	pop hl			; HL is pointing to e->behav_param
-	ld a, 1
-	ld (hl), a
-	ret
-
-
-; Shoot once, left direction, but wait 20 frames to do so
-
-behav_shoot_left_wait:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	cp 20
-	ret nc			; if e->behav_param > 20, we did it already
-	inc a
-	ld (hl), a
-	cp 20
-	ret nz			; we will only shoot when e->behav_param is 20
-
-	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
-	ld a, (de)
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_LEFT
-	push bc			; MOVE_LEFT
-	ld bc, SHOT_ENEMY
-	push bc			; SHOT_ENEMY
-	call _NewEnemyShoot
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	ret
-	; upon return, HL holds the pointer to the new enemy shoot
-	; anyway, we do not care
-
-
-; Shoot at ship, left direction, from ground
-; Uses: behav_param: counter, will shoot three times
-
-behav_shoot_target_left:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
- 	ld a, (hl)
-   	and a			; A == 0
-   	jr z, check_first_shoot_left
-   	dec a			; A == 1
-   	jr z, check_second_shoot_left
-   	dec a			; A == 2
-	ret nz
-	
-check_third_shoot_left:
-	ld a, (de)
-	cp 100
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr left_new_shoot
-	
-check_second_shoot_left:
-	ld a, (de)
-	cp 170
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr left_new_shoot
-	
-check_first_shoot_left:
-	ld a, (de)
-	cp 220
-	ret nc
-	inc (hl)		; e->behav_param++
-	
-left_new_shoot:
-	; NewEnemyShoot(e->x, e->y, MOVE_UPLEFT, SHOT_CANNON_LEFT);
-	sub 8
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	sub 8
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_UPLEFT
-	push bc			; MOVE_UPLEFT
-	ld bc, SHOT_CANNON_LEFT
-	push bc			; SHOT_CANNON_LEFT
-	call _NewEnemyShoot
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	ld a, l
-	or h
-	ret z			; If HL == 0, then skip, as the enemy shoot could not be created
-
-	ld bc, 6
-	add hl, bc
-	ld (hl), 4		; behav_e->param1=4
-	inc hl
-	ld (hl), 4		; behav_e->param2=4
-ret
-
-; Shoot at ship, right direction, from ground
-; Uses: behav_param: counter, will shoot three times
-
-behav_shoot_target_right:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	cp 0
-	jr z, check_first_shoot_right
-	cp 1
-	jr z, check_second_shoot_right
-	cp 2
-	ret nz
-check_third_shoot_right:
-	ld a, (de)
-	cp 40
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr right_new_shoot
-	
-check_second_shoot_right:
-	ld a, (de)
-	cp 90
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr right_new_shoot
-	
-check_first_shoot_right:
-	ld a, (de)
-	cp 220
-	ret nc
-	inc (hl)		; e->behav_param++
-	
-right_new_shoot:
-	; NewEnemyShoot(e->x, e->y, MOVE_UPRIGHT, SHOT_CANNON_RIGHT);
-	add a, 8
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	sub 8
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_UPRIGHT
-	push bc			; MOVE_UPRIGHT
-	ld bc, SHOT_CANNON_RIGHT
-	push bc			; SHOT_CANNON_RIGHT
-	call _NewEnemyShoot
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	ld a, l
-	or h
-	ret z			; If HL == 0, then skip, as the enemy shoot could not be created
-
-	ld bc, 6
-	add hl, bc
-	ld (hl), 4		; behav_e->param1=4
-	ret
-
-
-; Shoot at ship, point at target (kamikaze bomb)
-; behav_param: counter, will shoot every 16 frames
-
-behav_shoot_target:
-	push hl
-	ld de, 11
-	add hl, de
-	ld a, (hl)
-	inc a
-	ld (hl), a
-	pop hl
-	and $1F
-	cp $1f		; will shoot every 32 frames
-	ret nz
-	; now we have to shoot. First, generate shoot
-	push hl
-	;NewEnemyShoot(e->x, e->y+14, MOVE_TARGET, SHOT_MEGA);
-	ld e, (hl)
-	ld d, 0
-	push de		; e->x
-	inc hl
-	ld a, (hl)
-	add a, 14
-	ld e, a
-	push de		; e->y+14
-	ld e, MOVE_TARGET
-	push de
-	ld e, SHOT_MEGA
-	push de
-	call _NewEnemyShoot_FX	; HL holds the pointer to the new enemy shoot
-	pop de
-	pop de
-	pop de
-	pop de
-
-	; Then, generate parameters for the shoot
-	push hl
-	pop ix			; IX holds the pointer to the new enemy shoot
-	pop hl			; get the original HL (entity) back
-
-	ld a, ixh
-	or ixl
-	ret z			; If IX == 0, then skip, as the enemy shoot could not be created
-
-	ld d, (hl)		; D==x_enemy
-	inc hl
-	ld e, (hl)		; E==y_enemy
-	ld a, (_ship_x)
-	add a, 16
-	ld h, a			; H = x_ship
-	ld a, (_ship_y)
-	ld l, a			; L = y_ship
-	call calcdirectshoot
-
-	ld (ix+6), h
-	ld (ix+7), l
-	ld (ix+8), d
-	ld (ix+9), e
-	ld (ix+3), 0
-	ld (ix+5), 0
-
-	ret
-
-
-; Behavior for power ups
-; It is pretty simple: if we are exploding, and we are in the last
-; explosion frame, turn into a power up
-
-behav_powerup:
-	inc hl
-	inc hl
-	inc hl
-	inc hl			; check movement_type
-	ld a, (hl)
-	cp MOVE_EXPLOSION
-	ret nz			; if we are not exploding, just exit
-	; if we are exploding, check param1, which will specify the current frame. If it is one... just generate the new power up
-	inc hl
-	inc hl
-	ld a, (hl)
-	cp 1
-	ret nz			; only if param1==1 we will do something
-
-	inc hl			; param2 is the sprite number of the power up to generate
-	ld d, (hl)		; D == param2
-	ld bc, -7
-	add hl, bc		
-	ld e, (hl)			; E == x
-	inc hl
-	ld a, (hl)		; A == y
-
-	ld hl, _power_up
-	ld (hl), e
-	inc hl
-	ld (hl), a
-	inc hl
-	ld (hl), d
-	inc hl
-	inc hl
-	ld (hl), MOVE_LEFT
-	inc hl
-	inc hl
-	ld (hl), 2
-	inc hl
-	ld (hl), d
-	
-	ld hl, FX_HIT_CAPSULE
-        push hl
-        call _wyz_effect
-        pop hl
-ret
-
-; Behavior for three-position turrets
-; They check the ship X position. If it is between a -30,30 px range
-; they are in the middle position, otherwise they point at ship
-; And they shoot from time to time :)
-
-; Uses: behav_param: counter, will shoot three times
-
-behav_turret:
-	ld a, (_ship_x)		; get ship X position
-	ld b, (hl)		; B = e->x
-	sub b
-	jr nc, turret_nocarry	; ship_x - e->x is greater or equal than zero
-	
-turret_carry:
-	neg			; we convert A to a positive value
-	cp 30 
-	jr c, turret_center	; set the center position
-	ld a, ENEMY_TURRET	; this is the sprite for the look-left position
-	jr turret_done
-	
-turret_nocarry:
-	cp 30 
-	jr c, turret_center	; set the center position
-	ld a, ENEMY_TURRET+2	; this is the sprite for the look-right position
-	jr turret_done
-	
-turret_center:
-	ld a, ENEMY_TURRET+1	; this is the sprite for the look-up position
-	
-turret_done:
-	inc hl
-	inc hl
-	ld (hl), a		; we have just set the new sprite
-
-	dec hl
-	dec hl
-	
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	cp 0
-	jr z, check_first_shoot_turret
-	cp 1
-	jr z, check_second_shoot_turret
-	cp 2
-	ret nz
-	
-check_third_shoot_turret:
-	ld a, (de)
-	cp 40
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr turret_new_shoot
-	
-check_second_shoot_turret:
-	ld a, (de)
-	cp 90
-	ret nc
-	inc (hl)		; e->behav_param++
-	jr turret_new_shoot
-	
-check_first_shoot_turret:
-	ld a, (de)
-	cp 220
-	ret nc
-	inc (hl)		; e->behav_param++
-	
-turret_new_shoot:
-	ld bc, -11
-	add hl, bc		; make HL point back to e->x
-
-	push hl
-	;NewEnemyShoot(e->x, e->y-8, MOVE_TARGET, SHOT_MEGA);
-	ld e, (hl)
-	ld d, 0
-	push de		; e->x
-	inc hl
-	ld a, (hl)
-	sub 8
-	ld e, a
-	push de		; e->y-8
-	ld e, MOVE_TARGET
-	push de
-	ld e, SHOT_MEGA
-	push de
-	call _NewEnemyShoot_FX	; HL holds the pointer to the new enemy shoot
-	pop de
-	pop de
-	pop de
-	pop de
-
-	; Then, generate parameters for the shoot
-	push hl
-	pop ix			; IX holds the pointer to the new enemy shoot
-	pop hl			; get the original HL (entity) back
-
-	ld a, ixh
-	or ixl
-	ret z			; If IX == 0, then skip, as the enemy shoot could not be created
-
-	ld d, (hl)		; D==x_enemy
-	inc hl
-	ld e, (hl)		; E==y_enemy
-	ld a, (_ship_x)
-	add a, 16
-	ld h, a			; H = x_ship
-	ld a, (_ship_y)
-	ld l, a			; L = y_ship
-	call calcdirectshoot
-
-	ld (ix+6), h
-	ld (ix+7), l
-	ld (ix+8), d
-	ld (ix+9), e
-	ld (ix+3), 0
-	ld (ix+5), 0
-	ret
-
-
-; Behavior for asteroids
-; It is pretty stupid, just check if we are in the first frame of an explosion
-; and if so, change the sprite for the asteroid explosion one
-behav_asteroid:
 	inc hl
 	inc hl
 	inc hl
@@ -646,11 +162,191 @@ behav_asteroid:
 	dec hl
 	dec hl
 	ld (hl), ASTEROID_EXPL	; new sprite for the explosion!
-	ret
+ret
+;#END_ASM
 
-; Behavior for final enemy 1
-behav_fenemy1:
-	; First, check if we have been defeated
+
+PUBLIC _behav_casco
+_behav_casco:
+;#BEGIN_ASM
+; Casco is walking left. Every 24 frames stop, shoot a missile, wait for 8 frames and continue
+; Uses: behav_param: counter
+	ld d, h
+	ld e, l	
+	ld bc, 11
+	add hl, bc
+	ld a, (hl)	; a = e->behav_param
+	inc a
+	cp 24
+	jr z, casco_shoot
+	cp 32
+	jr nz, casco_storeandcont
+	
+casco_moveagain:
+	xor a
+	ld (hl), a	; e->behav_param = 0
+	ld bc, -7
+	add hl, bc	; HL points to e->movement
+	ld (hl), MOVE_LEFTANIM
+	inc hl
+	inc hl
+	ld (hl), 3	; move with animation, change speed
+ret
+	
+casco_shoot:
+	ld (hl), a	; store e->behav_param
+	ld bc, -7
+	add hl, bc	; HL points to e->movement
+	ld (hl), MOVE_LEFT
+	inc hl
+	inc hl
+	ld (hl), 2	; move without, at the background speed
+	; now we should create the shoot and stuff
+
+	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
+
+	ld a, (de)
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_MISSILE
+	push bc			; MOVE_MISSILE
+	ld bc, SHOT_CASCO_MISSILE
+	push bc			; SHOT_CASCO_MISSILE
+	call _NewEnemyShoot_FX
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	ld a, l
+	or h
+	ret z                    ; If HL == 0, then skip, as the enemy shoot could not be created
+
+	ld bc, 6
+	add hl, bc
+	ld (hl), 4		; move sloooowly
+	inc hl
+	ld (hl), 0		; param2=0
+
+ret
+	
+casco_storeandcont:
+	ld (hl), a
+ret
+;#END_ASM
+
+
+PUBLIC _behav_casco_bis
+_behav_casco_bis:
+;#BEGIN_ASM
+; Casco is walking left. Every 24 frames stop, shoot a missile, wait for 8 frames and continue
+; Uses: behav_param: counter
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc
+	ld a, (hl)	; a = e->behav_param
+	inc a
+	cp 24
+	jr z, cascobis_shoot
+	cp 32
+	jr nz, cascobis_storeandcont
+	
+cascobis_moveagain:
+	xor a
+	ld (hl), a	; e->behav_param = 0
+	ld bc, -7
+	add hl, bc	; HL points to e->movement
+	ld (hl), MOVE_LEFTANIM
+	inc hl
+	inc hl
+	ld (hl), 3	; move with animation, change speed
+ret
+	
+cascobis_shoot:
+	ld (hl), a	; store e->behav_param
+	ld bc, -7
+	add hl, bc	; HL points to e->movement
+	ld (hl), MOVE_LEFT
+	inc hl
+	inc hl
+	ld (hl), 2	; move without, at the background speed
+	; now we should create the shoot and stuff
+
+	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
+
+	ld a, (de)
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_MISSILE
+	push bc			; MOVE_MISSILE
+	ld bc, SHOT_CASCO_MISSILE_BIS
+	push bc			; SHOT_CASCO_MISSILE
+	call _NewEnemyShoot_FX
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	ld a, l
+	or h
+	ret z                    ; If HL == 0, then skip, as the enemy shoot could not be created
+
+	ld bc, 6
+	add hl, bc
+	ld (hl), 4		; move sloooowly
+	inc hl
+	ld (hl), 0		; param2=0
+
+ret
+
+cascobis_storeandcont:
+	ld (hl), a
+	ret
+;#END_ASM
+
+
+PUBLIC _behav_egg
+_behav_egg:
+;#BEGIN_ASM
+	; Just wait until the animation reachs frame 7, then move towards ship
+	; behav_param: counter, will wait until it reaches 57
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc
+	inc (hl)
+	ld a, (hl)	; a = e->behav_param
+	cp 57
+	ret nz
+	; now, change the movement to move_left
+	ld h, d
+	ld l, e
+	ld bc, 4
+	add hl, bc
+	ld (hl), MOVE_KAMIKAZE_2
+	inc hl
+	inc hl
+	ld (hl), 6	; move fast
+	ret
+;#END_ASM
+
+
+PUBLIC _behav_fenemy1
+_behav_fenemy1:
+;#BEGIN_ASM
+	;; Behavior for final enemy 1
+	;; First, check if we have been defeated
 
 	ld d, h
 	ld e, l			; save e in DE
@@ -697,6 +393,8 @@ inc_f1_defeated:
 	inc a
 	ld (_fenemy_defeat), a
 ret
+
+
 
 final1_start:
 	ld h, d
@@ -769,6 +467,7 @@ final1_start:
 	add a, 8
 	ld (hl), a               ; the X was not like that...
 
+
 notgenerated_1:
         pop de
         pop hl
@@ -778,6 +477,8 @@ notgenerated_1:
 	
 dec_behav_param_1:
 	dec (hl)		; e->behav_param--;
+
+
 	
 move_rest_final1:		; move the rest of the final enemy according to sprite 0
 	ld h, d
@@ -793,219 +494,15 @@ move_rest_final1:		; move the rest of the final enemy according to sprite 0
 	add hl, bc
 	ld (hl), a
 	; copy the movement to all sprites
-	ret
-
-
-
-; Behavior for final enemy 4
-behav_fenemy4:
-	; First, check if we have been defeated
-
-	ld d, h
-	ld e, l			; save e in DE
-
-	inc hl
-	inc hl
-	ld a, (hl)
-	and a
-	jr nz, final4_start
-	ld bc, 12
-	add hl, bc
-	ld a, (hl)
-	and a
-	jr nz, final4_start
-	ld a, (_fenemy_defeat)
-	and a
-	jr nz, inc_f4_defeated			; if the enemy is defeated, there is nothing left to do for us but increase the count
-	inc a
-	ld (_fenemy_defeat),a		; final_enemy_defeated=1, now make the rest of it explode
-	add hl, bc				; we are pointint at sprite3->sprnum
-        ld (hl), EXPLOSION_SPR
-	inc hl
-	inc hl
-	ld (hl), MOVE_EXPLOSION
-	inc hl
-	inc hl
-	ld (hl), 4				; param1
-	ld bc, 8
-	add hl, bc				; sprite4
-        ld (hl), EXPLOSION_SPR
-	inc hl
-	inc hl
-	ld (hl), MOVE_EXPLOSION
-	inc hl
-	inc hl
-	ld (hl), 4				; param1
-	add hl, bc				; sprite5
-        ld (hl), EXPLOSION_SPR
-	inc hl
-	inc hl
-	ld (hl), MOVE_EXPLOSION
-	inc hl
-	inc hl
-	ld (hl), 4				; param1
-	add hl, bc				; sprite6
-        ld (hl), EXPLOSION_SPR
-	inc hl
-	inc hl
-	ld (hl), MOVE_EXPLOSION
-	inc hl
-	inc hl
-	ld (hl), 4				; param1
-	ret
-
-inc_f4_defeated:
-	inc a
-	ld (_fenemy_defeat), a
 ret
-
-final4_start:
-	ld h, d
-	ld l, e
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	and a
-	jp nz, dec_behav_param
-
-; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_BASIC);
-
-; Generate new enemy...
-	push hl
-	push de
-
-	ld h, d
-	ld l, e
-	ld a, (hl)
-	cp 17
-	jr c, final4_generatesecond	; if X < 17, do not generate 
-	inc hl
-	inc hl
-	ld a, (hl)
-	and a
-	jr z, final4_generatesecond	; in  this case, the sprite does not exist
-
-	ld hl, _new_e
-        ld a, (de)     ; A has e->x
-        ld (hl), a
-        inc hl
-        inc hl         ; point to new_e->y
-        inc de
-        ld a, (de)
-        ld (hl), a
-        inc hl         ; point to new_e->enemy_type
-        ld (hl), 7     ; ENEMY_FINAL4_EYE
-        inc hl         ; point to new_e->movent
-        ld (hl), MOVE_LEFT
-        inc hl         ; point to new_e->energy
-        ld (hl), 0
-        inc hl         ; point to new_e->param1
-        ld (hl), 5
-        inc hl         ; point to new_e->param2
-        ld (hl), 0
-	ld hl, _new_e
-	push hl
-	ld bc, 6
-	push bc
-	call _NewEnemy
-	pop bc
-	pop bc         ; we pop BC because we want to keep HL
-	pop de
-	push de
-	ld a, h
-	and a
-	jr z, notgenerated       ; If the result returned was 0, the enemy could not be generated
-	ld a, (de)
-	sub 16
-	ld (hl), a               ; the X was not like that...
-
-final4_generatesecond:
-	pop de
-	pop hl
-	push hl
-	push de
-
-	ld h, d
-	ld l, e
-	ld bc, 14		; sizeof (struct Entity) + 2
-	add hl, bc
-	ld a, (hl)
-	and a
-	jr z, notgenerated	; in  this case, the sprite does not exist
-
-	ld hl, _new_e
-        ld a, (de)     ; A has e->x
-        ld (hl), a
-        inc hl
-        inc hl         ; point to new_e->y
-        inc de
-        ld a, (de)
-        ld (hl), a
-        inc hl         ; point to new_e->enemy_type
-        ld (hl), 7     ; ENEMY_FINAL4_EYE
-        inc hl         ; point to new_e->movent
-        ld (hl), MOVE_LEFT
-        inc hl         ; point to new_e->energy
-        ld (hl), 0
-        inc hl         ; point to new_e->param1
-        ld (hl), 5
-        inc hl         ; point to new_e->param2
-        ld (hl), 0
-	ld hl, _new_e
-	push hl
-	ld bc, 6
-	push bc
-	call _NewEnemy
-	pop bc
-	pop bc         ; we pop BC because we want to keep HL
-	pop de
-	push de
-	ld a, h
-	and a
-	jr z, notgenerated       ; If the result returned was 0, the enemy could not be generated
-	ld a, (de)
-        add a, 16
-	ld (hl), a               ; the X was not like that...
-
-notgenerated:
-        pop de
-        pop hl
-
-	ld a, 40
-	ld (hl), a
-	jr move_rest_final4
-	
-dec_behav_param:
-	dec (hl)		; e->behav_param--;
-move_rest_final4:
-	; move the rest of the final enemy according to sprite 0
-	ld a, (de)		; e->x
-	ld h, d
-	ld l, e
-	ld bc, 12	; sizeof (struct entity)
-	add hl, bc
-	add a, 32
-	ld (hl), a
-	add hl, bc
-	add a, -32
-	ld (hl), a
-	add hl, bc
-	add a, 16
-	ld (hl), a
-	add hl, bc
-	add a, 16
-	ld (hl), a
-	add hl, bc
-	add a, 16
-	ld (hl), a	; copy the movement to all sprites
-	ret
+;#END_ASM
 
 
-
-
-; Behavior for final enemy 2
-behav_fenemy2:
-	; First, check if we have been defeated
+PUBLIC _behav_fenemy2
+_behav_fenemy2:
+;#BEGIN_ASM
+	;; Behavior for final enemy 2
+	;; First, check if we have been defeated
 
 	ld d, h
 	ld e, l			; save e in DE
@@ -1046,12 +543,12 @@ behav_fenemy2:
 	inc hl
 	inc hl
 	ld (hl), 4				; param1
-	ret
+ret
 
 inc_f2_defeated:
 	inc a
 	ld (_fenemy_defeat), a
-	ret
+ret
 
 final2_start:
 	; before doing anything else, just check if we are already dying. Otherwise some nasty things could happen
@@ -1283,8 +780,6 @@ shoot2_skip2:
 	pop de
 
 
-
-
 shoot2_done:
 	pop hl
 	
@@ -1376,11 +871,14 @@ move_rest_final2:
 	ld (hl), a
 	; copy the movement to all sprites
 ret
+;#END_ASM
 
 
-; Behavior for final enemy 3
-behav_fenemy3:
-	; First, check if we have been defeated
+PUBLIC _behav_fenemy3
+_behav_fenemy3:
+;#BEGIN_ASM
+	;; Behavior for final enemy 3
+	;; First, check if we have been defeated
 
 	ld d, h
 	ld e, l			; save e in DE
@@ -1611,389 +1109,220 @@ noadjust_final3:
 
 	; copy the movement to all sprites
 ret
+;#END_ASM
 
 
-; Wait until ship X distance is < 30, then jump
-; While jumping, it will be animated
-; Uses: behav_param: y speed, it will be 6 initially, then decremented every frame until -6
-;       param4: simple toogle: 0 means movement not started, 1 means movement started
-behav_saltarin:
-	push hl	
-	ld bc, 9
-	add hl, bc
+PUBLIC _behav_fenemy4
+_behav_fenemy4:
+;#BEGIN_ASM
+	;; Behavior for final enemy 4
+	;; First, check if we have been defeated
+
+	ld d, h
+	ld e, l			; save e in DE
+
+	inc hl
+	inc hl
 	ld a, (hl)
-	pop hl
 	and a
-	jr nz, saltarin_alreadyjumping
-	
-saltarin_notjumping:
-	ld a, (_ship_x)
-	sub (hl)
-	jr nc, saltarin_nocarry	; ship_x - e->x is greater or equal than zero
-	
-saltarin_carry:
-	neg			; we convert A to a positive value
-	
-saltarin_nocarry:
-	cp 30 
-	ret nc			; if the distance is greater than 30, we just do not care
-	
-saltarin_jump:
-	push hl
-	ld bc, 9
-	add hl, bc		; point to e->param4
-	ld (hl), 1		; we are jumping!
-	inc hl
-	inc hl
-	ld (hl), -10		; set the vertical speed to 10
-	pop hl
-	
-saltarin_alreadyjumping:	
-	; when jumping, the value of e->behav_param changes the animation
-	; if > 2, second sprite
-	; if < 2 but > -2, third sprite
-	; if < -2, fourth sprite
-	ld d, h
-	ld e, l
-	ld bc, 11
-	add hl, bc	; point to e->behav_param
-	ld a, (hl)
-	cp 10
-	jr z, saltarin_goingdown
-	ld h, d
-	ld l, e	
-	inc hl
-	add a,(hl)	; A + (HL) is the new position
-	ld (hl), a	
-	ld bc, 10
-	add hl, bc	; point to e->behav_param
-	ld a, (hl)
-	inc a
-	ld (hl), a
-	ld bc, -9
-	add hl, bc		; point to e->sprnum
-	cp 246
-	jr nc, saltarin_anim1	; if < -3
-	cp 3
-	jr nc, saltarin_anim3   ; if > 3
-	
-saltarin_anim2:
-	ld (hl), ENEMY_SALTARIN+2
-	ret
-	
-saltarin_anim3:
-	ld (hl), ENEMY_SALTARIN+3
-	ret
-	
-saltarin_anim1:
-	ld (hl), ENEMY_SALTARIN+1
-	ret
-	
-saltarin_goingdown:
-	ld h, d
-	ld l, e	
-	inc hl
-	add a,(hl)	; A + (HL) is the new position
-	cp 112
-	jr nc, saltarin_gonedown		; if the position is >= 112, the enemy is gone
-	ld (hl), a
-ret
-	
-saltarin_gonedown:
-	inc hl			; HL points now to e->sprnum
-	xor a
-	ld (hl), a
-ret
-
-
-; Wait until ship X distance is < 30, then jump
-; While jumping, it will be animated
-; Uses: behav_param: y speed, it will be 6 initially, then decremented every frame until -6
-;       param4: simple toogle: 0 means movement not started, 1 means movement started
-behav_saltarin_bis:
-	push hl	
-	ld bc, 9
+	jr nz, final4_start
+	ld bc, 12
 	add hl, bc
 	ld a, (hl)
-	pop hl
 	and a
-	jr nz, saltarinbis_alreadyjumping
-	
-saltarinbis_notjumping:
-	ld a, (_ship_x)
-	sub (hl)
-	jr nc, saltarinbis_nocarry	; ship_x - e->x is greater or equal than zero
-	
-saltarinbis_carry:
-	neg			; we convert A to a positive value
-	
-saltarinbis_nocarry:
-	cp 30 
-	ret nc			; if the distance is greater than 30, we just do not care
-	
-saltarinbis_jump:
-	push hl
-	ld bc, 9
-	add hl, bc		; point to e->param4
-	ld (hl), 1		; we are jumping!
-	inc hl
-	inc hl
-	ld (hl), -10		; set the vertical speed to 10
-	pop hl
-	
-saltarinbis_alreadyjumping:	
-	; when jumping, the value of e->behav_param changes the animation
-	; if > 2, second sprite
-	; if < 2 but > -2, third sprite
-	; if < -2, fourth sprite
-	ld d, h
-	ld e, l
-	ld bc, 11
-	add hl, bc	; point to e->behav_param
-	ld a, (hl)
-	cp 10
-	jr z, saltarinbis_goingdown
-	ld h, d
-	ld l, e	
-	inc hl
-	add a,(hl)	; A + (HL) is the new position
-	ld (hl), a	
-	ld bc, 10
-	add hl, bc	; point to e->behav_param
-	ld a, (hl)
+	jr nz, final4_start
+	ld a, (_fenemy_defeat)
+	and a
+	jr nz, inc_f4_defeated			; if the enemy is defeated, there is nothing left to do for us but increase the count
 	inc a
-	ld (hl), a
-	ld bc, -9
-
-	add hl, bc		; point to e->sprnum
-	cp 246
-	jr nc, saltarinbis_anim1	; if < -3
-	cp 3
-	jr nc, saltarinbis_anim3   ; if > 3
-	
-saltarinbis_anim2:
-	ld (hl), ENEMY_SALTARIN_BIS+2
-ret
-	
-saltarinbis_anim3:
-	ld (hl), ENEMY_SALTARIN_BIS+3
-ret
-
-saltarinbis_anim1:
-	ld (hl), ENEMY_SALTARIN_BIS+1
-ret
-	
-saltarinbis_goingdown:
-	ld h, d
-	ld l, e	
-	inc hl
-	add a,(hl)	; A + (HL) is the new position
-	cp 112
-	jr nc, saltarinbis_gonedown		; if the position is >= 112, the enemy is gone
-	ld (hl), a
-ret
-	
-saltarinbis_gonedown:
-	inc hl			; HL points now to e->sprnum
-	xor a
-	ld (hl), a
-ret
-
-
-
-
-; Casco is walking left. Every 24 frames stop, shoot a missile, wait for 8 frames and continue
-; Uses: behav_param: counter
-behav_casco:
-	ld d, h
-	ld e, l	
-	ld bc, 11
-	add hl, bc
-	ld a, (hl)	; a = e->behav_param
-	inc a
-	cp 24
-	jr z, casco_shoot
-	cp 32
-	jr nz, casco_storeandcont
-	
-casco_moveagain:
-	xor a
-	ld (hl), a	; e->behav_param = 0
-	ld bc, -7
-	add hl, bc	; HL points to e->movement
-	ld (hl), MOVE_LEFTANIM
+	ld (_fenemy_defeat),a		; final_enemy_defeated=1, now make the rest of it explode
+	add hl, bc				; we are pointint at sprite3->sprnum
+        ld (hl), EXPLOSION_SPR
 	inc hl
 	inc hl
-	ld (hl), 3	; move with animation, change speed
-ret
-	
-casco_shoot:
-	ld (hl), a	; store e->behav_param
-	ld bc, -7
-	add hl, bc	; HL points to e->movement
-	ld (hl), MOVE_LEFT
+	ld (hl), MOVE_EXPLOSION
 	inc hl
 	inc hl
-	ld (hl), 2	; move without, at the background speed
-	; now we should create the shoot and stuff
-
-	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
-
-	ld a, (de)
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_MISSILE
-	push bc			; MOVE_MISSILE
-	ld bc, SHOT_CASCO_MISSILE
-	push bc			; SHOT_CASCO_MISSILE
-	call _NewEnemyShoot_FX
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	ld a, l
-	or h
-	ret z                    ; If HL == 0, then skip, as the enemy shoot could not be created
-
-	ld bc, 6
-	add hl, bc
-	ld (hl), 4		; move sloooowly
-	inc hl
-	ld (hl), 0		; param2=0
-
-ret
-	
-casco_storeandcont:
-	ld (hl), a
-ret
-
-
-
-; Casco is walking left. Every 24 frames stop, shoot a missile, wait for 8 frames and continue
-; Uses: behav_param: counter
-behav_casco_bis:
-	ld d, h
-	ld e, l
-	ld bc, 11
-	add hl, bc
-	ld a, (hl)	; a = e->behav_param
-	inc a
-	cp 24
-	jr z, cascobis_shoot
-	cp 32
-	jr nz, cascobis_storeandcont
-	
-cascobis_moveagain:
-	xor a
-	ld (hl), a	; e->behav_param = 0
-	ld bc, -7
-	add hl, bc	; HL points to e->movement
-	ld (hl), MOVE_LEFTANIM
+	ld (hl), 4				; param1
+	ld bc, 8
+	add hl, bc				; sprite4
+        ld (hl), EXPLOSION_SPR
 	inc hl
 	inc hl
-	ld (hl), 3	; move with animation, change speed
-ret
-	
-cascobis_shoot:
-	ld (hl), a	; store e->behav_param
-	ld bc, -7
-	add hl, bc	; HL points to e->movement
-	ld (hl), MOVE_LEFT
+	ld (hl), MOVE_EXPLOSION
 	inc hl
 	inc hl
-	ld (hl), 2	; move without, at the background speed
-	; now we should create the shoot and stuff
-
-	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
-
-	ld a, (de)
-	ld c, a
-	ld b, 0
-	push bc			; e->x
-	inc de
-	ld a, (de)
-	ld c, a
-	push bc			; e->y
-	ld bc, MOVE_MISSILE
-	push bc			; MOVE_MISSILE
-	ld bc, SHOT_CASCO_MISSILE_BIS
-	push bc			; SHOT_CASCO_MISSILE
-	call _NewEnemyShoot_FX
-	pop bc
-	pop bc
-	pop bc
-	pop bc
-	; upon return, HL holds the pointer to the new enemy shoot
-	ld a, l
-	or h
-	ret z                    ; If HL == 0, then skip, as the enemy shoot could not be created
-
-	ld bc, 6
-	add hl, bc
-	ld (hl), 4		; move sloooowly
+	ld (hl), 4				; param1
+	add hl, bc				; sprite5
+        ld (hl), EXPLOSION_SPR
 	inc hl
-	ld (hl), 0		; param2=0
-
-ret
-
-cascobis_storeandcont:
-	ld (hl), a
+	inc hl
+	ld (hl), MOVE_EXPLOSION
+	inc hl
+	inc hl
+	ld (hl), 4				; param1
+	add hl, bc				; sprite6
+        ld (hl), EXPLOSION_SPR
+	inc hl
+	inc hl
+	ld (hl), MOVE_EXPLOSION
+	inc hl
+	inc hl
+	ld (hl), 4				; param1
 	ret
 
-; Just wait until the animation reachs frame 7, then move towards ship
-; behav_param: counter, will wait until it reaches 57
+inc_f4_defeated:
+	inc a
+	ld (_fenemy_defeat), a
+ret
 
-behav_egg:
-	ld d, h
-	ld e, l
-	ld bc, 11
-	add hl, bc
-	inc (hl)
-	ld a, (hl)	; a = e->behav_param
-	cp 57
-	ret nz
-	; now, change the movement to move_left
+final4_start:
 	ld h, d
 	ld l, e
-	ld bc, 4
-	add hl, bc
-	ld (hl), MOVE_KAMIKAZE_2
-	inc hl
-	inc hl
-	ld (hl), 6	; move fast
-	ret
-
-; Ugly guy is constantly jumping
-; Uses: behav_param: y speed, it will be 4 initially, then decremented every frame until -4, then cycle
-behav_uglyguy:
-	ld d, h
-	ld e, l
 	ld bc, 11
-	add hl, bc	; point to e->behav_param
+	add hl, bc		; HL == e->behav_param
 	ld a, (hl)
-	dec a
-	cp -5
-	jr nz, ugluguy_nochange
-	ld a, 4
-ugluguy_nochange:
-	ld (hl), a
+	and a
+	jp nz, dec_behav_param
+
+; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_BASIC);
+
+; Generate new enemy...
+	push hl
+	push de
+
 	ld h, d
 	ld l, e
+	ld a, (hl)
+	cp 17
+	jr c, final4_generatesecond	; if X < 17, do not generate 
 	inc hl
-	add a,(hl)	; A + (HL) is the new position
+	inc hl
+	ld a, (hl)
+	and a
+	jr z, final4_generatesecond	; in  this case, the sprite does not exist
+
+	ld hl, _new_e
+        ld a, (de)     ; A has e->x
+        ld (hl), a
+        inc hl
+        inc hl         ; point to new_e->y
+        inc de
+        ld a, (de)
+        ld (hl), a
+        inc hl         ; point to new_e->enemy_type
+        ld (hl), 7     ; ENEMY_FINAL4_EYE
+        inc hl         ; point to new_e->movent
+        ld (hl), MOVE_LEFT
+        inc hl         ; point to new_e->energy
+        ld (hl), 0
+        inc hl         ; point to new_e->param1
+        ld (hl), 5
+        inc hl         ; point to new_e->param2
+        ld (hl), 0
+	ld hl, _new_e
+	push hl
+	ld bc, 6
+	push bc
+	call _NewEnemy
+	pop bc
+	pop bc         ; we pop BC because we want to keep HL
+	pop de
+	push de
+	ld a, h
+	and a
+	jr z, notgenerated       ; If the result returned was 0, the enemy could not be generated
+	ld a, (de)
+	sub 16
+	ld (hl), a               ; the X was not like that...
+
+final4_generatesecond:
+	pop de
+	pop hl
+	push hl
+	push de
+
+	ld h, d
+	ld l, e
+	ld bc, 14		; sizeof (struct Entity) + 2
+	add hl, bc
+	ld a, (hl)
+	and a
+	jr z, notgenerated	; in  this case, the sprite does not exist
+
+	ld hl, _new_e
+        ld a, (de)     ; A has e->x
+        ld (hl), a
+        inc hl
+        inc hl         ; point to new_e->y
+        inc de
+        ld a, (de)
+        ld (hl), a
+        inc hl         ; point to new_e->enemy_type
+        ld (hl), 7     ; ENEMY_FINAL4_EYE
+        inc hl         ; point to new_e->movent
+        ld (hl), MOVE_LEFT
+        inc hl         ; point to new_e->energy
+        ld (hl), 0
+        inc hl         ; point to new_e->param1
+        ld (hl), 5
+        inc hl         ; point to new_e->param2
+        ld (hl), 0
+	ld hl, _new_e
+	push hl
+	ld bc, 6
+	push bc
+	call _NewEnemy
+	pop bc
+	pop bc         ; we pop BC because we want to keep HL
+	pop de
+	push de
+	ld a, h
+	and a
+	jr z, notgenerated       ; If the result returned was 0, the enemy could not be generated
+	ld a, (de)
+        add a, 16
+	ld (hl), a               ; the X was not like that...
+
+notgenerated:
+        pop de
+        pop hl
+
+	ld a, 40
 	ld (hl), a
-
+	jr move_rest_final4
+	
+dec_behav_param:
+	dec (hl)		; e->behav_param--;
+move_rest_final4:
+	; move the rest of the final enemy according to sprite 0
+	ld a, (de)		; e->x
+	ld h, d
+	ld l, e
+	ld bc, 12	; sizeof (struct entity)
+	add hl, bc
+	add a, 32
+	ld (hl), a
+	add hl, bc
+	add a, -32
+	ld (hl), a
+	add hl, bc
+	add a, 16
+	ld (hl), a
+	add hl, bc
+	add a, 16
+	ld (hl), a
+	add hl, bc
+	add a, 16
+	ld (hl), a	; copy the movement to all sprites
 ret
+;#END_ASM
 
 
-; Behavior for final enemy 5
-behav_fenemy5:
+PUBLIC _behav_fenemy5
+_behav_fenemy5:
+;#BEGIN_ASM
+	; Behavior for final enemy 5
 	; First, check if we have been defeated
 
 	ld d, h
@@ -2224,12 +1553,13 @@ move_rest_final5:		; move the rest of the final enemy according to sprite 0
 	ld (hl), a
 
 ret
+;#END_ASM
 
 
-
-
-; Behavior for final enemy 6
-behav_fenemy6:
+PUBLIC _behav_fenemy6
+_behav_fenemy6:
+;#BEGIN_ASM
+	; Behavior for final enemy 6
 	; First, check if we have been defeated
 
 	ld d, h
@@ -2331,9 +1661,6 @@ final6_storeanimation:
 	add hl, bc
 	inc a
 	ld (hl), a
-
-
-
 
 	ld h, d
 	ld l, e
@@ -2606,121 +1933,14 @@ move_rest_final6:		; move the rest of the final enemy according to sprite 0
 	inc hl
 	ld (hl), a
 
-	ret
+ret
+;#END_ASM
 
 
-
-; behaviour for enemies following another enemy
-; basically check if the enemy is exploding, and if so explode as well
-
-behav_follow:
-	ld d, h
-	ld e, l			; save e in DE
-	ld bc, 7
-	add hl, bc		; HL == e->param2
-	ld a, (hl)
-	cp 255
-	ret z			; if e->param2 is 255, just return
-
-	inc a
-	ld hl, 	_active_enemies-12
-	ld bc, 12
-follow_loop:
-	add hl, bc
-	dec a
-	jr nz, follow_loop	; position at the reference enemy
-	
-	ld bc,4
-	add hl, bc		; HL == enemy->movement
-	ld a, (hl)
-	cp MOVE_EXPLOSION
-	ret nz			; return if it is not exploding
-; enemy is exploding, copy parameters
-	dec hl
-	dec hl			; point at enemy->sprnum
-	inc de
-	inc de			; point at enemy->sprnum
-	ld a, (hl)
-	ld (de), a
-	inc hl
-	inc hl
-	inc de
-	inc de			; point at e->movement
-	ld a, (hl)
-	ld (de), a
-	inc hl
-	inc hl
-	inc de
-	inc de			; point at e->param1
-	ld a, (hl)
-	ld (de), a
-	ret
-	
-
-; Just like final enemy in level 1, shoot an enemy every now and then
-; currently, every 64 frames
-
-behav_final1_l7:
-	ld d, h
-	ld e, l
-	ld bc, 11
-	add hl, bc		; HL == e->behav_param
-	ld a, (hl)
-	and $1f			; shoot once every 16 frames
-	cp 15
-	jr nz, inc_behav_param_final1_l7
-
-; Generate new enemy...
-	push hl
-	push de
-
-	ld hl, _new_e
-        ld a, (de)     ; A has e->x
-        ld (hl), a
-	inc hl
-        inc hl  ; point to new_e->y
-        inc de
-        ld a, (de)
-	add a, 20
-        ld (hl), a
-        inc hl         ; point to new_e->enemy_type
-        ld (hl), 32    ; ENEMY_SHIP1_LEVEL7
-        inc hl         ; point to new_e->movent
-        ld (hl), MOVE_KAMIKAZE_NOANIM
-        inc hl         ; point to new_e->energy
-        ld (hl), 1
-        inc hl         ; point to new_e->param1
-        ld (hl), 4
-        inc hl         ; point to new_e->param2
-        ld (hl), 0
-	ld hl, _new_e
-	push hl
-	ld bc, 4
-	push bc
-	call _NewEnemy
-	pop bc
-	pop bc         ; we pop BC because we want to keep HL
-	pop de
-	push de
-	ld a, h
-	and l
-	jr z, notgenerated_f1_l7       ; If the result returned was 0, the enemy could not be generated
-	ld a, (de)
-	add a, 8
-	ld (hl), a               ; the X was not like that...
-
-notgenerated_f1_l7:
-        pop de
-        pop hl
-
-inc_behav_param_final1_l7:
-	inc (hl)		; e->behav_param++;
-	ret
-
-
-
-; Behavior for final enemy 7
-behav_fenemy7:
+PUBLIC _behav_fenemy7
+_behav_fenemy7:
+;#BEGIN_ASM
+	; Behavior for final enemy 7
 	; First, check if we have been defeated
 
 	ld d, h
@@ -3338,6 +2558,905 @@ move_rest_final7:		; move the rest of the final enemy according to sprite 0
 	inc hl
 	ld (hl), a
 	ret
+;#END_ASM
+
+
+PUBLIC _behav_final1_l7
+_behav_final1_l7:
+;#BEGIN_ASM
+; Just like final enemy in level 1, shoot an enemy every now and then
+; currently, every 64 frames
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+	ld a, (hl)
+	and $1f			; shoot once every 16 frames
+	cp 15
+	jr nz, inc_behav_param_final1_l7
+
+; Generate new enemy...
+	push hl
+	push de
+
+	ld hl, _new_e
+        ld a, (de)     ; A has e->x
+        ld (hl), a
+	inc hl
+        inc hl  ; point to new_e->y
+        inc de
+        ld a, (de)
+	add a, 20
+        ld (hl), a
+        inc hl         ; point to new_e->enemy_type
+        ld (hl), 32    ; ENEMY_SHIP1_LEVEL7
+        inc hl         ; point to new_e->movent
+        ld (hl), MOVE_KAMIKAZE_NOANIM
+        inc hl         ; point to new_e->energy
+        ld (hl), 1
+        inc hl         ; point to new_e->param1
+        ld (hl), 4
+        inc hl         ; point to new_e->param2
+        ld (hl), 0
+	ld hl, _new_e
+	push hl
+	ld bc, 4
+	push bc
+	call _NewEnemy
+	pop bc
+	pop bc         ; we pop BC because we want to keep HL
+	pop de
+	push de
+	ld a, h
+	and l
+	jr z, notgenerated_f1_l7       ; If the result returned was 0, the enemy could not be generated
+	ld a, (de)
+	add a, 8
+	ld (hl), a               ; the X was not like that...
+
+notgenerated_f1_l7:
+        pop de
+        pop hl
+
+inc_behav_param_final1_l7:
+	inc (hl)		; e->behav_param++;
+ret
+;#END_ASM
+
+
+PUBLIC _behav_follow
+_behav_follow:
+;#BEGIN_ASM
+	; behaviour for enemies following another enemy
+	; basically check if the enemy is exploding, and if so explode as well
+	
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 7
+	add hl, bc		; HL == e->param2
+	ld a, (hl)
+	cp 255
+	ret z			; if e->param2 is 255, just return
+
+	inc a
+	ld hl, 	_active_enemies-12
+	ld bc, 12
+follow_loop:
+	add hl, bc
+	dec a
+	jr nz, follow_loop	; position at the reference enemy
+	
+	ld bc,4
+	add hl, bc		; HL == enemy->movement
+	ld a, (hl)
+	cp MOVE_EXPLOSION
+	ret nz			; return if it is not exploding
+; enemy is exploding, copy parameters
+	dec hl
+	dec hl			; point at enemy->sprnum
+	inc de
+	inc de			; point at enemy->sprnum
+	ld a, (hl)
+	ld (de), a
+	inc hl
+	inc hl
+	inc de
+	inc de			; point at e->movement
+	ld a, (hl)
+	ld (de), a
+	inc hl
+	inc hl
+	inc de
+	inc de			; point at e->param1
+	ld a, (hl)
+	ld (de), a
+ret
+;#END_ASM	
+
+
+PUBLIC _behav_none
+_behav_none:	;;behav_none:
+;#BEGIN_ASM
+	;; Dummy behavior, does nothing
+ret
+;#END_ASM
+
+
+PUBLIC _behav_powerup
+_behav_powerup:
+;#BEGIN_ASM
+	;; Behavior for power ups
+	;; It is pretty simple: 
+	;;if we are exploding, 
+	;;and we are in the last
+	;; explosion frame, turn into 
+	;;a power up
+	inc hl
+	inc hl
+	inc hl
+	inc hl			; check movement_type
+	ld a, (hl)
+	cp MOVE_EXPLOSION
+	ret nz			; if we are not exploding, just exit
+	; if we are exploding, check param1, which will specify the current frame. If it is one... just generate the new power up
+	inc hl
+	inc hl
+	ld a, (hl)
+	cp 1
+	ret nz			; only if param1==1 we will do something
+
+	inc hl			; param2 is the sprite number of the power up to generate
+	ld d, (hl)		; D == param2
+	ld bc, -7
+	add hl, bc		
+	ld e, (hl)			; E == x
+	inc hl
+	ld a, (hl)		; A == y
+
+	ld hl, _power_up
+	ld (hl), e
+	inc hl
+	ld (hl), a
+	inc hl
+	ld (hl), d
+	inc hl
+	inc hl
+	ld (hl), MOVE_LEFT
+	inc hl
+	inc hl
+	ld (hl), 2
+	inc hl
+	ld (hl), d
+	
+	ld hl, FX_HIT_CAPSULE
+	push hl
+	call _wyz_effect
+	pop hl
+ret
+;#END_ASM
+
+
+PUBLIC _behav_saltarin
+_behav_saltarin:
+;#BEGIN_ASM
+	;; Wait until ship X distance is
+	;;< 30, then jump
+	;; While jumping, it will be 
+	;;animated
+	;; Uses: behav_param: y speed, it 
+	;;will be 6 initially, then 
+	;;decremented every frame until -6
+	;;       param4: simple toogle: 
+	;; 0 means movement not started
+	;; 1 means movement started
+
+	push hl	
+	ld bc, 9
+	add hl, bc
+	ld a, (hl)
+	pop hl
+	and a
+	jr nz, saltarin_alreadyjumping
+	
+saltarin_notjumping:
+	ld a, (_ship_x)
+	sub (hl)
+	jr nc, saltarin_nocarry	; ship_x - e->x is greater or equal than zero
+	
+saltarin_carry:
+	neg			; we convert A to a positive value
+	
+saltarin_nocarry:
+	cp 30 
+	ret nc			; if the distance is greater than 30, we just do not care
+	
+saltarin_jump:
+	push hl
+	ld bc, 9
+	add hl, bc		; point to e->param4
+	ld (hl), 1		; we are jumping!
+	inc hl
+	inc hl
+	ld (hl), -10		; set the vertical speed to 10
+	pop hl
+	
+saltarin_alreadyjumping:	
+	; when jumping, the value of e->behav_param changes the animation
+	; if > 2, second sprite
+	; if < 2 but > -2, third sprite
+	; if < -2, fourth sprite
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc	; point to e->behav_param
+	ld a, (hl)
+	cp 10
+	jr z, saltarin_goingdown
+	ld h, d
+	ld l, e	
+	inc hl
+	add a,(hl)	; A + (HL) is the new position
+	ld (hl), a	
+	ld bc, 10
+	add hl, bc	; point to e->behav_param
+	ld a, (hl)
+	inc a
+	ld (hl), a
+	ld bc, -9
+	add hl, bc		; point to e->sprnum
+	cp 246
+	jr nc, saltarin_anim1	; if < -3
+	cp 3
+	jr nc, saltarin_anim3   ; if > 3
+	
+saltarin_anim2:
+	ld (hl), ENEMY_SALTARIN+2
+	ret
+	
+saltarin_anim3:
+	ld (hl), ENEMY_SALTARIN+3
+	ret
+	
+saltarin_anim1:
+	ld (hl), ENEMY_SALTARIN+1
+	ret
+	
+saltarin_goingdown:
+	ld h, d
+	ld l, e	
+	inc hl
+	add a,(hl)	; A + (HL) is the new position
+	cp 112
+	jr nc, saltarin_gonedown		; if the position is >= 112, the enemy is gone
+	ld (hl), a
+ret
+	
+saltarin_gonedown:
+	inc hl			; HL points now to e->sprnum
+	xor a
+	ld (hl), a
+ret
+;#END_ASM
+
+
+PUBLIC _behav_saltarin_bis
+_behav_saltarin_bis:
+;#BEGIN_ASM
+	;; Wait until ship X distance is 
+	;; < 30, then jump
+	;; While jumping, it will 
+	;; be animated
+	;; Uses: behav_param: 
+	;; y speed, it will be 6 initially,
+	;; then decremented every frame
+	;; until -6
+	;;	param4: simple toogle: 
+	;; 0 means movement not started
+	;; 1 means movement started
+
+	push hl	
+	ld bc, 9
+	add hl, bc
+	ld a, (hl)
+	pop hl
+	and a
+	jr nz, saltarinbis_alreadyjumping
+	
+saltarinbis_notjumping:
+	ld a, (_ship_x)
+	sub (hl)
+	jr nc, saltarinbis_nocarry	; ship_x - e->x is greater or equal than zero
+	
+saltarinbis_carry:
+	neg			; we convert A to a positive value
+	
+saltarinbis_nocarry:
+	cp 30 
+	ret nc			; if the distance is greater than 30, we just do not care
+	
+saltarinbis_jump:
+	push hl
+	ld bc, 9
+	add hl, bc		; point to e->param4
+	ld (hl), 1		; we are jumping!
+	inc hl
+	inc hl
+	ld (hl), -10		; set the vertical speed to 10
+	pop hl
+	
+saltarinbis_alreadyjumping:	
+	; when jumping, the value of e->behav_param changes the animation
+	; if > 2, second sprite
+	; if < 2 but > -2, third sprite
+	; if < -2, fourth sprite
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc	; point to e->behav_param
+	ld a, (hl)
+	cp 10
+	jr z, saltarinbis_goingdown
+	ld h, d
+	ld l, e	
+	inc hl
+	add a,(hl)	; A + (HL) is the new position
+	ld (hl), a	
+	ld bc, 10
+	add hl, bc	; point to e->behav_param
+	ld a, (hl)
+	inc a
+	ld (hl), a
+	ld bc, -9
+
+	add hl, bc		; point to e->sprnum
+	cp 246
+	jr nc, saltarinbis_anim1	; if < -3
+	cp 3
+	jr nc, saltarinbis_anim3   ; if > 3
+	
+saltarinbis_anim2:
+	ld (hl), ENEMY_SALTARIN_BIS+2
+ret
+	
+saltarinbis_anim3:
+	ld (hl), ENEMY_SALTARIN_BIS+3
+ret
+
+saltarinbis_anim1:
+	ld (hl), ENEMY_SALTARIN_BIS+1
+ret
+	
+saltarinbis_goingdown:
+	ld h, d
+	ld l, e	
+	inc hl
+	add a,(hl)	; A + (HL) is the new position
+	cp 112
+	jr nc, saltarinbis_gonedown		; if the position is >= 112, the enemy is gone
+	ld (hl), a
+ret
+	
+saltarinbis_gonedown:
+	inc hl			; HL points now to e->sprnum
+	xor a
+	ld (hl), a
+ret
+;#END_ASM
+
+
+PUBLIC _behav_shoot_left
+_behav_shoot_left:
+;#BEGIN_ASM
+	;;behav_shoot_left:
+	;; Shoot once, left direction
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+	ld a, (hl)
+	and a
+	ret nz			; if e->behav_param is not zero, just return
+
+	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
+
+	push hl
+	ld a, (de)
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_LEFT
+	push bc			; MOVE_LEFT
+	ld bc, SHOT_ENEMY
+	push bc			; SHOT_ENEMY
+	call _NewEnemyShoot
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	pop hl			; HL is pointing to e->behav_param
+	ld a, 1
+	ld (hl), a
+ret
+;#END_ASM
+
+
+PUBLIC _behav_shoot_left_Y
+_behav_shoot_left_Y:
+;#BEGIN_ASM
+	;;behav_shoot_left_Y:
+	;; Shoot once, left direction, 
+	;; when the ship is within a
+	;; (-10,+10) Y distance
+	ld d, h
+	ld e, l			;; save e in DE
+	ld bc, 11
+	add hl, bc		;; HL == e->behav_param
+	ld a, (hl)
+	and a
+	ret nz			;; if e->behav_param is not zero, just return
+
+	inc de
+	ld a, (de)		;; A = e->y
+	ld hl, _ship_y
+	sub (hl)
+	jr nc, y_nocarry
+	neg
+	
+y_nocarry:
+	cp 10
+	ret nc			;; if the distance is greater than 10, do not shoot
+
+	dec de
+	ld h, d
+	ld l, e
+	ld bc, 11
+	add hl, bc		;; HL == e->behav_param
+
+	;; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
+
+	push hl
+	ld a, (de)
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_LEFT
+	push bc			; MOVE_LEFT
+	ld bc, SHOT_ENEMY
+	push bc			; SHOT_ENEMY
+	call _NewEnemyShoot
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	pop hl			; HL is pointing to e->behav_param
+	ld a, 1
+	ld (hl), a
+ret
+;#END_ASM
+
+
+PUBLIC _behav_shoot_left_wait
+_behav_shoot_left_wait:
+;#BEGIN_ASM
+	;;behav_shoot_left_wait:
+	;; Shoot once, left direction, but wait 20 frames to do so
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+	ld a, (hl)
+	cp 20
+	ret nc			; if e->behav_param > 20, we did it already
+	inc a
+	ld (hl), a
+	cp 20
+	ret nz			; we will only shoot when e->behav_param is 20
+
+	; NewEnemyShoot(e->x, e->y, MOVE_LEFT, SHOT_ENEMY)
+	ld a, (de)
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_LEFT
+	push bc			; MOVE_LEFT
+	ld bc, SHOT_ENEMY
+	push bc			; SHOT_ENEMY
+	call _NewEnemyShoot
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+ret
+	;; upon return, HL holds the
+	;;pointer to the new enemy shoot
+	;; anyway, we do not care
+;#END_ASM
+
+
+PUBLIC _behav_shoot_target
+_behav_shoot_target:
+;#BEGIN_ASM
+	;; Shoot at ship, point at target
+	;;(kamikaze bomb)
+	;; behav_param: counter, will shoot
+	;;every 16 frames
+	push hl
+	ld de, 11
+	add hl, de
+	ld a, (hl)
+	inc a
+	ld (hl), a
+	pop hl
+	and $1F
+	cp $1f		; will shoot every 32 frames
+	ret nz
+	; now we have to shoot. First, generate shoot
+	push hl
+	;NewEnemyShoot(e->x, e->y+14, MOVE_TARGET, SHOT_MEGA);
+	ld e, (hl)
+	ld d, 0
+	push de		; e->x
+	inc hl
+	ld a, (hl)
+	add a, 14
+	ld e, a
+	push de		; e->y+14
+	ld e, MOVE_TARGET
+	push de
+	ld e, SHOT_MEGA
+	push de
+	call _NewEnemyShoot_FX	; HL holds the pointer to the new enemy shoot
+	pop de
+	pop de
+	pop de
+	pop de
+
+	; Then, generate parameters for the shoot
+	push hl
+	pop ix			; IX holds the pointer to the new enemy shoot
+	pop hl			; get the original HL (entity) back
+
+	ld a, ixh
+	or ixl
+	ret z			; If IX == 0, then skip, as the enemy shoot could not be created
+
+	ld d, (hl)		; D==x_enemy
+	inc hl
+	ld e, (hl)		; E==y_enemy
+	ld a, (_ship_x)
+	add a, 16
+	ld h, a			; H = x_ship
+	ld a, (_ship_y)
+	ld l, a			; L = y_ship
+	call calcdirectshoot
+
+	ld (ix+6), h
+	ld (ix+7), l
+	ld (ix+8), d
+	ld (ix+9), e
+	ld (ix+3), 0
+	ld (ix+5), 0
+ret
+;#END_ASM
+
+
+PUBLIC _behav_shoot_target_left
+_behav_shoot_target_left:
+;#BEGIN_ASM
+	;; Shoot at ship, left direction,
+	;; from ground
+	;; Uses: behav_param: counter, 
+	;; will shoot three times
+
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+ 	ld a, (hl)
+   	and a			; A == 0
+   	jr z, check_first_shoot_left
+   	dec a			; A == 1
+   	jr z, check_second_shoot_left
+   	dec a			; A == 2
+	ret nz
+	
+check_third_shoot_left:
+	ld a, (de)
+	cp 100
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr left_new_shoot
+	
+check_second_shoot_left:
+	ld a, (de)
+	cp 170
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr left_new_shoot
+	
+check_first_shoot_left:
+	ld a, (de)
+	cp 220
+	ret nc
+	inc (hl)		; e->behav_param++
+	
+left_new_shoot:
+	; NewEnemyShoot(e->x, e->y, MOVE_UPLEFT, SHOT_CANNON_LEFT);
+	sub 8
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	sub 8
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_UPLEFT
+	push bc			; MOVE_UPLEFT
+	ld bc, SHOT_CANNON_LEFT
+	push bc			; SHOT_CANNON_LEFT
+	call _NewEnemyShoot
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	ld a, l
+	or h
+	ret z			; If HL == 0, then skip, as the enemy shoot could not be created
+
+	ld bc, 6
+	add hl, bc
+	ld (hl), 4		; behav_e->param1=4
+	inc hl
+	ld (hl), 4		; behav_e->param2=4
+ret
+;#END_ASM
+
+
+PUBLIC _behav_shoot_target_right
+_behav_shoot_target_right:
+;#BEGIN_ASM
+
+	;; Shoot at ship, right direction,
+	;;from ground
+	;; Uses: behav_param: counter, 
+	;;will shoot three times
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+	ld a, (hl)
+	cp 0
+	jr z, check_first_shoot_right
+	cp 1
+	jr z, check_second_shoot_right
+	cp 2
+	ret nz
+check_third_shoot_right:
+	ld a, (de)
+	cp 40
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr right_new_shoot
+	
+check_second_shoot_right:
+	ld a, (de)
+	cp 90
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr right_new_shoot
+	
+check_first_shoot_right:
+	ld a, (de)
+	cp 220
+	ret nc
+	inc (hl)		; e->behav_param++
+	
+right_new_shoot:
+	; NewEnemyShoot(e->x, e->y, MOVE_UPRIGHT, SHOT_CANNON_RIGHT);
+	add a, 8
+	ld c, a
+	ld b, 0
+	push bc			; e->x
+	inc de
+	ld a, (de)
+	sub 8
+	ld c, a
+	push bc			; e->y
+	ld bc, MOVE_UPRIGHT
+	push bc			; MOVE_UPRIGHT
+	ld bc, SHOT_CANNON_RIGHT
+	push bc			; SHOT_CANNON_RIGHT
+	call _NewEnemyShoot
+	pop bc
+	pop bc
+	pop bc
+	pop bc
+	; upon return, HL holds the pointer to the new enemy shoot
+	ld a, l
+	or h
+	ret z			; If HL == 0, then skip, as the enemy shoot could not be created
+
+	ld bc, 6
+	add hl, bc
+	ld (hl), 4		; behav_e->param1=4
+ret
+;#END_ASM
+
+
+PUBLIC _behav_turret
+_behav_turret:
+;#BEGIN_ASM
+	;; Behavior for 
+	;;three-position turrets
+	;;They check the ship X position.
+	;;If it is between a -30,30 px range
+	;; they are in the middle position,
+	;; otherwise they point at ship
+	;; And they shoot from time to time
+
+	;; Uses: behav_param: counter,
+	;;will shoot three times
+
+
+	ld a, (_ship_x)		; get ship X position
+	ld b, (hl)		; B = e->x
+	sub b
+	jr nc, turret_nocarry	; ship_x - e->x is greater or equal than zero
+	
+turret_carry:
+	neg			; we convert A to a positive value
+	cp 30 
+	jr c, turret_center	; set the center position
+	ld a, ENEMY_TURRET	; this is the sprite for the look-left position
+	jr turret_done
+	
+turret_nocarry:
+	cp 30 
+	jr c, turret_center	; set the center position
+	ld a, ENEMY_TURRET+2	; this is the sprite for the look-right position
+	jr turret_done
+	
+turret_center:
+	ld a, ENEMY_TURRET+1	; this is the sprite for the look-up position
+	
+turret_done:
+	inc hl
+	inc hl
+	ld (hl), a		; we have just set the new sprite
+
+	dec hl
+	dec hl
+	
+	ld d, h
+	ld e, l			; save e in DE
+	ld bc, 11
+	add hl, bc		; HL == e->behav_param
+	ld a, (hl)
+	cp 0
+	jr z, check_first_shoot_turret
+	cp 1
+	jr z, check_second_shoot_turret
+	cp 2
+	ret nz
+	
+check_third_shoot_turret:
+	ld a, (de)
+	cp 40
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr turret_new_shoot
+	
+check_second_shoot_turret:
+	ld a, (de)
+	cp 90
+	ret nc
+	inc (hl)		; e->behav_param++
+	jr turret_new_shoot
+	
+check_first_shoot_turret:
+	ld a, (de)
+	cp 220
+	ret nc
+	inc (hl)		; e->behav_param++
+	
+turret_new_shoot:
+	ld bc, -11
+	add hl, bc		; make HL point back to e->x
+
+	push hl
+	;NewEnemyShoot(e->x, e->y-8, MOVE_TARGET, SHOT_MEGA);
+	ld e, (hl)
+	ld d, 0
+	push de		; e->x
+	inc hl
+	ld a, (hl)
+	sub 8
+	ld e, a
+	push de		; e->y-8
+	ld e, MOVE_TARGET
+	push de
+	ld e, SHOT_MEGA
+	push de
+	call _NewEnemyShoot_FX	; HL holds the pointer to the new enemy shoot
+	pop de
+	pop de
+	pop de
+	pop de
+
+	; Then, generate parameters for the shoot
+	push hl
+	pop ix			; IX holds the pointer to the new enemy shoot
+	pop hl			; get the original HL (entity) back
+
+	ld a, ixh
+	or ixl
+	ret z			; If IX == 0, then skip, as the enemy shoot could not be created
+
+	ld d, (hl)		; D==x_enemy
+	inc hl
+	ld e, (hl)		; E==y_enemy
+	ld a, (_ship_x)
+	add a, 16
+	ld h, a			; H = x_ship
+	ld a, (_ship_y)
+	ld l, a			; L = y_ship
+	call calcdirectshoot
+
+	ld (ix+6), h
+	ld (ix+7), l
+	ld (ix+8), d
+	ld (ix+9), e
+	ld (ix+3), 0
+	ld (ix+5), 0
+ret
+;#END_ASM
+
+
+PUBLIC _behav_uglyguy
+_behav_uglyguy:
+;#BEGIN_ASM
+	; Ugly guy is constantly jumping
+	; Uses: behav_param: y speed, it will be 4 initially, then decremented every frame until -4, then cycle
+	ld d, h
+	ld e, l
+	ld bc, 11
+	add hl, bc	; point to e->behav_param
+	ld a, (hl)
+	dec a
+	cp -5
+	jr nz, ugluguy_nochange
+	ld a, 4
+ugluguy_nochange:
+	ld (hl), a
+	ld h, d
+	ld l, e
+	inc hl
+	add a,(hl)	; A + (HL) is the new position
+	ld (hl), a
+
+ret
+;#END_ASM
+
+
+
+
+
 
 
 ;rand_seed:
