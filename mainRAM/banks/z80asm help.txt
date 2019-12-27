@@ -1,0 +1,56 @@
+Z80 Module Assembler 2.8.5, (c) InterLogic 1993-2009, Paulo Custodio 2011-2016
+
+Usage:
+  z80asm [options] { @<modulefile> | <filename> }
+
+  [] = optional, {} = may be repeated, | = OR clause.
+
+  To assemble 'fred.asm' use 'fred' or 'fred.asm'
+
+  <modulefile> contains list of file names of all modules to be linked,
+  one module per line.
+
+  File types recognized or created by z80asm:
+    .asm   = source file
+    .o     = object file
+    .lis   = list file
+    .bin   = Z80 binary file
+    .sym   = symbols file
+    .map   = map file
+    .reloc = reloc file
+    .def   = global address definition file
+    .err   = error file
+
+Help Options:
+  -h, --help             Show help options
+  -v, --verbose          Be verbose
+
+Code Generation Options:
+  --RCMX000              Assemble for RCM2000/RCM3000 series of Z80-like CPU
+  --ti83plus             Interpret 'Invoke' as RST 28h
+  --IXIY                 Swap IX and IY registers
+  -C, --line-mode        Enable LINE directive
+
+Environment:
+  -I, --inc-path=PATH    Add directory to include search path
+  -L, --lib-path=PATH    Add directory to library search path
+  -D, --define=SYMBOL    Define a static symbol
+
+Libraries:
+  -x, --make-lib=FILE    Create a library file.lib
+  -i, --use-lib=FILE     Link library file.lib
+
+Binary Output:
+  -o, --output=FILE      Output binary file
+  -b, --make-bin         Assemble and link/relocate to file.bin
+  --split-bin            Create one binary file per section
+  -d, --date-stamp       Assemble only updated files
+  -r, --origin=ADDR      Relocate binary file to given address (decimal or hex)
+  -R, --relocatable      Create relocatable code
+  --reloc-info           Geneate binary file relocation information
+
+Output File Options:
+  -s, --symtable         Create symbol table file.sym
+  -l, --list             Create listing file.lis
+  -m, --map              Create address map file.map
+  -g, --globaldef        Create global definition file.def

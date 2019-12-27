@@ -42,12 +42,23 @@ cd ..
 cls
 echo on
 
+
 rem BUILD OBJECT FILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
 
-zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
 
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+
+
+rem zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
+
+rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+
+rem need to compile with all of the different objects included
+
+
+
+
+
 
 
 rem pause
