@@ -12,8 +12,7 @@
 #include "ram3.h"
 
 
-
-void main(void)
+void ram3(void)
 {
 }
 

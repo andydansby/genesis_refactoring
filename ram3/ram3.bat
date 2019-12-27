@@ -4,6 +4,7 @@ cls
 
 echo on
 
+rem a little cleanup first
 
 cd codemaps
 	del objects.o
@@ -22,24 +23,18 @@ cd images
 cd ..
 
 
-
-rem BUILD OBJECT FILE
-@rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
-
 zcc +zx -v -c -clib=new --fsigned-char -o objects @ram3.lst
-
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
 
 rem cleanup
 echo off
-move "compiled.map" "codemaps\"
+
 move "objects.o" "codemaps\"
 
-move "compiled_BANK_03.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
+rem move "compiled_BANK_03.bin" "binary\"
+rem move "compiled_CODE.bin" "binary\"
  
-del compiled.tmp
+
 del zcc_opt.def
 del zcc_proj.lst
 
@@ -49,6 +44,7 @@ del gameend.bin
 del gameover.bin
 del ship_pieces.bin
 del endattr.bin
+del alienattr.bin
 
 cd codemaps
 	echo on
