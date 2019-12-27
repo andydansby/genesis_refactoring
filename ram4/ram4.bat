@@ -4,6 +4,13 @@ cls
 
 echo on
 
+rem a little cleanup first
+
+cd codemaps
+	del objects.o
+cd ..
+
+
 cd gamelevels
 	copy "levels.asm" "..\"
 	copy "level1.map" "..\"
@@ -25,22 +32,18 @@ cd ..
 
 zcc +zx -v -c -clib=new --fsigned-char -o objects @ram4.lst
 
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
-
-
 @rem ram4.bin: levels.asm level1.map level2.map level3.map level4.map level5.map level6.map level7.map level1_enemies.asm level2_enemies.asm level3_enemies.asm level4_enemies.asm level5_enemies.asm level6_enemies.asm level7_enemies.asm
 @rem 	pasmo levels.asm ram4.bin levels.sym
 
 
 echo off
 
-move "compiled.map" "codemaps\"
 move "objects.o" "codemaps\"
 
-move "compiled_BANK_04.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
+rem move "compiled_BANK_04.bin" "binary\"
+rem move "compiled_CODE.bin" "binary\"
 
-del compiled.tmp
+
 del zcc_opt.def
 del zcc_proj.lst
 

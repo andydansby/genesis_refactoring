@@ -12,9 +12,7 @@
 #include "ram4.h"
 
 
-
-void main(void)
+void ram4(void)
 {
 }
-
 
