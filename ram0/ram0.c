@@ -13,7 +13,7 @@
 
 
 
-void main(void)
+void ram0(void)
 {
 }
 

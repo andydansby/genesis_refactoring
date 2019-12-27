@@ -5,7 +5,9 @@ cls
 echo on
 
 rem a little cleanup first
-
+cd binary
+	del *.bin
+cd ..
 cd codemaps
 	del objects.o
 cd ..
@@ -39,16 +41,27 @@ zcc +zx -v -c -clib=new --fsigned-char -o objects @ram0.lst
 rem just make the object file
 
 
+@rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+
+
+@rem ram0.bin: ProPlay37a.asm genesis_sfx.asm
+@rem 	pasmo ProPlay37a.asm ram0.bin wyzplayer.sym
+
+rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp 
+
+rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+
 
 echo off
 rem cleanup
 
+move "compiled.map" "codemaps\"
 move "objects.o" "codemaps\"
 
-rem move "compiled_BANK_00.bin" "binary\"
-rem move "compiled_CODE.bin" "binary\"
+move "compiled_BANK_00.bin" "binary\"
+move "compiled_CODE.bin" "binary\"
 
-
+del compiled.tmp
 del zcc_opt.def
 del zcc_proj.lst
 

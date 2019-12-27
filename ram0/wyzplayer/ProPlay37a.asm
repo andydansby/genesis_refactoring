@@ -37,9 +37,10 @@ ret
 ;                defb      "PSG PROPLAYER BY WYZ'10"
 
 ;___________________________________________________________
+;;WYZ_PLAY
 PUBLIC _INICIO
 _INICIO:
-LD   A, (SOUND_SFX)
+LD   A, (_SOUND_SFX)
 		AND  2
 		JR   Z, NO_EFECTOS
 		CALL    _REPRODUCE_EFECTO
@@ -49,7 +50,7 @@ NO_EFECTOS:
       		LD   DE,PSG_REG_SEC
       		LD   BC,14
 	        LDIR            
-	  	LD   A, (SOUND_SFX)
+	  	LD   A, (_SOUND_SFX)
 		AND  1
 		RET   Z
                 CALL    REPRODUCE_SONIDO
@@ -234,7 +235,7 @@ PCAJP5:         POP	HL
                 RET
 
 
-;PLAYER OFF
+;STOP_PLAYER
 PUBLIC _PLAYER_OFF
 _PLAYER_OFF:
 	LD   A,(INTERR)
@@ -290,6 +291,7 @@ LOUT:           OUT     (C),A
 
 ;CARGA UNA CANCION
 ;IN:(A)=Nº DE CANCION
+;;LOAD_SONG
 PUBLIC _CARGA_CANCION
 _CARGA_CANCION:  LD      HL,INTERR       ;CARGA CANCION
 
@@ -1171,7 +1173,8 @@ PUNTERO_SONIDO:
 	defw      0               ;defw : PUNTERO DEL SONIDO QUE SE REPRODUCE
 ; SOUND AND FX SELECTOR
 
-SOUND_SFX:
+PUBLIC _SOUND_SFX
+_SOUND_SFX:
 	defb	3		; 0: Silence; 1: Music only; 2: SFX ony; 3: Musix+SFX
 ;EFECTOS
 
