@@ -1,0 +1,72 @@
+10 BORDER VAL "BIN": PAPER VAL "7": INK VAL "BIN": CLEAR VAL "24199"
+20 LOAD "" SCREEN$
+30 FOR N= VAL "1" TO VAL "2": POKE VAL "23739", VAL "111": READ C: POKE VAL "23388",C: POKE VAL "32765",C: LOAD "" CODE VAL "49152": NEXT N: LOAD "" CODE VAL "24450": RANDOMIZE USR VAL "24450"
+100 DATA VAL "17", VAL "22"
+
+
+
+
+
+Calculate the FREE SPACE left for BASIC Program in the system after you insert a clear command
+
+
+org any address (28000)
+LD HL,0
+ADD HL,SP
+LD DE,(23653)
+AND A
+SBC HL,DE
+LD B,H
+LD C,L
+RET
+
+
+
+Returns the length of a BASIC Program
+org any address (28020)
+LD HL,(23627)
+LD DE,(23635)
+AND A
+SBC HL,DE
+LD B,H
+LD C,L
+RET
+
+10 PRINT "hello"
+28000 = 41558
+28020 = 13
+
+
+10 PRINT "hello"
+20 GOTO 10
+28000 = 41544
+28020 = 27
+
+
+10 PRINT "hello"
+20 GOTO "VAL" 10
+28000 = 41547
+28020 = 24
+----------
+org 28000
+main
+LD HL,0
+ADD HL,SP
+LD DE,(23653)
+AND A
+SBC HL,DE
+LD B,H
+LD C,L
+RET
+
+main2
+org 28020
+LD HL,(23627)
+LD DE,(23635)
+AND A
+SBC HL,DE
+LD B,H
+LD C,L
+RET
+
+
