@@ -2,25 +2,30 @@ SET PATH=c:\z88dk199b;c:\z88dk199b\bin;c:\z88dk199b\lib\;c:\z88dk199b\lib\clibs;
 
 cls
 
+echo on
+
+rem a little cleanup first
+
+cd codemaps
+	del objects.o
+cd ..
+
+
+
 rem BUILD OBJECT FILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
 
 zcc +zx -v -c -clib=new --fsigned-char -o objects @ram1.lst
+rem just make the object file
 
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
-
-
-z80nm objects.o
-@REM all these objects match up
 
 rem cleanup
-move "compiled.map" "codemaps\"
+
 move "objects.o" "codemaps\"
 
-move "compiled_BANK_01.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
+rem move "compiled_BANK_01.bin" "binary\"
+rem move "compiled_CODE.bin" "binary\"
  
-del compiled.tmp
 del zcc_opt.def
 del zcc_proj.lst
 
