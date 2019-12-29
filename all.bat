@@ -1,3 +1,7 @@
+
+rem mode con lines=32766
+
+
 rem compiling order will matter
 rem try data only areas first
 rem then move to banked areas with code
@@ -92,7 +96,7 @@ move "ram1.o" "mainRAM\banks\"
 move "ram0.o" "mainRAM\banks\"
 move "ram6.o" "mainRAM\banks\"
 
-pause
+@rem pause
 
 cd mainRAM
 	cd banks

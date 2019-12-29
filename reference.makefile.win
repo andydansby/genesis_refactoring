@@ -1,0 +1,30 @@
+all: x.tzx
+
+clean: 
+	del *.tzx
+	del *.bin
+	del *~
+
+x.tzx:  test.bin engine.bin sprites.bin ram3.bin ram4.bin
+	buildtzx -l 3 -i template.txt -o x.tzx -n ProjectX
+
+test.bin: test.c movement.o engine.h movement.h structs.h
+	zcc +zx -vn -O3 -zorg=24600 test.c movement.o -lndos -o test.bin -m
+
+movement.o: movement.c structs.h
+	zcc +zx -vn -O3 -c movement.c -m
+
+sprites.bin: sprites.asm
+	pasmo sprites.asm sprites.bin sprites.sym
+
+ram3.bin: ram3.asm background.bin
+	pasmo ram3.asm ram3.bin ram3.sym
+
+engine.bin: engine.asm  input.asm rambanks.asm drawmap.asm drawsprite.asm create_shifted_tables.asm
+	pasmo engine.asm engine.bin engine.sym
+
+background.bin: background.scr
+	apack background.scr background.bin
+
+ram4.bin: levels.asm level1.map
+	pasmo levels.asm ram4.bin levels.sym
