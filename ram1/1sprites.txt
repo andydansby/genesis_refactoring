@@ -6,3 +6,4 @@ Start   End		Size	Name					Compressed?	Comments
 $C000 	$C7FF	2048	Current level sprites	NO Realtime
 $c800	$FFFF	14336	Total sprites 			YES
 (up to 448 sprites)
+
