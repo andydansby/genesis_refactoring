@@ -12,4 +12,5 @@ z80asm --output=ram99.o ram3.o ram4.o ram1.o ram0.o ram6.o
 
 z80nm ram99.o
 
-
+z80nm ram99.o > output.txt
+@rem will create a new file with all the output of myProgram
