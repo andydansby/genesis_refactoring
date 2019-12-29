@@ -1,10 +1,10 @@
-org 61440
+;;org 61440
 
 include "maindefs.asm"
 
 ; Simple global variable to hold created entities, allowing modification
 
-_new_e	ds 8		; struct Enemy new_e
+_new_e	defs 8		; struct Enemy new_e
 
 ; Supporting functions
 
@@ -3265,7 +3265,7 @@ move_rest_final7:		; move the rest of the final enemy according to sprite 0
 	ret
 
 
-rand_seed	dw 63059
+rand_seed	defw 63059
 
 ; Blatant copy from the z88dk RAND routine
 

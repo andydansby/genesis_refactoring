@@ -1,3 +1,5 @@
+@REM used for build of low memory only
+
 SET PATH=c:\z88dk199b;c:\z88dk199b\bin;c:\z88dk199b\lib\;c:\z88dk199b\lib\clibs;c:\z88dk199b\lib\config;C:\Program Files\SDCC\bin 
 
 cls
@@ -36,7 +38,10 @@ copy "LoadLevel.asm" "..\"
 copy "create_shifted_tables.asm"  "..\"
 copy "im2.asm" "..\"
 copy "starfield.asm" "..\"
+cd ..
 
+cd banks
+	copy "ram99.o" "..\"
 cd ..
 
 cls
@@ -45,12 +50,19 @@ echo on
 rem BUILD OBJECT FILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
 
+
+rem build as an object file
 zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
 
+rem build as a binary
 zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
 
-rem pause
+rem tester
+rem zcc +zx -v -m -clib=new ram99.o -o compiled.tmp -pragma-include:zpragma.inc
+
+
+pause
 rem cleanup
 echo off
 
@@ -78,7 +90,7 @@ del "starfield.asm"
 
 
 move "compiled.map" "codemaps\"
-move "objects.o" "codemaps\"
+copy "objects.o" "codemaps\"
 
 rem move "compiled_BANK_03.bin" "binary\"
 move "compiled_CODE.bin" "binary\"

@@ -1,4 +1,5 @@
-@REM used for full game compile
+
+@REM used for build of low memory only
 
 SET PATH=c:\z88dk199b;c:\z88dk199b\bin;c:\z88dk199b\lib\;c:\z88dk199b\lib\clibs;c:\z88dk199b\lib\config;C:\Program Files\SDCC\bin 
 
@@ -38,33 +39,50 @@ copy "LoadLevel.asm" "..\"
 copy "create_shifted_tables.asm"  "..\"
 copy "im2.asm" "..\"
 copy "starfield.asm" "..\"
+cd ..
 
+cd banks
+	copy "ram99.o" "..\"
 cd ..
 
 cls
 echo on
 
-
 rem BUILD OBJECT FILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
 
 
+rem build as an object file
+zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
 
-
-rem zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
-
+rem build as a binary
 rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
-rem need to compile with all of the different objects included
+
+rem tester
+zcc +zx -v -m -clib=new ram99.o -o compiled.tmp -pragma-include:zpragma.inc @main.lst
 
 
-
-
-
-
-
-rem pause
 rem cleanup
+echo off
+
+
+
+
+
+
+move "compiled.map" "codemaps\"
+
+
+rem move "compiled_BANK_03.bin" "binary\"
+move "compiled_CODE.bin" "binary\"
+ 
+
+
+z80nm objects.o
+
+
+
 echo off
 
 
@@ -88,26 +106,3 @@ del "LoadLevel.asm"
 del "create_shifted_tables.asm"
 del "im2.asm"
 del "starfield.asm"
-
-
-move "compiled.map" "codemaps\"
-move "objects.o" "codemaps\"
-
-rem move "compiled_BANK_03.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
- 
-del compiled.tmp
-del zcc_opt.def
-rem del zcc_proj.lst
-
-
-
-
-
-cd codemaps
-	echo on
-	@REM all these objects match up
-	z80nm objects.o
-	echo off
-cd ..
-

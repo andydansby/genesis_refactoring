@@ -16,9 +16,22 @@ unsigned char life_counter;		// How many lifes do we have?
 unsigned char credit_counter;		// Start with 3 credits!
 unsigned char end_game;			// Game will be really over at this time
 unsigned char current_screen;
-unsigned char map_xpos;
+
+
+//ATTENTION, already defined in module 'ram99'
+//unsigned char map_xpos;
+
+
 unsigned char respawn_xpos;		// xpos to respawn after dying
-unsigned char map_displacement;  // Displacement in tile: 0000YYXX, where XX is the displacement in pixels (0, 1==2, 2==4, 3==6), and YY is the displacement in chars (0-2).
+
+
+
+//ATTENTION, already defined in module 'ram99'
+//unsigned char map_displacement;  // Displacement in tile: 0000YYXX, where XX is the displacement in pixels (0, 1==2, 2==4, 3==6), and YY is the displacement in chars (0-2).
+
+
+
+
 unsigned char max_shoots; 	// Maximum number of shoots allowed with the current weapon
 unsigned char mayday;		// We have been shot!
 
@@ -35,7 +48,12 @@ unsigned char update_life;	// We must update the number of lifess
 // Final enemy
 unsigned char final_enemy_active;
 unsigned char final_enemy_components;		// How many sprites in the enemy
-unsigned char fenemy_defeat;		// Have we beaten it?
+
+//ATTENTION, already defined in module 'ram99'
+//unsigned char fenemy_defeat;
+// Have we beaten it?
+
+
 unsigned char fenemy_activation_counter;
 
 // Ship sprites, used for dying animation
@@ -50,13 +68,22 @@ unsigned int keys[]={KEY_Q,KEY_A,KEY_O,KEY_P,KEY_SPACE};
 
 unsigned char joy;
 unsigned char joystick_type;            // Which joystick are we using
-unsigned char inertia_cheat;		// are we cheating?
+
+
+//ATTENTION, already defined in module 'ram99'
+//unsigned char inertia_cheat;		// are we cheating?
+
+
+
 unsigned char border_color;		// For some silly effects
 
 
 // Array of existing enemies and shoots (max 8 enemies for now)
+//ATTENTION, already defined in module 'ram99'
+//struct Entity active_enemies[MAX_ENEMIES];
 
-struct Entity active_enemies[MAX_ENEMIES];
+
+
 struct Entity my_active_shoots[MAX_ENEMIES];
 struct Entity enemy_active_shoots[MAX_ENEMIES];
 struct Entity power_up;			// Only one powerup active at a time...
@@ -65,12 +92,17 @@ struct Entity power_up;			// Only one powerup active at a time...
 // We use the same Entity structure, with just one difference: X now means the tile
 
 //struct Enemy enemy_locations[128]; // up to 128 enemies per level, 8 bytes per enemy: 1K
+
+//ATTENTION, this is a hard coded address
 struct Enemy *enemy_locations = 0xF800; // up to 256 enemies per level, 8 bytes per enemy: 2K, WARNING: this is placed in RAM 4
 unsigned char new_enemy;
 
 // Loop counters and temporary variables
 
-unsigned char sound_selection;
+//unsigned char sound_selection;
+//ATTENTION, already defined in module 'ram99'
+
+
 unsigned char dummy_b;
 unsigned int dummy_i;
 unsigned char frameskip_counter;

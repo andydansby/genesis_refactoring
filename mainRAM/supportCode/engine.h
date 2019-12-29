@@ -55,8 +55,9 @@ DEFC GET_KEY_STATE = $86C4
 #define JOY_RIGHT	0x8
 #define JOY_FIRE	0x10
 
+//ATTENTION
+//need to investigate
 // Key definitions
-
 #define KEY_CAPS 	0xfe01
 #define KEY_Z 		0xfe02 	
 #define KEY_X 		0xfe04

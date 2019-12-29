@@ -1,5 +1,9 @@
 #ifndef MOVEMENTS_H
 #define MOVEMENTS_H
+
+//#include "movement.c"
+
+
 extern void __FASTCALL__  *movement_funcs[];
 
 #define MOVE_NONE 0
@@ -22,4 +26,10 @@ extern void __FASTCALL__  *movement_funcs[];
 #define MOVE_TARGET 17
 #define MOVE_KAMIKAZE_NOANIM 18
 #define MOVE_WAVE_NOGONELEFT 19
+
+
+
+
+
+
 #endif

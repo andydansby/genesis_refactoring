@@ -5,6 +5,9 @@ extern unsigned char ship_y;
 
 
 // Definition for the movement functions
+// these are hard coded addresses
+// and need to be eliminated.
+/*
 #define move_downleft	0xE2B1
 #define move_downright	0xE2CC
 #define move_explosion	0xE0AB
@@ -33,10 +36,40 @@ extern unsigned char ship_y;
 #define move_upright	0xE290
 #define move_wave	0xE1E4
 #define move_wave_nogoneleft 0xE3A8
+*/
 
-void __FASTCALL__ *movement_funcs[]={move_none,move_left,move_right,move_pingpong,move_explosion,move_furby,move_kamikaze,move_wave,move_leftanim,move_upleft,move_upright,
-				    move_downleft, move_left_expire,move_pingpong_final4,move_homing,move_downright,move_up,move_target,move_kamikaze_noanim,
-				    move_wave_nogoneleft,move_missile,move_kamikaze_2,move_follow_right,move_follow_down,move_follow_downright,move_left_accel,move_right_accel};
+
+
+void __FASTCALL__ *movement_funcs[]=
+{
+	move_none,
+	move_left,
+	move_right,
+	move_pingpong,
+	move_explosion,
+	move_furby,
+	move_kamikaze,
+	move_wave,
+	move_leftanim,
+	move_upleft,
+	move_upright,
+	move_downleft,
+	move_left_expire,
+	move_pingpong_final4,
+	move_homing,
+	move_downright,
+	move_up,
+	move_target,
+	move_kamikaze_noanim,
+	move_wave_nogoneleft,
+	move_missile,
+	move_kamikaze_2,
+	move_follow_right,
+	move_follow_down,
+	move_follow_downright,
+	move_left_accel,
+	move_right_accel
+};
 
 
 

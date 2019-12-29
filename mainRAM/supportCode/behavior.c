@@ -10,6 +10,11 @@ extern struct Entity power_up;
 extern unsigned char ship_x;
 extern unsigned char ship_y;
 
+
+// Definition for the behavior functions
+// these are hard coded addresses
+// and need to be eliminated.
+/*
 #define behav_asteroid	0xF2AB
 #define behav_casco	0xF80A
 #define behav_casco_bis	0xF859
@@ -35,26 +40,31 @@ extern unsigned char ship_y;
 #define behav_shoot_target_right 0xF14C
 #define behav_turret	0xF21C
 #define behav_uglyguy	0xF8C0
+*/
 
 
 
-
-void __FASTCALL__ *behavior_funcs[]={	behav_none,
-					behav_shoot_left,
-					behav_shoot_target,
-					behav_shoot_target_left,
-					behav_shoot_target_right,
-					behav_powerup,
-					behav_turret,
-					behav_shoot_left_Y,
-					behav_shoot_left_wait,
-					behav_asteroid,
-					behav_saltarin,
-					behav_casco,
-					behav_egg,
-					behav_uglyguy,
-					behav_saltarin_bis,
-					behav_casco_bis,
-					behav_follow,
-					behav_final1_l7};
+void __FASTCALL__ *behavior_funcs[]=
+{
+	behav_none,
+	behav_shoot_left,
+	behav_shoot_target,
+	behav_shoot_target_left,
+	behav_shoot_target_right,
+	behav_powerup,
+	behav_turret,
+	behav_shoot_left_Y,
+	behav_shoot_left_wait,
+	behav_asteroid,
+	behav_saltarin,
+	behav_casco,
+	behav_egg,
+	behav_uglyguy,
+	behav_saltarin_bis,
+	behav_casco_bis,
+	behav_follow,
+	behav_final1_l7
+};
+					
+					
 void __FASTCALL__  *fenemy_behavior_funcs[]={behav_fenemy1,behav_fenemy2,behav_fenemy3,behav_fenemy4,behav_fenemy5,behav_fenemy6,behav_fenemy7};
