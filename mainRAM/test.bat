@@ -75,7 +75,7 @@ move "compiled.map" "codemaps\"
 
 
 rem move "compiled_BANK_03.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
+rem move "compiled_CODE.bin" "binary\"
  
 
 

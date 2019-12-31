@@ -1,7 +1,5 @@
 @REM used for build of low memory only
 
-SET PATH=c:\z88dk199b;c:\z88dk199b\bin;c:\z88dk199b\lib\;c:\z88dk199b\lib\clibs;c:\z88dk199b\lib\config;C:\Program Files\SDCC\bin 
-
 cls
 
 cd codemaps
@@ -16,28 +14,26 @@ rem background.bin: background.scr
 rem apack background.scr background.bin
 
 cd supportCode
-rem apack c background.scr background.bin
-rem move "background.bin" "..\"
-copy "movement.c" "..\"
-copy "movement.h" "..\"
-copy "structs.h" "..\"
-copy "behav.asm" "..\"
-copy "behavior.c" "..\"
-copy "behavior.h" "..\"
-copy "constants.h" "..\"
-copy "sprdefs.h" "..\"
-copy "engine.h" "..\"
-copy "engine.asm" "..\"
-copy "drawmap.asm"  "..\"
-copy "drawsprite.asm" "..\"
-copy "input.asm" "..\"
-copy "variables.h" "..\"
-copy "loadBackground.asm" "..\"
-copy "LoadSprBlock.asm" "..\"
-copy "LoadLevel.asm" "..\"
-copy "create_shifted_tables.asm"  "..\"
-copy "im2.asm" "..\"
-copy "starfield.asm" "..\"
+	copy "movement.c" "..\"
+	copy "movement.h" "..\"
+	copy "structs.h" "..\"
+	copy "behav.asm" "..\"
+	copy "behavior.c" "..\"
+	copy "behavior.h" "..\"
+	copy "constants.h" "..\"
+	copy "sprdefs.h" "..\"
+	copy "engine.h" "..\"
+	copy "engine.asm" "..\"
+	copy "drawmap.asm"  "..\"
+	copy "drawsprite.asm" "..\"
+	copy "input.asm" "..\"
+	copy "variables.h" "..\"
+	copy "loadBackground.asm" "..\"
+	copy "LoadSprBlock.asm" "..\"
+	copy "LoadLevel.asm" "..\"
+	copy "create_shifted_tables.asm"  "..\"
+	copy "im2.asm" "..\"
+	copy "starfield.asm" "..\"
 cd ..
 
 cd banks
@@ -49,22 +45,35 @@ echo on
 
 rem BUILD OBJECT FILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -o objects @zproject.lst
+@rem build as an object file
+@rem zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
+rem build as a binary
+@rem zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
 
 
 rem build as an object file
 zcc +zx -v -c -clib=new --fsigned-char -o objects @main.lst
 
-rem build as a binary
-zcc +zx -v -m -startup=31 -clib=new objects.o -o compiled.tmp -pragma-include:zpragma.inc
+rem tester
+zcc +zx -v -m -clib=new ram99.o -o compiled.tmp -pragma-include:zpragma.inc @main.lst
 
+
+echo off
+ 
+copy "compiled.map" "codemaps\"
+move "compiled_CODE.bin" "..\"
+move "compiled_BANK_00.bin" "..\"
+move "compiled_BANK_01.bin" "..\"
+move "compiled_BANK_03.bin" "..\"
+move "compiled_BANK_04.bin" "..\"
+move "compiled_BANK_06.bin" "..\"
 
 rem tester
 rem zcc +zx -v -m -clib=new ram99.o -o compiled.tmp -pragma-include:zpragma.inc
 
 
-pause
+rem pause
 rem cleanup
-echo off
 
 
 del "movement.c"
@@ -88,13 +97,14 @@ del "create_shifted_tables.asm"
 del "im2.asm"
 del "starfield.asm"
 
+del ram99.o
+
 
 move "compiled.map" "codemaps\"
-copy "objects.o" "codemaps\"
+move "objects.o" "banks\"
 
-rem move "compiled_BANK_03.bin" "binary\"
-move "compiled_CODE.bin" "binary\"
- 
+
+
 del compiled.tmp
 del zcc_opt.def
 rem del zcc_proj.lst
@@ -103,10 +113,10 @@ rem del zcc_proj.lst
 
 
 
-cd codemaps
-	echo on
-	@REM all these objects match up
-	z80nm objects.o
-	echo off
-cd ..
+@rem cd codemaps
+@rem 	echo on
+@rem 	@REM all these objects match up
+@rem 	z80nm objects.o
+@rem 	echo off
+@rem cd ..
 
