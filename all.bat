@@ -30,6 +30,13 @@ cd mainRAM
 	cd ..	
 cd ..
 
+rem make a loader
+cd loader
+	call loader
+	move "loader.tap" "..\"
+cd ..
+
+
 rem BANK 3
 cd ram3
 	call ram3.bat	
@@ -88,7 +95,7 @@ REM at this point all banks have been compiled
 rem need to move them to main
 rem compile order 3,4,1,0,6,MAIN
 
-echo on
+echo off
 
 move "ram3.o" "mainRAM\banks\"
 move "ram4.o" "mainRAM\banks\"
@@ -98,10 +105,28 @@ move "ram6.o" "mainRAM\banks\"
 
 @rem pause
 
+echo on
+
 cd mainRAM
 	cd banks
-		call obj.bat
+		z80asm --output=ram99.o ram3.o ram4.o ram6.o ram1.o ram0.o
+		rem z80nm ram99.o
+		z80nm ram99.o > output.txt
+		@rem output.txt will have the listing of routines		
 	cd ..
+	call main.bat
 cd ..
 
+move "compiled_CODE.bin" "magic\"
+move "compiled_BANK_00.bin" "magic\"
+move "compiled_BANK_01.bin" "magic\"
+move "compiled_BANK_03.bin" "magic\"
+move "compiled_BANK_04.bin" "magic\"
+move "compiled_BANK_06.bin" "magic\"
 
+move "loader.tap" "magic\"
+
+
+cd magic
+	call magic.bat
+cd ..
