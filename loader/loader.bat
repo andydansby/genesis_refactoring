@@ -1,4 +1,4 @@
-cls
+
 
 cd loading
 	copy loading.scr loadscreen.bin
@@ -15,6 +15,7 @@ cd ..
 
 copy /b basloader.tap + loadscreen.tap loader.tap
 
+echo off
 
 rem cleanup
 del bas2tap.exe
