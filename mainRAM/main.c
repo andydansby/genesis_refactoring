@@ -43,6 +43,7 @@
 void main(void)
 {
 	clean_screen_asm();
+	//while (1);
 }
 
 

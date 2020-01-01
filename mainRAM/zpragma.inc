@@ -1,5 +1,10 @@
-#pragma output CRT_ORG_CODE = 24550
+//#pragma output CRT_ORG_CODE = 24550
 // main binary program start
+#pragma output CRT_ORG_CODE = 24300
+
+
+
+
 
 #pragma output REGISTER_SP = 0xc000
 // keep stack out of top 16k
