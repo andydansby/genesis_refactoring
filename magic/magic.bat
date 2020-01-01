@@ -14,6 +14,19 @@ appmake +zx -b compiled_CODE.bin -o main.tap --org 24300 --noloader --blockname 
 
 copy /b loader.tap + bank03.tap + bank04.tap + bank06.tap + bank02.tap + bank01.tap + bank00.tap + main.tap output.tap
 
-rem copy /b loader.tap + bank03.tap + bank04.tap + bank06.tap + bank02.tap + bank01.tap + main.tap output.tap
+
+	del loader.tap
+	del bank00.tap
+	del bank01.tap
+	del bank03.tap
+	del bank04.tap
+	del bank06.tap	
+	del main.tap
 
 
+move "compiled_BANK_00.bin" "bin\"
+move "compiled_BANK_01.bin" "bin\"
+move "compiled_BANK_03.bin" "bin\"
+move "compiled_BANK_04.bin" "bin\"
+move "compiled_BANK_06.bin" "bin\"
+move "compiled_CODE.bin" "bin\"
