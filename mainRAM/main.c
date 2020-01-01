@@ -12,8 +12,8 @@
 //	pasmo engine.asm engine.bin engine.sym
 
 
-
-
+//#define MAX_ENEMIES 8 move to variables as const
+static const unsigned char MAX_ENEMIES;
 
 
 

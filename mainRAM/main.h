@@ -15,23 +15,15 @@ extern void __FASTCALL__ loadPrepTiles(void);
 
 extern int __FASTCALL__ read_joystick();
 
+extern int __FASTCALL__ get_joystick();
 
-/*int __FASTCALL__ read_joystick(int joytype)
-{
-#asm
-	ld a, l
-	ld hl, _keys
-	call get_joystick
-	ld h,0
-	ld l,a
-#endasm
-}*/
+
+
 
 // WYZ player functions
 void wyz_load_music (unsigned char mzk_number)
 {
-
-	#asm
+	__asm
 		ld hl, 2
 		add hl, sp
 		ld a, (hl)              ; A gets the song number
@@ -53,29 +45,29 @@ void wyz_load_music (unsigned char mzk_number)
 		ld a, (hl)
 		ld (FX_CHANNEL),a
 		call STOP_FX
-	#endasm
+	__endasm
 }
 
 void wyz_stop_music(void)
 {
-	#asm
+	__asm
 		di	
 		CALL STOP_PLAYER
 		ei
 		halt
-	#endasm
+	__endasm
 }
 
 void wyz_play(void)
 {
-	#asm
+	__asm
 		call WYZ_PLAY
-	#endasm
+	__endasm
 }
 
 void wyz_effect(unsigned char effect)
 {
-	#asm
+	__asm
 		ld a, (23388)
 		and $07			; keep low bits
 		push af			; save current state
@@ -94,14 +86,14 @@ void wyz_effect(unsigned char effect)
 		ld b, a
 		call _setrambank		; go back to normal state
 		ei
-	#endasm
+	__endasm
 }
 
 void gameISR(void)
 {
 	joy=read_joystick(joystick_type);
 	
-	#asm
+	__asm
 		ld a,r
 		jp p, noscreenswitch	; the highest bit of R is 0, no screen switch yet
 		call _switchscreen	; switch screen yabba
@@ -127,7 +119,7 @@ void gameISR(void)
 		dec a
 		ld (_border_color), a
 		out ($fe), a
-	#endasm
+	__endasm
 }
 
 
@@ -175,16 +167,19 @@ void load_level(unsigned char level)
 
 	// now, copy the map (uncompress) to its final location
 	level_pointer += length_tiles;
+	
 	__asm
 		ld de, $a000
 		ld hl, (_level_pointer)
 		call _depack
 	__endasm
+	
         // Copy enemy table
         level_pointer=(unsigned char*)enemy_address[level];
         dummy_i = *level_pointer; // Number of enemies in level
         level_pointer++;
         dummy_i *= sizeof (struct Enemy);
+		
 	__asm
 		ld de, (_enemy_locations)
 		ld hl, (_level_pointer)

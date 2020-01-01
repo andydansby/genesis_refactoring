@@ -20,6 +20,7 @@ include "engine.asm"
 include "loadBackground.asm"
 include "LoadSprBlock.asm"
 include "LoadLevel.asm"
+include "Drawing.asm"
 
 
 ;;PUBLIC _blackout
@@ -511,7 +512,7 @@ _CalcScreenPos_Char:
 ret
 ;#END_ASM
 
-PUBLIC _clean_screen_asm
+PUBLIC _clean_screen
 _clean_screen_asm:
 ;#BEGIN_ASM
 	di

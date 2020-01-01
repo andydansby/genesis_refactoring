@@ -89,26 +89,7 @@ dy_is_zero
 	ld de, 0
 	ret			; Special case when x_ship equals x_enemy
 
-;Divide 8-bit values
-;In: Divide E by divider D
-;Out: A = result, D = rest
-;
-Div8:
-    xor a
-    ld b,8
-Div8_Loop:
-    rl e
-    rla
-    sub d
-    jr nc,Div8_NoAdd
-    add a,d
-Div8_NoAdd:
-    djnz Div8_Loop
-    ld d,a
-    ld a,e
-    rla
-    cpl
-    ret
+
 
 
 ; Dummy behavior, does nothing

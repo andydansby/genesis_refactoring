@@ -34,6 +34,7 @@ cd supportCode
 	copy "create_shifted_tables.asm"  "..\"
 	copy "im2.asm" "..\"
 	copy "starfield.asm" "..\"
+	copy "Drawing.asm" "..\"
 cd ..
 
 cd banks
@@ -96,6 +97,7 @@ del "LoadLevel.asm"
 del "create_shifted_tables.asm"
 del "im2.asm"
 del "starfield.asm"
+del "Drawing.asm"
 
 del ram99.o
 
