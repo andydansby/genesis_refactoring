@@ -35,6 +35,7 @@ cd supportCode
 	copy "im2.asm" "..\"
 	copy "starfield.asm" "..\"
 	copy "Drawing.asm" "..\"
+	copy "miscellaneous.asm" "..\"
 cd ..
 
 cd banks
@@ -98,6 +99,7 @@ del "create_shifted_tables.asm"
 del "im2.asm"
 del "starfield.asm"
 del "Drawing.asm"
+del "miscellaneous.asm"
 
 del ram99.o
 

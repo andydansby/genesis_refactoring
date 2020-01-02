@@ -36,8 +36,95 @@ static const unsigned char MAX_ENEMIES;
 
 
 
+//1052 of test.c
+void activate_final_enemy(void)
+{
+	if(!fenemy_activation_counter)
+	{
+		__asm
+			di
+			push bc
+			ld b, 4
+			call _setrambank		; Levels in RAM4
+			pop bc
+		__endasm
+	}
+	level_pointer=(unsigned char*)finalenemy_address[current_level];
+	dummy_i = final_enemy_components = *(level_pointer)++;	// Load the basic final enemy data
+	// Copy to enemy table (we are overwriting, which should not be a problem)
+	dummy_i *= sizeof (struct Enemy);
+	
+	__asm
+		ld de, (_enemy_locations)
+		ld hl, (_level_pointer)
+        ld bc, (_dummy_i)
+        ldir
+	__endasm
+	
+	__asm
+		extern _active_enemies;; ATTENTION Coming in from another bank
+		
+		ld a, (_final_enemy_components)
+		ld b, a
+		
+		ld hl, _active_enemies
+		
+		ld de, (_enemy_locations)
+	.initfenemyloop
+		ld a, (de)		; fenemy->x
+		ld (hl), a		; active_enemies[i].x=fenemy->x;
+		inc hl
+		inc de
+		inc de
+		ld a, (de)		; fenemy->y
+		ld (hl), a		; active_enemies[i].y=fenemy->y;
+		inc hl
+		inc de
+		ld (hl), EXPLOSION_SPR	;active_enemies[i].sprnum=EXPLOSION_SPR;	
+		inc hl
+		ld a, (de)		; fenemy->enemy_type
+		ld (hl),a		; active_enemies[i].type= fenemy->enemy_type;
+		inc hl
+		inc de	
+		ld (hl), MOVE_EXPLOSION		; active_enemies[i].movement=MOVE_EXPLOSION;
+		inc hl
+		inc de
+	;	ld a, (de)		; 	fenemy->energy;
+	;	ld (hl), a		; active_enemies[i].energy = fenemy->energy;
+		ld (hl), 0		; active_enemies[i].energy = 0, so the enemy is only vulnerable after the explosions
+		inc hl
+		inc de
+		ld (hl), 4		;active_enemies[i].param1=4;  
+		inc hl
+		inc de
+		ld a, (de)
+		ld (hl), a		; active_enemies[i].param2=fenemy->param2;
+		inc hl
+		inc de			; DE now points to the next enemy
+		ld (hl), 0		; active_enemies[i].param3=0;
+		inc hl
+		ld (hl), 0		; active_enemies[i].param4=0;
+		inc hl
+		ld (hl), BEHAV_DO_NOTHING ;	 active_enemies[i].behavior = BEHAV_DO_NOTHING;
+		inc hl
+		ld (hl), 0		; active_enemies[i].behav_param=0;
+		inc hl			; HL now points to the next enemy
+		djnz initfenemyloop
+	__endasm
+	
+}
 
-//decompose_5digit
+
+
+//2212 of test.c
+void gameloop(void)
+{
+	 while(mayday < 7)
+	{
+	}
+}
+
+
 
 
 void main(void)

@@ -21,6 +21,7 @@ include "loadBackground.asm"
 include "LoadSprBlock.asm"
 include "LoadLevel.asm"
 include "Drawing.asm"
+include "miscellaneous.asm"
 
 
 ;;PUBLIC _blackout

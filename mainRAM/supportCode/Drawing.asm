@@ -10,6 +10,15 @@ extern _ship0spr
 extern _power_up
 extern _max_shoots
 extern _my_active_shoots
+extern _frames_fire_pressed
+
+extern _active_enemies
+
+extern _MAX_ENEMIES
+
+
+
+
 
 ;;PUBLIC _someFunction
 ;;	_someFunction:
@@ -117,5 +126,81 @@ PUBLIC _DrawShip
 
 	call _DrawSprite		; draw the power up, and that is it
 ;#END_ASM
+
+
+PUBLIC _ShowBombBar
+_ShowBombBar:
+;#BEGIN_ASM
+	ld hl, 56025		; position in memory for the attributes of the progress bar
+	ld a, (_frames_fire_pressed)
+	sra a			; and divide by 2
+
+.bar_onloop
+	and a
+	jr z, bar_off
+	ld (hl), 0x03
+	inc hl
+	dec a
+	jr bar_onloop
+.bar_off	
+	ld a, (_frames_fire_pressed)
+	sub 12
+	neg
+	sra a
+.bar_offloop
+	and a
+	ret z
+	ld (hl), 0x01
+	inc hl
+	dec a
+	jr bar_offloop
+;#END_ASM
+
+
+PUBLIC _DrawEnemies
+	_DrawEnemies:
+;#BEGIN_ASM
+	ld b, _MAX_ENEMIES
+	ld ix, _active_enemies
+	ld iy, _enemy_active_shoots
+
+.drawenemy_loop
+	push bc
+	ld a, (ix+2)
+	and a
+	jr z, loop_enemy_shoot
+
+	ld b, (ix+0)
+	ld c, (ix+1)	; bc = (x << 8) | y
+	ld d, 0
+	ld e, (ix+2)
+	push ix
+	call _DrawSprite	
+	pop ix
+
+.loop_enemy_shoot
+	ld a, (iy+2)
+	and a
+	jr z, loop_enemy_continue
+
+	ld b, (iy+0)
+	ld c, (iy+1)	; bc = (x << 8) | y
+	ld d, 0
+	ld e, (iy+2)
+	push ix
+	call _DrawSprite	
+	pop ix
+
+.loop_enemy_continue
+	ld bc, 12		; 12 = sizeof(struct Entity)	
+	add ix, bc
+	add iy, bc		; go to the next entity
+	pop bc
+	djnz drawenemy_loop	; continue loop
+;#END_ASM
+
+
+
+
 
 
