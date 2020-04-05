@@ -1,0 +1,10 @@
+Object  file objects.o at $0000: Z80RMF12
+  Name: objects
+  Section code_compiler: 1 bytes
+  Section bss_compiler: 0 bytes
+  Section BANK_03: 582 bytes
+  Symbols:
+    G A $0000 _ram3 (section code_compiler) (file ram3.c:20)
+    G A $0000 _junkmarker (section BANK_03) (file ram3Z.asm:6)
+    G A $0003 _background (section BANK_03) (file ram3Z.asm:12)
+    G A $0243 _junkmarker2 (section BANK_03) (file ram3Z.asm:18)

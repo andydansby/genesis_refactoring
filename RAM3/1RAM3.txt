@@ -1,0 +1,2 @@
+ram3.bin: ram3.asm background.bin
+	pasmo ram3.asm ram3.bin ram3.sym
