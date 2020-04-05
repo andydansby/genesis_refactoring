@@ -1,0 +1,34 @@
+Object  file objects.o at $0000: Z80RMF12
+  Name: objects
+  Section code_compiler: 1 bytes
+  Section bss_compiler: 0 bytes
+  Section UNCONTENDED: 11480 bytes
+  Section data_user: 90 bytes
+  Section CODE_END: 7 bytes
+  Symbols:
+    G A $0000 _uncontended (section code_compiler) (file uncontended.c:20)
+    G A $0000 _IM2table (section UNCONTENDED) (file uncontended.asm:31)
+    G A $0101 SprCacheTable (section UNCONTENDED) (file uncontended.asm:40)
+    G A $0501 LRU_next (section UNCONTENDED) (file uncontended.asm:49)
+    G A $052C LRU_prev (section UNCONTENDED) (file uncontended.asm:57)
+    G A $0557 TablaTiles (section UNCONTENDED) (file uncontended.asm:65)
+    G A $1557 _MAP_START (section UNCONTENDED) (file uncontended.asm:70)
+    G A $0000 LRU_first (section data_user) (file uncontended.asm:87)
+    G A $0001 LRU_last (section data_user) (file uncontended.asm:92)
+    G C $002A LRU_LASTENTRY (section data_user) (file uncontended.asm:98)
+    G A $0002 SCRADD (section data_user) (file uncontended.asm:101)
+    G A $0004 LINECOUNT (section data_user) (file uncontended.asm:106)
+    G A $0005 SAVE_RAMBANK (section data_user) (file uncontended.asm:110)
+    G A $0006 Multiply_by_96 (section data_user) (file uncontended.asm:117)
+    G A $2557 _DrawMap (section UNCONTENDED) (file drawmap.asm:13)
+    G A $2710 _ClearMapArea (section UNCONTENDED) (file clearMapArea.asm:8)
+    G A $2744 _ClearMapArea2 (section UNCONTENDED) (file clearMapArea.asm:68)
+    G A $28DF _CreaTablaTiles (section UNCONTENDED) (file create_shifted_tables.asm:35)
+    G A $29BA _DrawSprite (section UNCONTENDED) (file drawsprite.asm:29)
+    G A $2A67 _InsertSpriteInCache (section UNCONTENDED) (file drawsprite.asm:204)
+    G A $2B52 _MoveSpriteToTop (section UNCONTENDED) (file drawsprite.asm:433)
+    G A $2B72 _InitSprCacheList (section UNCONTENDED) (file drawsprite.asm:483)
+    G A $2BC2 _SCAN_KEYBOARD (section UNCONTENDED) (file input.asm:19)
+    G A $2BE9 _GET_KEY_STATE (section UNCONTENDED) (file input.asm:59)
+    G A $2BFA _get_joystick (section UNCONTENDED) (file input.asm:141)
+    G A $0000 _RAM_marker_MAIN (section CODE_END) (file uncontended.asm:161)
