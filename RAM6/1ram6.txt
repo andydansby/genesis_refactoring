@@ -1,0 +1,29 @@
+original C code
+
+C:\z88dk_1.6\GENESIS\original Genesis C code
+C:\z88dk_1.6\GENESIS\genesis-zx-master\src
+
+is confusing on ram6
+
+makefile 		has ram6.bin
+makefile.linix 	does not have ram6
+makefile.old 	does not have ram6
+makefile.win	does not have ram6
+
+template.txt	refers to ram6
+
+a search through the files only shows template.txt and makefile having any reference to RAM6
+
+
+in the references it does find
+
+genesis.tzx:  main.bin engine.bin sprites.bin ram3.bin ram4.bin ram0.bin ram6.bin rwks_logo.scr loading.scr
+	buildtzx -l 3 -i template.txt -o genesis.tzx -n GENESiS
+
+ram6.bin: menu.asm genesis_title.bin title_hiscores.bin credits_bkg.bin move.asm behav.asm maindefs.asm
+	pasmo menu.asm menu.bin menu.sym
+	pasmo move.asm move.bin move.sym
+	pasmo behav.asm behav.bin behav.sym
+	cat menu.bin move.bin behav.bin > ram6.bin
+	
+FOR RIGHT NOW, USE RAM6 for MAIN MENU
