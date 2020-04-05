@@ -1,0 +1,43 @@
+CONTENDED MEMORY 24599-32767
+8168 bytes available<---
+
+using 310 bytes now. << subject to change
+
+
+C:\z88dk199c\game\genesis\C_Code_1-4-2020\assembly
+
+
+
+
+x.tzx:  test.bin engine.bin sprites.bin ram3.bin ram4.bin ram0.bin ram6.bin
+	buildtzx -l 3 -i template.txt -o x.tzx -n ProjectX
+	
+test.bin: test.c movement.o engine.h movement.h structs.h
+	zcc +zx -vn -O3 -zorg=24600 test.c movement.o -lndos -o test.bin -m
+
+
+MAIN RAM
+engine.bin: engine.asm  input.asm rambanks.asm drawmap.asm drawsprite.asm create_shifted_tables.asm
+	pasmo engine.asm engine.bin engine.sym
+	
+	org 33025
+
+include "drawmap.asm"
+include "rambanks.asm"
+include "drawsprite.asm"
+include "input.asm"
+include "create_shifted_tables.asm"
+include "im2.asm"
+
+
+
+
+sprites.bin: sprites.asm
+	pasmo sprites.asm sprites.bin sprites.sym
+	
+	sprites.asm = 	ORG 0
+	bank 1
+
+
+movement.o: movement.c structs.h
+	zcc +zx -vn -O3 -c movement.c -m

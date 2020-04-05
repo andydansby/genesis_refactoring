@@ -1,0 +1,37 @@
+#include  <stdio.h>
+
+unsigned char *level_pointer = 0;
+unsigned int level_address[]={0xC000,0xC6C7,0xCBF2,0xD0E2,0xD0E2,0xD0E2,0xD0E2};
+unsigned char CurLevel_NTiles = 0;
+unsigned char CurLevel_XLength = 0;
+unsigned int *int_pointer = 0;
+unsigned int length_tiles = 0;
+unsigned int length_map = 0;
+
+void load_level(unsigned char level)		
+{
+    level_pointer=(unsigned char*)level_address[level];
+
+	CurLevel_NTiles = *(level_pointer)++;
+
+    CurLevel_XLength = *(level_pointer)++;	// Load the basic level data
+
+    int_pointer = (unsigned int*)level_pointer;//was int_pointer = level_pointer; 
+
+    length_tiles = *(int_pointer);//this line causes crash
+
+    level_pointer+=2;
+
+    int_pointer = (unsigned int*)level_pointer;//was int_pointer=level_pointer;
+
+    length_map = *(int_pointer);//this line causes crash
+
+    level_pointer+=2;    
+}
+
+int main(void)
+{
+    load_level(0);
+    printf("Hello, world!\n");
+    return 0;
+}
