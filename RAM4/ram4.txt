@@ -1,0 +1,22 @@
+Object  file objects.o at $0000: Z80RMF12
+  Name: objects
+  Section code_compiler: 1 bytes
+  Section bss_compiler: 0 bytes
+  Section BANK_04: 4304 bytes
+  Symbols:
+    G A $0000 _ram4 (section code_compiler) (file ram4.c:20)
+    G A $0000 _level1map (section BANK_04) (file ram4Z.asm:6)
+    G A $056C _enemies1 (section BANK_04) (file ram4Z.asm:10)
+    G A $05D5 _level2map (section BANK_04) (file ram4Z.asm:34)
+    G A $0B0D _enemies2 (section BANK_04) (file ram4Z.asm:38)
+    G A $0B76 _level3map (section BANK_04) (file ram4Z.asm:61)
+    G A $1066 _enemies3 (section BANK_04) (file ram4Z.asm:65)
+    G A $10CF _level4map (section BANK_04) (file ram4Z.asm:86)
+    G A $10CF _enemies4 (section BANK_04) (file ram4Z.asm:88)
+    G A $10CF _level5map (section BANK_04) (file ram4Z.asm:91)
+    G A $10CF _enemies5 (section BANK_04) (file ram4Z.asm:93)
+    G A $10CF _level6map (section BANK_04) (file ram4Z.asm:96)
+    G A $10CF _enemies6 (section BANK_04) (file ram4Z.asm:98)
+    G A $10CF _level7map (section BANK_04) (file ram4Z.asm:101)
+    G A $10CF _enemies7 (section BANK_04) (file ram4Z.asm:103)
+    G A $10CF _endmarkerRam4 (section BANK_04) (file ram4Z.asm:125)

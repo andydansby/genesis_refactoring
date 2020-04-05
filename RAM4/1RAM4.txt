@@ -1,0 +1,5 @@
+ram4.bin: levels.asm level1.map
+	pasmo levels.asm ram4.bin levels.sym
+	
+	
+	
