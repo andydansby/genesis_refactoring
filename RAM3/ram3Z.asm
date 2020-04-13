@@ -4,20 +4,22 @@ SECTION BANK_03
 
 PUBLIC _junkmarker
 _junkmarker:
-halt
-halt
+nop
+nop
 ret
+
 
 PUBLIC _background
 _background:
-halt
+
 	BINARY "background.bin"
 
 
 PUBLIC _junkmarker2
 _junkmarker2:
-halt
-halt
+nop
+nop
+nop
 ret
 
 
