@@ -27,10 +27,7 @@ SECTION UNCONTENDED
 ;SECTION bss_user
 ; bss_user is for zeroed ram variables
 
-PUBLIC _IM2table
-_IM2table:
-	defs 257	;;0x101
-	; 257 byte table for the Interupt Manager
+
 
 ;; Definitions for sprite cache addresses
 ;;used in drawsprite.asm

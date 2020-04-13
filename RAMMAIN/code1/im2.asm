@@ -1,13 +1,20 @@
 ;;im2.asm
 ;;SECTION UNCONTENDED
+EXTERN _borderTest
 
+PUBLIC _IM2table
+_IM2table:
+	defs 257	;;0x101
+	; 257 byte table for the Interupt Manager
 
+;; starts at $ACD8-ACEA
 ;; runs once during game setup
 PUBLIC _interuptSetup
 ;#BEGIN_ASM
 _interuptSetup:
 
-	nop	;;used to make sure that the next line is compiled
+;;#ACD8
+;;	nop	;;used to make sure that the next line is compiled
 	
 	ld a, r
 	and $7f
@@ -27,7 +34,7 @@ _interuptSetup:
 	ld de, _gameISR1	
 	;;	ld de, $614f
 	;;load de with actual _gameISR
-	
+
 	call _SetIM2
 ;;seems to only run once
 ret
@@ -48,13 +55,16 @@ PUBLIC _SetIM2
 ;;	DE: address with the ISR handler
 	
 _SetIM2:
+
+;;#ACEB
+
 	di
 	
-	
+
 	
 	;;ATTENTION gets funny here
 	;;some self modifying code
-	;ld (_israddr), de
+	;;ld (_israddr), de
 	;; set address in handler
 	ld (_israddr + 1), de
 
@@ -80,7 +90,7 @@ _SetIM2:
 	
 	ld bc, 256
 	ldir
-	; fill the 257 byte table
+	;; fill the 257 byte table
 	;;Source address in HL, a target address in DE, and a 16-bit count in BC
 	
 
@@ -99,6 +109,10 @@ _SetIM2:
 	im 2
 
 	ei
+	
+;;call _borderTest
+
+
 ret
 ;#END_ASM
 

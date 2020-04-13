@@ -27,9 +27,9 @@ SECTION UNCONTENDED
 ;SECTION bss_user
 ; bss_user is for zeroed ram variables
 
-PUBLIC _IM2table
-_IM2table:
-	defs 257	;;0x101
+;;PUBLIC _IM2table
+;;_IM2table:
+;;	defs 257	;;0x101
 	;; 257 byte table for the Interupt Manager
 
 ;; Definitions for sprite cache addresses
@@ -40,30 +40,9 @@ PUBLIC SprCacheTable
 SprCacheTable:
 	defs 1024 ;;0x400
 
-;; cache list next pointers
-;;used in drawsprite.asm
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_next	EQU $8B00
-PUBLIC LRU_next
-LRU_next:
-	defs 43	;;0x2b
 
-;; cache list prev pointers, 
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_prev	EQU $8A00
-PUBLIC LRU_prev
-LRU_prev:
-	defs 43 ;;0x2b
 
-;; Exit:
-;; - TablaTiles (aligned in 4K): Shifted Tiles,
-;; according to the following criteria:
-;;defc		TablaTiles	= $B000		;45056
-PUBLIC TablaTiles
-TablaTiles:
-defs 4096;;0x1000
+
 
 ;;original found in test.c C_Code_1-4-2020
 PUBLIC _MAP_START
@@ -83,19 +62,44 @@ SECTION data_user
 ;_isrdummy:
 ;	defb 1
 
+;;-------------------------------
+
+;; cache list next pointers
+;;used in drawsprite.asm
+;; 43 bytes used 
+;; (some bytes wasted!)
+;;LRU_next	EQU $8B00
+PUBLIC LRU_next
+LRU_next:
+	defs 43	;;0x2b
+
+;; cache list prev pointers, 
+;; 43 bytes used 
+;; (some bytes wasted!)
+;;LRU_prev	EQU $8A00
+PUBLIC LRU_prev
+LRU_prev:
+	defs 43 ;;0x2b
+
 PUBLIC LRU_first
-LRU_first:
-	defb 0
+defc LRU_first = 0
+;LRU_first:
+;	defb 0
 
 ;; pointers to the first and last entry in the cache
 PUBLIC LRU_last
-LRU_last:
-	defb 41	;;0x29
+defc LRU_last = 42
+;LRU_last:
+;	defb 41	;;0x29
 
 
 ;; LRU_LASTENTRY   EQU 42
 PUBLIC LRU_LASTENTRY
+;	LRU_LASTENTRY:
+;	defb 1, 42
 	defc LRU_LASTENTRY = 42	;;0x2a
+
+;;-------------------------------
 
 PUBLIC SCRADD
 SCRADD:

@@ -11,9 +11,6 @@ _ClearMapArea:
 ;; We will assume ints are disabled!!!!!
 ;; Save DE before calling!!!!!
 
-
-
-
 	ld (cma_restoresp+1),sp
 	ld sp, $c000+4096	; at the end of the screen area (second third)
 	ld de, 0		; we clean with whites

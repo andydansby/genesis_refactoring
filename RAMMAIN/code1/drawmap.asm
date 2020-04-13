@@ -6,6 +6,9 @@
 
 SECTION UNCONTENDED
 
+centertiles:
+	defb 0
+	
 PUBLIC _DrawMap
 ;#BEGIN_ASM
 ;;must be in UNCONTENDED
@@ -576,13 +579,8 @@ b_not_zero:
 
 dm_restoresp: 
 	ld sp, 0	
-	;; This value is modified at the beginning!
-	
-	
+	;; This value is modified at the beginning!	
 ret
-
-centertiles:
-	defb 0
 ;#END_ASM
 
 

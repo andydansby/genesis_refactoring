@@ -5,6 +5,14 @@ SECTION UNCONTENDED
 ;;CreaTablaTiles:
 ;;TablaTiles
 
+;; Exit:
+;; - TablaTiles (aligned in 4K): Shifted Tiles,
+;; according to the following criteria:
+;;defc		TablaTiles	= $B000		;45056
+PUBLIC TablaTiles
+TablaTiles:
+defs 4096;;0x1000
+
 ;;stays in main RAM
 
 
@@ -29,7 +37,7 @@ SECTION UNCONTENDED
 ;	The tiles of origin are also organized by columns
 ;
 ; The algorithm is simple (and not too fast), and is based on making rl (hl) to rough,
-; dafter organizing the table with the initial data
+; after organizing the table with the initial data
 ;
 ;;in zx assembler starts at line 10274 - address 10463
 ;; in rammain.txt shows as G A $28DF _CreaTablaTiles (section UNCONTENDED) (file create_shifted_tables.asm:35)
@@ -58,8 +66,6 @@ _CreaTablaTiles:
 	push bc
 	push de
 	ld bc, 8
-	
-;halt;;for testing
 	
 copiatiles_outerloop:
 	ld ixl, 24

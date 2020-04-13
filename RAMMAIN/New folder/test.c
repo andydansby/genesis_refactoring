@@ -72,7 +72,7 @@ void initilizeVariables(void)
 	unsigned char map_displacement;
 	unsigned char max_shoots;
 	unsigned char frames_to_shoot;
-	unsigned char current_screen;
+//	unsigned char current_screen;
 	
 	char speed_x;
 	char speed_y;
@@ -81,7 +81,7 @@ void initilizeVariables(void)
 	ship_x=ship_y=map_xpos=map_displacement=0;
 	speed_x=speed_y=frames_to_shoot=0;
 	 
-	current_screen = 7;
+//	current_screen = 7;
 	//used for Page flipping shadow screen
 	//when used with xor 2 will flipflop from bank 7 to bank 5
 	 
@@ -141,7 +141,7 @@ void gamesetup(void)
 	load_background();	
 	
 	
-	clean_screen();
+	clear_screen();
 	
 	
 	initilizeVariables();

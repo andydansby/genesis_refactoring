@@ -450,8 +450,6 @@ _MoveSpriteToTop:
 	ld l, e
 	ld (hl),a		;; LRU_next[entry] = LRU_first;
 	
-	;;ATTENTION
-	;;Warning at file 'drawsprite.asm' line 414: integer '347892390653' out of range
 	ld l, LRU_LASTENTRY
 	
 	
@@ -472,7 +470,7 @@ ret			; Total: 143 T-states for a cache hit
 
 ;;---------------------------------
 
-;;#8594
+;;#AA71
 ;; Initialize sprite cache list
 ;; No entry, no output
 ;; Modifies: BC, DE, HL, A
@@ -481,6 +479,8 @@ PUBLIC _InitSprCacheList
 ;#BEGIN_ASM
 _InitSprCacheList:
 	;; First, initialize the Sprite Cache Table with 255
+	
+
 
 
 	ld hl, SprCacheTable
@@ -488,6 +488,8 @@ _InitSprCacheList:
 	ld (hl),255
 	ld bc, 1023
 	ldir
+	
+	;;aa7e
 	
 	;; Second, pre-populate the LRU_next and LRU_prev arrays
 	;;unsigned char LRU_next[43]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,0};
@@ -512,6 +514,10 @@ loop_InitSprCache:
 	ld (LRU_prev), a
 	xor a
 	ld (de), a
+	
+;;	halt
+	
+	
 ret
 ;#END_ASM
 
