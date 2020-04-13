@@ -30,11 +30,11 @@ INCLUDE "variables.asm"
 
 PUBLIC _WYZ_PLAY
 _WYZ_PLAY:
-
-halt
+ret
 nop
 halt
 nop
+halt
 	CALL _INICIO
 
                
