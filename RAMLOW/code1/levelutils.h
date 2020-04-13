@@ -2,22 +2,15 @@
 #define LEVELUTILS_H
 
 
-
 void load_level(unsigned char level)
 {
-__asm
-	di;;33422
 	
-;//	push bc
-;//	ld b, 4
-;//	call _BankRam;// Levels in RAM4 levelutils
-;//supposed to call setrambank (33672), but it goes to somewhere else in memory
-;// call _borderTest
-;//	pop bc
-
+// performs bank switch	
+__asm
+	EXTERN _load_levelpart1
+	call _load_levelpart1
 __endasm
 
-	bank(4);
 
 	level_pointer = (unsigned int*) level_address[level];
 	level_pointer = (unsigned char*)level_address[level];//#601F
@@ -53,43 +46,31 @@ __endasm
 	// We will use the map area as decompression buffer
 	//remember, we are still in RAM4
 	
+	intrinsic_label(load_levelpart2_BEGIN);
 __asm
-
-EXTERN _depack
-EXTERN _MAP_START
-EXTERN _CreaTablaTiles
-
-
-
-
-;//ld de, $a000
-;//have a feeling the problem is here hard coded addy
-;//MAP_START = A000 	defc MAP_START	= $A000
-;// in engine.asm
-	ld de, _MAP_START	
-	ld hl, (_level_pointer)	
-	call _depack;;
-
-;//ld de, $a000;;hard coded addy
-	ld de, _MAP_START	
-	ld a, (_CurLevel_NTiles)
-	ld b,a
-	
-	call _CreaTablaTiles;
+extern _CreaTablaTiles
+extern _MAP_START
+extern _load_levelpart2
+call _load_levelpart2
 __endasm
+	intrinsic_label(load_levelpart2_END);
 
 	// now, copy the map (uncompress) to its final location
 	level_pointer += length_tiles;
-		
+
+
+
+intrinsic_label(load_levelpart3_BEGIN);
 __asm
-
-EXTERN _depack
-	ld de, _MAP_START;// ld de, $a000
-	ld hl, (_level_pointer)
-	call _depack
-
+extern _depack
+extern _MAP_START
+extern _load_levelpart3
+	call _load_levelpart3
 ;//seems stable to here
 __endasm
+intrinsic_label(load_levelpart3_END);
+
+
 
 	// Copy enemy table
 	level_pointer=(unsigned char*)enemy_address[level];
@@ -104,61 +85,18 @@ __endasm
 //this is corrupting / crashing here
 //shows at ldir
 //perhaps copying to already used area
+
+
+
 __asm
+extern _load_levelpart4
+call _load_levelpart4
 
+;halt
 
-
-
-	;//_enemy_locations is an unsigned struct in variables.h
-	;//struct Enemy enemy_locations[128]; // up to 128 enemies per level, 8 bytes per enemy: 1K
-	ld de, _enemy_locations	
-	;//ld DE, AEC1		AEC1=0
-	;//aec1 = 44737 vs 76c2 = 30402
-	;//----------------------------
-	
-	;//unsigned char *level_pointer;
-	ld hl, (_level_pointer)
-	;//;ld HL, (AEB5)	AEB5=5F/95
-	;//----------------------------
-	
-	ld bc, (_dummy_i)
-	;//ld BC, (AEB9)	AEB9=0
-	
-	
-	
-	ldir
-	
-	;//Repeats LDI (LD (DE),(HL), then increments DE, HL, and decrements BC) until BC=0
-	;//DE = AEC1
-	;//HL = C65F
-	;//BC = 0000 = FFFF
-
-
-//back to bank (0)
-//	bank(0);//ATTENTION
-
-;//ATTENTION
-;;halt;//6132
+;;EXTERN _borderTestEndless	
+;;call _borderTestEndless
 __endasm
-
-	bank(0);
-
-__asm	
-	;ld b, 0
-	;call setrambank	; back to normal
-	ei
-	
-;//EXTERN _borderTestEndless
-;//call _borderTestEndless
-__endasm
-	
-
-/*
-EXTERN _borderTestEndless
-halt
-call _borderTestEndless
-*/
-
 
 
 }

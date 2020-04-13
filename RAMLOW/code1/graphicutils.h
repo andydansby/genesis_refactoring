@@ -1,108 +1,21 @@
 #ifndef GRAPHICUTILS_H
 #define GRAPHICUTILS_H
 
-void clean_screen(void)
+void clear_screen(void)
 {
 __asm
-	di
-	EXTERN _clean_screen1
-	call _clean_screen1
-__endasm
-
-/*	ld b, 5
-	call setrambank		; we put it in $c000 - $ffff
-*/
-	bank(5);
-	
-/*
-	ld hl, $C000
-	ld de, $C001
-	ld (hl),0
-	ld bc, 4095
-	ldir
-	ld hl, $d800
-	ld de, $d801
-	ld (hl), $05
-	ld bc, 511
-	ldir
-*/
-
-	bank(5);
-/*
-	ld b, 7
-	call setrambank		; we put it in $c000 - $ffff	
-*/
-
-__asm
-	call _clean_screen1
-__endasm
-
-/*
-	ld hl, $C000
-	ld de, $C001
-	ld (hl),0
-	ld bc, 4095
-	ldir
-	ld hl, $d800
-	ld de, $d801
-	ld (hl), $05
-	ld bc, 511
-	ldir
-*/
-
-	bank(0);
-/*	ld b, 0
-	call setrambank		; back to normal
-*/
-
-__asm
-	ei
+	EXTERN _clean_screen
+	call _clean_screen
 __endasm
 }
 
 void load_background(void)
 {
 __asm
-	di
-	EXTERN _load_background1
-	EXTERN _load_background2
+	EXTERN _load_backgroundASM
+	call _load_backgroundASM
 __endasm
 
-	bank(3);
-/*
-	ld b, 3			; Static images in RAM3
-	call setrambank		; we put it in $c000 - $ffff
-*/	
-	
-__asm
-	call _load_background1
-__endasm
-/*	ld hl, $c000
-	ld de, 16384
-	call _depack
-*/
-
-	bank(7);
-/*	ld b, 7
-	call setrambank		; we put it in $c000 - $ffff*/
-
-__asm
-	call _load_background2
-__endasm	
-/*	ld hl, 16384
-	ld de, $c000
-	ld bc, 6912
-	ldir			; copy the background to the alternate screen
-*/
-
-	bank(7);
-/*	ld b, 0
-	call setrambank		; back to reality
-*/
-	
-__asm	
-	ei
-__endasm
 }
 
 
@@ -143,12 +56,13 @@ void DrawSpriteList(void)
 	{
 		// First draw the ship
 		__asm
+			extern _DrawSprite
 			ld a, (_ship_x)
 			ld b, a
 			ld a, (_ship_y)
 			ld c,a
 			ld de, 0		; _ship01
-			call drawsprite
+			call _DrawSprite	;//call drawsprite
 
 			ld a, (_ship_x)
 			add a,16
@@ -156,7 +70,7 @@ void DrawSpriteList(void)
 			ld a, (_ship_y)
 			ld c,a	
 			ld de, 1		;_ship02
-			call drawsprite	
+			call _DrawSprite	;//call drawsprite
 		__endasm
 	}
 // Now, display all enemies, shoots, etc
@@ -173,7 +87,7 @@ void DrawSpriteList(void)
 			__asm
 				ld bc, (_dummy_i)
 				ld de, (_dummy_i2)
-				call drawsprite
+				call _DrawSprite	;//call drawsprite
 			__endasm
 		}
 
@@ -187,7 +101,7 @@ void DrawSpriteList(void)
 			__asm
 				ld bc, (_dummy_i)
 				ld de, (_dummy_i2)
-				call drawsprite
+				call _DrawSprite	;//call drawsprite
 			__endasm
 		}
 
@@ -201,7 +115,7 @@ void DrawSpriteList(void)
 			__asm
 				ld bc, (_dummy_i)
 				ld de, (_dummy_i2)
-				call drawsprite
+				call _DrawSprite	;//call drawsprite
 			__endasm
 		}
 	}

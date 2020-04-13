@@ -5,6 +5,8 @@
 
 ;hl = source
 ;de = dest
+
+;;#6745
 PUBLIC _depack
 _depack:
 	ld ixl,128

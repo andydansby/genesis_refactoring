@@ -1,47 +1,119 @@
 ;;graphicutils.asm
 ;; these are short routines that are pulled from graphicutils.h
 
-PUBLIC _clean_screen1
+PUBLIC _clean_screen
 ;#BEGIN_ASM
-;;must be in UNCONTENDED
-_clean_screen1:
+_clean_screen:
+	di
+	ld b, 5
+	call _BankRam
 
 	ld hl, $C000
 	ld de, $C001
-	ld (hl),0
-	ld bc, 4095
+	ld bc, 4095		;;top 2 3rds of screen
+	ld (hl),0		;;set pixel to 0
 	ldir
+	
+	;;ldir=
+	;;HL = source address
+	;;DE = target address
+	;;BC = countdown number
+	;;increments HL and DE
+	;;and
+	;;deincrements BC until BC = 0
+	
 	ld hl, $d800
 	ld de, $d801
-	ld (hl), $05
 	ld bc, 511
+	ld (hl), $05
 	ldir
+	
+;;ok to here
+	
+;;now repeat the same for shadow screen
+	ld b, 7
+	call _BankRam
+	
+	ld hl, $C000
+	ld de, $C001
+	ld bc, 4095
+	ld (hl),0	
+	ldir
+	
+	
+	ld hl, $d800
+	ld de, $d801
+	ld bc, 511
+	ld (hl), $05	
+	ldir
+
+;;#682a
+
+	;;back to bank 0
+	ld b, 0
+	call _BankRam		; back to normal
+	ei
+	
 ret
 ;#END_ASM
 
-PUBLIC _load_background1
-;#BEGIN_ASM
-;;must be in UNCONTENDED
-_load_background1:
 
-	ld hl, $c000
-	ld de, 16384
+PUBLIC _load_backgroundASM
+_load_backgroundASM:
+;#BEGIN_ASM
+extern _background
+
+push bc
+push hl
+push de
+
+	di
+
+	ld b, 3				;; Static images in RAM3
+	call _BankRam		;; we put it in $c000 - $ffff	
+	ld hl, _background
+	ld de, 0x4000
 	call _depack
+	;;hl = source	de = dest
+	
+
+
+	ld b, 7
+	call _BankRam		;; we put it in $c000 - $ffff	
+	ld hl, 0x4000
+	ld de, 0xC000
+	ld bc, 0x1B00
+	ldir			
+		;; copy the background to the alternate screen
+	
+;;	ld b, 5
+;;	call _BankRam
+;;	ld hl, 0x4000
+;;	ld de, 0xC000
+;;	ld bc, 0x1B00
+;;	ldir
+	
+	;;ldir=
+	;;HL = source address
+	;;DE = target address
+	;;BC = countdown number
+	;;increments HL and DE
+	;;and
+	;;deincrements BC until BC = 0
+
+
+
+	ld b, 0
+	call _BankRam		; back to reality
+	ei
+
+
+pop de
+pop hl
+pop bc	
+	
 ret
 ;#END_ASM
-
-PUBLIC _load_background2
-;#BEGIN_ASM
-;;must be in UNCONTENDED
-_load_background2:
-
-	ld hl, 16384
-	ld de, $c000
-	ld bc, 6912
-	ldir			; copy the background to the alternate screen
-ret
-;#END_ASM
-
 
 
 ;;troubleshooting this #676e
@@ -80,13 +152,13 @@ _DrawGameMap:
 	
 	;;I believe we are in the shadow screen
 	
-;;halt ;;here $7ffd = 0001-1011
+
 ;;#c046 = wyz
 
 	ld a, (_current_screen)
 	;;#6738
 	
-;;halt = wyz = c046
+
 	
 
 	xor 2
@@ -132,7 +204,7 @@ _DrawGameMap:
 ;;	BC': it is used as a temporary variable	
 
 
-;;halt
+
 ;;here $7ffd = 1111 1011
 
 	call _DrawMap;; in UNCONTENDED
@@ -166,5 +238,89 @@ EXTERN _ship_y
 	ld de, 1		;_ship02
 	call _DrawSprite	;drawsprite
 
+ret
+;#END_ASM
+
+
+PUBLIC _screenLoop
+;#BEGIN_ASM
+_screenLoop:
+
+EXTERN _WYZ_PLAY
+EXTERN _DrawGameMap
+EXTERN _current_screen
+
+;;halt;;score screen shifted
+
+	waitvblank:
+		ld a,r
+		jp m, waitvblank
+;; while the screen has not been switched, we cannot continue
+;;-----------------------
+
+
+
+	di;;here $7ffd = 0001-0000
+	call _DrawGameMap;;graphicutils.asm
+;; in contended RAM #62ac
+;; draw map, interrupts must be disabled
+;;will call _DrawMap in drawmap.asm
+;;located in RAMMAIN
+
+;; _DrawMap will then call _ClearMapArea
+;; located in clearMapArea.asm
+;;located in RAMMAIN
+
+;;score screen shifted
+
+;;temp
+;;call _switchscreen
+
+	ld b, 0
+	call _BankRam
+
+	call _INICIO
+	;; we have missed one interrupt for sure, so call player
+	;; WYZ_PLAY _INICIO _WYZ_PLAY
+	;; call c03f	
+
+	ld a, (_current_screen)
+	xor 2
+	ld b, a
+	call _BankRam
+	;; restore the previous paging state
+	ei
+	
+
+
+	call _DrawSpriteList1	
+	;; draw player sprite
+	;;seems to work OK
+
+
+	
+	
+	
+	
+	ld a,r
+	or $80
+	ld r,a
+	;; set the highest bit of R to 1, so switch screen!!!!
+	
+
+	
+	di
+	ld b, 0
+	call _BankRam
+	
+;;temp
+;;call _switchscreen
+;;call _borderTest
+;;call _screenLoop
+
+
+	ei
+	
+	
 ret
 ;#END_ASM

@@ -1,0 +1,66 @@
+interupt manager
+#8A8A - #8AA4
+runs ok 1st time
+
+_SetIM2 = $AC94
+_BASICISR = $ACB5
+
+however when rest of the program is run 8A8A-8AA4 is erased
+
+run first with breakpoint at #8AA4 
+
+#60cb		#8AA4 ok
+
+#60dc		#8AA4 ok
+
+afterwards messes with #8a8a
+
+#66fb	ok
+#66fe	ok
+#6701	ok
+#6704	ok
+#6705	ok
+#6706	ok
+#6707 <<< call #a7de
+	#a7de is where problem starts which is _CreaTablaTiles
+	
+	ldir copying over ISR
+
+;;ldir=
+;;HL = source address
+;;DE = target address
+;;BC = countdown number
+;;increments HL and DE
+;;and
+;;deincrements BC until BC = 0
+	
+	
+8a8a	push hl
+8a8b	push af
+8a8c	push bc
+8a8d	push de
+8a8e	push ix
+8a90	push iy	
+8a92	ex af, af'
+8a93	push af
+8a94	ex af, af'
+8a95	call #ad27
+8a98	ex af, af'
+8a99	pop af
+8a9a	ex af, af'
+8a9b	pop iy
+8a9d	pop ix
+8a9f	pop de
+8aa0	pop bc
+8aa1	pop af
+8aa2	pop hl
+8aa3	ei
+8aa4	ret
+
+
+
+
+
+
+
+

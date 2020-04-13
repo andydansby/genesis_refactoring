@@ -13,11 +13,11 @@ __asm
 ;; need to eliminate
 ;//	DEFC get_joystick = $8752
 ;//	DEFC CreaTablaTiles = $8830
-	DEFC setrambank = $8489
-	DEFC DrawMap = $8101
-	DEFC drawsprite = $84B6
+;//	DEFC setrambank = $8489
+;//	DEFC DrawMap = $8101
+;//	DEFC drawsprite = $84B6
 ;//	DEFC switchscreen = $8498
-	DEFC InitSprCacheList = $866E
+;//	DEFC InitSprCacheList = $866E
 ;//	DEFC SetIM2 = $890B
 __endasm
 
