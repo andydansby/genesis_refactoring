@@ -5,7 +5,7 @@
 void load_level(unsigned char level)
 {
 	
-// performs bank switch	
+// performs bank switch	to 4
 __asm
 	EXTERN _load_levelpart1
 	call _load_levelpart1
@@ -13,7 +13,10 @@ __endasm
 
 
 	level_pointer = (unsigned int*) level_address[level];
-	level_pointer = (unsigned char*)level_address[level];//#601F
+
+//	level_pointer = (unsigned char*)level_address[level];//#601F  this is gold standard line
+//creates this error
+//sccz80:"levelutils.h" L:17 Warning:Assigning 'level_pointer', type:unsigned int *level_pointer from unsigned char * [-Wincompatible-pointer-types]
 
 	//ld hl,#6CBA (6CBA = level_address = 0)
 	//ends with 680B holding info 84 6D (680B = _level_pointer)
@@ -45,15 +48,17 @@ __endasm
 	// Prepare tiles, preshift them, store them in their final location
 	// We will use the map area as decompression buffer
 	//remember, we are still in RAM4
-	
-	intrinsic_label(load_levelpart2_BEGIN);
+
+
 __asm
 extern _CreaTablaTiles
 extern _MAP_START
 extern _load_levelpart2
 call _load_levelpart2
 __endasm
-	intrinsic_label(load_levelpart2_END);
+
+
+
 
 	// now, copy the map (uncompress) to its final location
 	level_pointer += length_tiles;
@@ -73,7 +78,12 @@ intrinsic_label(load_levelpart3_END);
 
 
 	// Copy enemy table
-	level_pointer=(unsigned char*)enemy_address[level];
+//	level_pointer=(unsigned char*)enemy_address[level];
+//gold standard line
+	level_pointer=(unsigned int*)enemy_address[level];
+	
+	
+	
 
 	dummy_i = *level_pointer; // Number of enemies in level
 	

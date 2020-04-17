@@ -1,6 +1,9 @@
 ;;graphicutils.asm
 ;; these are short routines that are pulled from graphicutils.h
 
+PUBLIC _current_screen
+_current_screen: defb 7
+
 PUBLIC _clean_screen
 ;#BEGIN_ASM
 _clean_screen:
@@ -116,17 +119,46 @@ ret
 ;#END_ASM
 
 
-;;troubleshooting this #676e
+
+
+PUBLIC _DrawSpriteList1
+;#BEGIN_ASM
+;;in CONTENDED
+_DrawSpriteList1:
+EXTERN _DrawSprite
+EXTERN _ship_x
+EXTERN _ship_y
+
+	ld a, (_ship_x)
+	ld b, a
+	ld a, (_ship_y)
+	ld c,a
+	ld de, 0		; _ship01
+	call _DrawSprite	;drawsprite
+
+	ld a, (_ship_x)
+	add a,16
+	ld b, a
+	ld a, (_ship_y)
+	ld c,a	
+	ld de, 1		;_ship02
+	call _DrawSprite	;drawsprite
+
+ret
+;#END_ASM
+
+
+
+
+;;troubleshooting this #679B
 PUBLIC _DrawGameMap
 ;#BEGIN_ASM
 ;;in CONTENDED
 _DrawGameMap:
-	EXTERN _current_screen
 	EXTERN _map_displacement
 	EXTERN _map_xpos
 	EXTERN _CurLevel_XLength
 	EXTERN _DrawMap
-;;	EXTERN _BankRam
 
 ;;here $7ffd = 0001-0000
 
@@ -152,17 +184,9 @@ _DrawGameMap:
 	
 	;;I believe we are in the shadow screen
 	
-
-;;#c046 = wyz
-
-	ld a, (_current_screen)
-	;;#6738
-	
-
-	
+	ld a, (_current_screen)	
 
 	xor 2
-	;;#673b
 	;; 5 xor 2 = 7; 7 xor 2 = 5
 	
 	
@@ -204,65 +228,39 @@ _DrawGameMap:
 ;;	BC': it is used as a temporary variable	
 
 
+;;ATTENTION
+;;by the time it gets here _DrawMap is complletely erased
 
-;;here $7ffd = 1111 1011
-
-	call _DrawMap;; in UNCONTENDED
-	
-	
+;;	call _DrawMap;; in UNCONTENDED
 
 ret
 ;#END_ASM
 
 
-PUBLIC _DrawSpriteList1
-;#BEGIN_ASM
-;;in CONTENDED
-_DrawSpriteList1:
-EXTERN _DrawSprite
-EXTERN _ship_x
-EXTERN _ship_y
-
-	ld a, (_ship_x)
-	ld b, a
-	ld a, (_ship_y)
-	ld c,a
-	ld de, 0		; _ship01
-	call _DrawSprite	;drawsprite
-
-	ld a, (_ship_x)
-	add a,16
-	ld b, a
-	ld a, (_ship_y)
-	ld c,a	
-	ld de, 1		;_ship02
-	call _DrawSprite	;drawsprite
-
-ret
-;#END_ASM
-
-
+;;$67C8
 PUBLIC _screenLoop
 ;#BEGIN_ASM
 _screenLoop:
 
 EXTERN _WYZ_PLAY
-EXTERN _DrawGameMap
-EXTERN _current_screen
 
-;;halt;;score screen shifted
+;;uses _current_screen to work with waitvblank
 
 	waitvblank:
 		ld a,r
-		jp m, waitvblank
-;; while the screen has not been switched, we cannot continue
+		nop
+		nop
+		jp m, waitvblank	
+		;; while the screen has not been switched, we cannot continue
 ;;-----------------------
 
+	di;;
+	
 
 
-	di;;here $7ffd = 0001-0000
-	call _DrawGameMap;;graphicutils.asm
-;; in contended RAM #62ac
+
+	
+	call _DrawGameMap
 ;; draw map, interrupts must be disabled
 ;;will call _DrawMap in drawmap.asm
 ;;located in RAMMAIN
@@ -271,7 +269,10 @@ EXTERN _current_screen
 ;; located in clearMapArea.asm
 ;;located in RAMMAIN
 
-;;score screen shifted
+;;temp  ATTENTION
+ret
+
+
 
 ;;temp
 ;;call _switchscreen
@@ -292,16 +293,12 @@ EXTERN _current_screen
 	ei
 	
 
-
-	call _DrawSpriteList1	
+;;ATTENTION PROBLEM, crash!
+;;	call _DrawSpriteList1	
 	;; draw player sprite
-	;;seems to work OK
+	;;ATTENTION PROBLEM, crash!
+	
 
-
-	
-	
-	
-	
 	ld a,r
 	or $80
 	ld r,a
@@ -320,7 +317,11 @@ EXTERN _current_screen
 
 
 	ei
-	
+
+
+;;temp
+;;halt
+;;call _screenLoop	
 	
 ret
 ;#END_ASM

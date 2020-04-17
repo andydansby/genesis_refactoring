@@ -9,8 +9,9 @@ void wtf (void)
 
 // Function definitions...is there a way to automate this?
 __asm
-;; THESE are hard coded addresses
-;; need to eliminate
+;;// ATTENTION
+;;// THESE are hard coded addresses
+;;// need to eliminate
 ;//	DEFC get_joystick = $8752
 ;//	DEFC CreaTablaTiles = $8830
 ;//	DEFC setrambank = $8489

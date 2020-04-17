@@ -6,6 +6,17 @@ extern _CurLevel_NTiles
 extern _depack
 extern _CreaTablaTiles
 
+;;original found in test.c C_Code_1-4-2020
+PUBLIC _MAP_START
+_MAP_START:
+defs 0x1000
+;;0x1000 = 4096
+;;reserve 4096 bytes set to 0
+;;was originally A000
+;;which means it should be in main RAM
+;;-------------------------------
+
+;;just switches to bank 4
 PUBLIC _load_levelpart1
 ;#BEGIN_ASM
 _load_levelpart1:
@@ -21,11 +32,14 @@ ret
 PUBLIC _load_levelpart2
 ;#BEGIN_ASM
 _load_levelpart2:
-EXTERN _MAP_START
 	;; ld de, $a000
 	;; have a feeling the problem is here hard coded addy
 	;; MAP_START = A000 	defc MAP_START	= $A000
 	;; in engine.asm
+	
+;; aPPack decompressor
+;;hl = source
+;;de = dest
 	
 push de
 push hl
@@ -118,7 +132,8 @@ _unpackMap:
 		;;have a feeling the problem is here hard coded addy
 		;;defc 		MAP_START	= $A000 in engine.asm
 		;;85D0=34256 A000=40960
-	ld de, _MAP_START;_MAP_START = 40812
+	ld de, _MAP_START
+	;;_MAP_START = 40812
 	
 	ld hl, (_level_pointer)	;_level_pointer = 35338 = 06 c0
 	
