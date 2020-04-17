@@ -8,23 +8,14 @@ SECTION UNCONTENDED
 
 centertiles:
 	defb 0
-	
-PUBLIC _DrawMap
-;#BEGIN_ASM
-;;must be in UNCONTENDED
-_DrawMap:
-
-EXTERN _ClearMapArea
 
 ;; Routine to paint the map ... may God catch me confessed
-
 ;; Entry:
 ;; 	DE: Map + scrolling through the map in tiles
 ;; 	BC: map scrolling; B: chars (0-2), C: pixels (0,1,2,3)
 ;; 	HL: map width in characters
 ;;	TablaTiles: table with tiles already preshifted (ver create_shifted_tiles.asm), in $B000
-
-
+;;-----------------
 ;; Use of registers:
 ;;	IYh: height counter (16)
 ;;	IYl: tile width counter (10)
@@ -34,13 +25,25 @@ EXTERN _ClearMapArea
 ;;		Z: bytes inside of the tile (32)
 ;;	HL', DE': they will move across the screen
 ;;	BC': it is used as a temporary variable
-
+;;-----------------
 ;; IMPORTANT: ENTER WITH DISABLED INTERRUPTIONS!!!!!!!
 
 
+PUBLIC _DrawMap
+;#BEGIN_ASM
+;;must be in UNCONTENDED
+_DrawMap:		;;#9401
+
+
+
+;;something erasing 
+;;EXTERN _ClearMapArea
 	push de
 	call _ClearMapArea
 ;; clean the screen
+
+
+
 
 	ld de, -11
 	add hl, de			
@@ -65,23 +68,16 @@ chars_not_zero:
 	
 dm_save_sp:
 
-
 	ld (centertiles),a
 	
-
-
 	ld (dm_restoresp+1), SP		
 ;; we play with SP, so there can be no active interruptions
-
-
 
 	ld iyh, 16			; 16 characters high 
 	ld a, c
 	rlca
 	rlca				
 ;; we move the displacement in pixels to 0000xx00
-
-
 
 	or $b0
 
@@ -107,31 +103,32 @@ draw_loopy:
 ;; for empty tiles, we follow a different path
 	jp nz, draw_loopy_notzero
 
-
 	ld a, 3
 	sub b				
-	exx				; alternate regset
+	exx				;; alternate regset
 
-
-	
 draw_loopy_zero:	
 	inc de
 	inc hl
 	dec a
-	jp nz, draw_loopy_zero		; we do this whole loop to leave increased
+	jp nz, draw_loopy_zero
+	;; we do this whole loop to leave increased
 	
 	jp go_to_center
 
 
 
 draw_loopy_notzero:
-	exx				; alternate regset
+	exx				;; alternate regset
 	rrca
 	rrca
-	rrca				; we pass the tile number to yyy000yy	
+	rrca				
+	;; we pass the tile number to yyy000yy	
 	ld b,a
-	and 3				; we are left with the upper two bits 000000yy
-	ld c, a				; and copy them to C
+	and 3				
+	;; we are left with the upper two bits 000000yy
+	ld c, a				
+	;; and copy them to C
 	ld a,b
 
 	and $e0				 

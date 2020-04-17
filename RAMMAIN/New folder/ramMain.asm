@@ -27,15 +27,9 @@ SECTION UNCONTENDED
 ;SECTION bss_user
 ; bss_user is for zeroed ram variables
 
+;;-------------------------------
 
 
-;; Definitions for sprite cache addresses
-;;used in drawsprite.asm
-;; sprite cache table, 1K	
-;;SprCacheTable 	EQU $8C00
-PUBLIC SprCacheTable
-SprCacheTable:
-	defs 1024 ;;0x400
 
 ;; cache list next pointers
 ;;used in drawsprite.asm
@@ -54,14 +48,7 @@ PUBLIC LRU_prev
 LRU_prev:
 	defs 43 ;;0x2b
 
-;; Exit:
-;; - TablaTiles (aligned in 4K): Shifted Tiles,
-;; according to the following criteria:
-;;defc		TablaTiles	= $B000		;45056
-PUBLIC TablaTiles
-TablaTiles:
-defs 4096;;0x1000
-;;-------------------------------
+
 
 SECTION data_user
 

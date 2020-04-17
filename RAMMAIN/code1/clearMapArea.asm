@@ -13,7 +13,7 @@ _ClearMapArea:
 
 	ld (cma_restoresp+1),sp
 	ld sp, $c000+4096	; at the end of the screen area (second third)
-	ld de, 0		; we clean with whites
+	ld de, 0		; we clean with whites	ld de, 0
 	ld a, b	
 	ld b, 64		; we will make series of 32 push (16 pixels per push), 64x2 lines
 	

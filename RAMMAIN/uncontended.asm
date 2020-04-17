@@ -1,7 +1,10 @@
 ;;uncontended memory from 32768 to 49151
-SECTION UNCONTENDED
-;;org 0x8000;;32768 to 49151 below BANK switch and above contended
+;;look in mmap.inc in /ramlow
 
+SECTION UNCONTENDED
+
+
+;SECTION data_user
 ;;INCLUDEs are at the bottom
 
 ;SECTION code_user
@@ -32,31 +35,15 @@ SECTION UNCONTENDED
 ;;	defs 257	;;0x101
 	;; 257 byte table for the Interupt Manager
 
-;; Definitions for sprite cache addresses
-;;used in drawsprite.asm
-;; sprite cache table, 1K	
-;;SprCacheTable 	EQU $8C00
-PUBLIC SprCacheTable
-SprCacheTable:
-	defs 1024 ;;0x400
 
 
 
 
 
-;;original found in test.c C_Code_1-4-2020
-PUBLIC _MAP_START
-_MAP_START:
-defs 0x1000
-;;0x1000 = 4096
-;;reserve 4096 bytes set to 0
-;;was originally A000
-;;which means it should be in main RAM
-;;-------------------------------
 
 
 
-SECTION data_user
+
 
 ;PUBLIC _isrdummy
 ;_isrdummy:
@@ -71,7 +58,7 @@ SECTION data_user
 ;;LRU_next	EQU $8B00
 PUBLIC LRU_next
 LRU_next:
-	defs 43	;;0x2b
+	defb 43	;;0x2b
 
 ;; cache list prev pointers, 
 ;; 43 bytes used 
@@ -79,16 +66,16 @@ LRU_next:
 ;;LRU_prev	EQU $8A00
 PUBLIC LRU_prev
 LRU_prev:
-	defs 43 ;;0x2b
+	defb 43 ;;0x2b
 
 PUBLIC LRU_first
-defc LRU_first = 0
+	defc LRU_first = 0
 ;LRU_first:
 ;	defb 0
 
 ;; pointers to the first and last entry in the cache
 PUBLIC LRU_last
-defc LRU_last = 42
+	defc LRU_last = 42
 ;LRU_last:
 ;	defb 41	;;0x29
 
@@ -141,7 +128,7 @@ defc _SPRITES_BANK = 1
 
 
 
-
+SECTION UNCONTENDED
 ;;--------------------------------
 ;; PLACE INCLUDEs HERE
 INCLUDE "drawmap.asm"

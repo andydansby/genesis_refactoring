@@ -3,9 +3,13 @@
 
 ;;---------------------------------
 
-;SECTION code_user
 
 SECTION UNCONTENDED
+
+
+	
+	
+	
 ;; Limited to 16x16 sprites, with mask
 ;; Originally taken from a tutorial by dmsmith, then modified
 
@@ -22,6 +26,7 @@ SECTION UNCONTENDED
 ;; So, in SevenuP terminology, this means: X char, Mask, Char line, Y char, interleave: sprite, mask before sprite
 ;; now, the sprite drawing routine includes a sprite cache, with all required handling
 
+;;#9463
 PUBLIC _DrawSprite
 ;#BEGIN_ASM
 ;;must be in UNCONTENDED
@@ -522,4 +527,10 @@ ret
 ;#END_ASM
 
 
-
+;; Definitions for sprite cache addresses
+;;used in drawsprite.asm
+;; sprite cache table, 1K	
+;;SprCacheTable 	EQU $8C00
+PUBLIC SprCacheTable
+SprCacheTable:
+	defs 1024 ;;0x400
