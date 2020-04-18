@@ -5,18 +5,10 @@ extern _level_pointer
 extern _CurLevel_NTiles
 extern _depack
 extern _CreaTablaTiles
+extern _MAP_START;;in uncontended RAM where map unpack to
 
-;;original found in test.c C_Code_1-4-2020
-PUBLIC _MAP_START
-_MAP_START:
-defs 0x1000
-;;0x1000 = 4096
-;;reserve 4096 bytes set to 0
-;;was originally A000
-;;which means it should be in main RAM
-;;-------------------------------
 
-;;just switches to bank 4
+;;just switches to bank 4	$65F5
 PUBLIC _load_levelpart1
 ;#BEGIN_ASM
 _load_levelpart1:
@@ -29,6 +21,10 @@ _load_levelpart1:
 ret
 ;#END_ASM
 
+
+
+
+;;$65FE
 PUBLIC _load_levelpart2
 ;#BEGIN_ASM
 _load_levelpart2:
@@ -36,20 +32,23 @@ _load_levelpart2:
 	;; have a feeling the problem is here hard coded addy
 	;; MAP_START = A000 	defc MAP_START	= $A000
 	;; in engine.asm
-	
+
+push de
+push hl
+
 ;; aPPack decompressor
 ;;hl = source
 ;;de = dest
-	
-push de
-push hl
 
 	ld de, _MAP_START
 	;;_MAP_START is actually a big buffer that map uncompresses to
 	
-	ld hl, (_level_pointer)	
-	call _depack
+	ld hl, (_level_pointer)
+	
 
+;;ok to here	
+	call _depack
+halt
 	;; ld de, $a000;;hard coded addy
 	ld de, _MAP_START
 	ld a, (_CurLevel_NTiles)
@@ -65,11 +64,11 @@ pop de
 ret
 ;#END_ASM
 
+
+;;$6616
 PUBLIC _load_levelpart3
 ;#BEGIN_ASM
 _load_levelpart3:
-EXTERN _MAP_START
-
 push de
 push hl
 
@@ -82,6 +81,8 @@ pop de
 ret
 ;#END_ASM
 
+
+;;$6624
 PUBLIC _load_levelpart4
 ;#BEGIN_ASM
 _load_levelpart4:

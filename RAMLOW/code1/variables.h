@@ -4,10 +4,6 @@
 //#define MAX_ENEMIES 8
 
 
-
-
-
-
 //define in asm to force placement
 // in ramlow.asm
 
@@ -251,21 +247,37 @@
 		{0,0,0,0,0,0,0}
 	};
 
+
+//ATTENTION HARD CODED ADDRESSES
+//NEED TO FIX
 unsigned int level_address[3] =
 {
 	0xC000,
 	0xC6C7,
-	0xCBF2
+	0xCD8E,
+	0xD2B9
+	
 };//level addresses
-
+//_level0map
+//_level1map
+//_level2map
+//_level3map
 //level addresses		0xC000,	0xC6C7, 0xCBF2
 
+
+//ATTENTION HARD CODED ADDRESSES
+//NEED TO FIX
 unsigned int enemy_address[3]=
 {
 	0xC65E,
-	0xCB89,
-	0xD079
+	0xCD25,
+	0xD250,
+	0xD740
 };// Enemy addresses
+//_enemies0
+//_enemies1
+//_enemies2
+//_enemies3
 
 
 /*	extern unsigned int _level1map;//$C000

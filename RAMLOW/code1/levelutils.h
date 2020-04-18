@@ -11,37 +11,41 @@ __asm
 	call _load_levelpart1
 __endasm
 
-
+//------------------------------
+//intrinsic_label(level_pointer_begin);//$6084
 	level_pointer = (unsigned int*) level_address[level];
+	//this points to the level address in BANK 4
+//intrinsic_label(level_pointer_end);//$6098
+//HL ends up with $C000
 
-//	level_pointer = (unsigned char*)level_address[level];//#601F  this is gold standard line
-//creates this error
-//sccz80:"levelutils.h" L:17 Warning:Assigning 'level_pointer', type:unsigned int *level_pointer from unsigned char * [-Wincompatible-pointer-types]
+//	level_pointer = (unsigned char*)level_address[level];
+//#601F  this is gold standard line
+//creates a pointer error
+//------------------------------
 
-	//ld hl,#6CBA (6CBA = level_address = 0)
-	//ends with 680B holding info 84 6D (680B = _level_pointer)
-	//gold standard routine is #6191
-	// in gold standard  ends with hl set to C000
-	//ld hl,#75a1  ld hl with address #75a1
-	//7591 has 00 C0
-	
 
+//intrinsic_label(CurLevel_NTiles_begin);//$6098
 	CurLevel_NTiles = (*level_pointer)++;
-	//#6033
-	//ld HL, (#680B) / inc HL
-	//ends with A = 0 and placed in 67EA (67EA = _CurLevel_NTiles)
-
-
+//intrinsic_label(CurLevel_NTiles_end);//$60AA
+//level 0 HL = $17 = 23 good?
+//level 1 HL = $17 = 23 good?
+//level 2 HL = $1e = 30 ?
+//level 3 HL = $20 = 32 ?
 
 	CurLevel_XLength = (*level_pointer)++;	// Load the basic level data
+	
+	
 	int_pointer = (unsigned int*)level_pointer;//604E
+
 
 	length_tiles = *(int_pointer);
 	level_pointer+=2;
 	
+	
 	int_pointer = (unsigned int*)level_pointer;
 	
-	length_map = (*int_pointer);//this line causes crash
+	
+	length_map = (*int_pointer);//this line caused crash in the past
 	
 	level_pointer+=2;
 	
@@ -49,15 +53,14 @@ __endasm
 	// We will use the map area as decompression buffer
 	//remember, we are still in RAM4
 
-
+intrinsic_label(troubleshoot_DrawMap_2);
 __asm
-extern _CreaTablaTiles
-extern _MAP_START
 extern _load_levelpart2
 call _load_levelpart2
 __endasm
+// THIS ROUTINE FUCKING UP MY WORLD
 
-
+intrinsic_label(troubleshoot_DrawMap_3);
 
 
 	// now, copy the map (uncompress) to its final location
@@ -67,8 +70,6 @@ __endasm
 
 intrinsic_label(load_levelpart3_BEGIN);
 __asm
-extern _depack
-extern _MAP_START
 extern _load_levelpart3
 	call _load_levelpart3
 ;//seems stable to here
@@ -97,17 +98,17 @@ intrinsic_label(load_levelpart3_END);
 //perhaps copying to already used area
 
 
-
+intrinsic_label(load_levelpart4_BEGIN);
 __asm
 extern _load_levelpart4
 call _load_levelpart4
 
 ;halt
 
-;;EXTERN _borderTestEndless	
+;EXTERN _borderTestEndless	
 ;;call _borderTestEndless
 __endasm
-
+intrinsic_label(load_levelpart4_END);
 
 }
 

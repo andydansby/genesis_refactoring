@@ -2,8 +2,11 @@
 breakpoints needed
 __Start				$6018
 _load_level			$6081
+level_pointer_begin	$6084
+level_pointer_end	$6098
 _load_levelpart2	$7611
-_depack				$7666
+_depack				$7652
+level_pointer_end	$6098
 
 need to monitor _DrawMap @
 $805B

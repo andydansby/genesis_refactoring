@@ -1,6 +1,11 @@
 ;;graphicutils.asm
 ;; these are short routines that are pulled from graphicutils.h
 
+extern _map_displacement
+extern _map_xpos
+extern _CurLevel_XLength
+extern _DrawMap
+
 PUBLIC _current_screen
 _current_screen: defb 7
 
@@ -150,18 +155,15 @@ ret
 
 
 
-;;troubleshooting this #679B
+;;troubleshooting this 
 PUBLIC _DrawGameMap
 ;#BEGIN_ASM
 ;;in CONTENDED
 _DrawGameMap:
-	EXTERN _map_displacement
-	EXTERN _map_xpos
-	EXTERN _CurLevel_XLength
-	EXTERN _DrawMap
+
 
 ;;here $7ffd = 0001-0000
-
+;;troubleshoot _DrawMap to see if it's erased. $9001
 
 ;;#c046 is where wyz player resides
 
@@ -229,7 +231,7 @@ _DrawGameMap:
 
 
 ;;ATTENTION
-;;by the time it gets here _DrawMap is complletely erased
+;;by the time it gets here _DrawMap is completely erased
 
 ;;	call _DrawMap;; in UNCONTENDED
 
@@ -237,7 +239,7 @@ ret
 ;#END_ASM
 
 
-;;$67C8
+;;$67B1
 PUBLIC _screenLoop
 ;#BEGIN_ASM
 _screenLoop:
@@ -255,11 +257,9 @@ EXTERN _WYZ_PLAY
 ;;-----------------------
 
 	di;;
-	
 
 
-
-	
+;;troubleshoot _DrawMap to see if it's erased. $9001
 	call _DrawGameMap
 ;; draw map, interrupts must be disabled
 ;;will call _DrawMap in drawmap.asm
@@ -269,10 +269,7 @@ EXTERN _WYZ_PLAY
 ;; located in clearMapArea.asm
 ;;located in RAMMAIN
 
-;;temp  ATTENTION
 ret
-
-
 
 ;;temp
 ;;call _switchscreen
