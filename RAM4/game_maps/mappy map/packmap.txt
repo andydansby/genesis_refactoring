@@ -1,0 +1,17 @@
+Hey, it's great to see someone digging into my source code :). We created the levels using Mappy, however those .MAP files are pre-processed versions of those maps, ready to be used by the engine. Looking at the source code we published, I realize none of the artwork is there, so here it is (https://app.box.com/s/0olkheyff1nn2odmvh23i0zfe1c5pwxj).
+
+It's a raw dump of what I have in my hard disk, so there's a lot of junk and comments in Spanish (sorry for that). The important bits are:
+
+- niveles: the levels in FMP format are there, ready to be loaded by Mappy. We used the Pro version though, so you will not be able to see the objects if you have the regular version.
+- level_creator: that's the exporter we used to convert the Mappy files into the .map files used by the game.
+
+There's also the game music in .wyz format (using WYZTracker), lots of graphics, etc. Have fun poking around :).
+
+
+Usage: packmap <num tiles> <map width>
+
+packmap <num tiles> <255>
+
+
+
+packmap <23> <255>
