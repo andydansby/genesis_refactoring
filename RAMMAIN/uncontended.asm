@@ -36,6 +36,15 @@ SECTION UNCONTENDED
 	;; 257 byte table for the Interupt Manager
 
 
+;;original found in test.c C_Code_1-4-2020
+PUBLIC _MAP_START
+_MAP_START:
+defs 0x1000
+;;0x1000 = 4096
+;;reserve 4096 bytes set to 0
+;;was originally in $A000
+;;which means it should be in main RAM
+;;-------------------------------
 
 
 
@@ -51,62 +60,21 @@ SECTION UNCONTENDED
 
 ;;-------------------------------
 
-;; cache list next pointers
-;;used in drawsprite.asm
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_next	EQU $8B00
-PUBLIC LRU_next
-LRU_next:
-	defb 43	;;0x2b
 
-;; cache list prev pointers, 
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_prev	EQU $8A00
-PUBLIC LRU_prev
-LRU_prev:
-	defb 43 ;;0x2b
-
-PUBLIC LRU_first
-	defc LRU_first = 0
-;LRU_first:
-;	defb 0
-
-;; pointers to the first and last entry in the cache
-PUBLIC LRU_last
-	defc LRU_last = 42
-;LRU_last:
-;	defb 41	;;0x29
-
-
-;; LRU_LASTENTRY   EQU 42
-PUBLIC LRU_LASTENTRY
-;	LRU_LASTENTRY:
-;	defb 1, 42
-	defc LRU_LASTENTRY = 42	;;0x2a
 
 ;;-------------------------------
 
-PUBLIC SCRADD
-SCRADD:
-	defw 0
+
 	
 
-PUBLIC LINECOUNT
-LINECOUNT:
-	defb 0
+
 	
-PUBLIC SAVE_RAMBANK
-SAVE_RAMBANK:
-	defb 0
 
 
 
 
-PUBLIC Multiply_by_96
-Multiply_by_96:
-	defw 0,96,192,288,384,480,576,672,768,864,960,1056,1152,1248,1344,1440,1536,1632,1728,1824,1920,2016,2112,2208,2304,2400,2496,2592,2688,2784,2880,2976,3072,3168,3264,3360,3456,3552,3648,3744,3840,3936
+
+
 
 
 

@@ -6,10 +6,81 @@
 
 SECTION UNCONTENDED
 
+;; cache list next pointers
+;;used in drawsprite.asm
+;; 43 bytes used 
+;; (some bytes wasted!)
+;;LRU_next	EQU $8B00
+PUBLIC LRU_next
+;#BEGIN_ASM
+LRU_next:
+	defb 43	;;0x2b
+;#END_ASM
 
-	
-	
-	
+;; cache list prev pointers, 
+;; 43 bytes used 
+;; (some bytes wasted!)
+;;LRU_prev	EQU $8A00
+PUBLIC LRU_prev
+;#BEGIN_ASM
+LRU_prev:
+	defb 43 ;;0x2b
+;#END_ASM
+
+
+PUBLIC LRU_first
+;#BEGIN_ASM
+	defc LRU_first = 0
+;LRU_first:
+;	defb 0
+;#END_ASM
+
+
+;; pointers to the first and last entry in the cache
+PUBLIC LRU_last
+;#BEGIN_ASM
+	defc LRU_last = 42
+;LRU_last:
+;	defb 41	;;0x29
+;#END_ASM
+
+;; LRU_LASTENTRY   EQU 42
+PUBLIC LRU_LASTENTRY
+;#BEGIN_ASM
+;	LRU_LASTENTRY:
+;	defb 1, 42
+	defc LRU_LASTENTRY = 42	;;0x2a
+;#END_ASM	
+
+
+PUBLIC Multiply_by_96
+;#BEGIN_ASM
+Multiply_by_96:
+	defw 0,96,192,288,384,480,576,672,768,864,960,1056,1152,1248,1344,1440,1536,1632,1728,1824,1920,2016,2112,2208,2304,2400,2496,2592,2688,2784,2880,2976,3072,3168,3264,3360,3456,3552,3648,3744,3840,3936
+;#END_ASM
+
+
+PUBLIC SCRADD
+;#BEGIN_ASM
+SCRADD:
+	defw 0
+;#END_ASM
+
+
+PUBLIC LINECOUNT
+;#BEGIN_ASM
+LINECOUNT:
+	defb 0
+;#END_ASM
+
+PUBLIC SAVE_RAMBANK
+;#BEGIN_ASM
+SAVE_RAMBANK:
+	defb 0
+;#END_ASM
+
+
+
 ;; Limited to 16x16 sprites, with mask
 ;; Originally taken from a tutorial by dmsmith, then modified
 
