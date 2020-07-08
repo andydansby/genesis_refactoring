@@ -1,0 +1,24 @@
+GOLD STANDARD #8169
+leftmost_loop
+#8169 start of loop POP BC
+
+#816a seems to start drawing on #C000
+#816c seems to start drawing on #C100
+#816f seems to start drawing on #C200
+#8171 seems to start drawing on #C300
+#8174 seems to start drawing on #C400
+#8176 seems to start drawing on #C500
+#8179 seems to start drawing on #C600
+#817b seems to start drawing on #C700
+
+#817c increases de + 1
+#817d-817e copies DE to HL
+#8180 jp nz to start drawing all over again
+
+
+BP
+#8101
+#C000
+
+NEW = #9069 for POP BC
+

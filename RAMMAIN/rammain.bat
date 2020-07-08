@@ -14,7 +14,7 @@ rem cls
 REM LOAD FILES FROM ANOTHER DIRECTORY
 cd code1
 	copy "drawmap.asm" "..\"
-	copy "clearMapArea.asm" "..\"
+rem	copy "clearMapArea.asm" "..\"
 	copy "create_shifted_tables.asm" "..\"
 	copy "drawsprite.asm" "..\"
 	copy "input.asm" "..\"
@@ -33,6 +33,8 @@ zcc +zx -v -c -clib=new --fsigned-char -o objects @ramMain.lst
 @rem normal compile
 @rem zcc +zx -vn -m -startup=31 -clib=new ramALL.o -o compiled -pragma-include:zpragma.inc @ramMain.lst
 
+rem pause
+
 
 copy "objects.o" "uncontended.o"
 move "uncontended.o" "..\"
@@ -44,7 +46,7 @@ del zcc_opt.def
 
 REM Delete our support files
 del "drawmap.asm"
-del "clearMapArea.asm"
+rem del "clearMapArea.asm"
 REM del "rambank.asm"
 REM del "gameISR.asm"
 del "create_shifted_tables.asm"

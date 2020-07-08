@@ -1,17 +1,23 @@
-SECTION UNCONTENDED
-;SECTION code_user
-
-;;create_shifted_tables.asm
-;;CreaTablaTiles:
-;;TablaTiles
-
+SECTION UNCONTENDED_TABLATILES
+PUBLIC TablaTiles
+TablaTiles:
+defs 0x1000;;0x1000 ;;4096
 ;; Exit:
 ;; - TablaTiles (aligned in 4K): Shifted Tiles,
 ;; according to the following criteria:
 ;;defc		TablaTiles	= $B000		;45056
-PUBLIC TablaTiles
-TablaTiles:
-defs 4096;;0x1000
+
+
+
+
+SECTION UNCONTENDED
+
+;--------------------------------
+;  VARIABLE AREA
+;--------------------------------
+PUBLIC SaveTablaTiles
+SaveTablaTiles:
+defw 0
 
 ;;stays in main RAM
 
@@ -38,23 +44,21 @@ defs 4096;;0x1000
 ;
 ; The algorithm is simple (and not too fast), and is based on making rl (hl) to rough,
 ; after organizing the table with the initial data
-;
-;;in zx assembler starts at line 10274 - address 10463
-;; in rammain.txt shows as G A $28DF _CreaTablaTiles (section UNCONTENDED) (file create_shifted_tables.asm:35)
-;;$28df = address 10463
 
-;;32768+10463 = 43231 = a8df
 
+;;$A1EF routine start
+;;creates the table at #91ED
 PUBLIC _CreaTablaTiles
 _CreaTablaTiles:
-;;starts at 84AA 33962
-	push iy
-	; First, clean the tile table with zeros
+
+	push iy	
 	push de
 	push bc
+	
+	; First, clean the tile table with zeros
 	ld hl, TablaTiles	;8e26
 	ld de, TablaTiles + 1
-	ld (hl),0
+	ld (hl),0 ;; clear out the table by setting all to 0
 	ld bc, 4095
 	ldir
 	pop bc
@@ -217,13 +221,12 @@ looprotate:
 endCreaTablaTiles:
 	pop bc 		; cleanup
 	pop iy
-ret
 
 
+ret;;#92cb
 
-;----------------------------------------
-;  VARIABLE AREA
-;----------------------------------------				
-SaveTablaTiles:
-	defw 0
+;;for some reason returns back to #0101
+;;which happens to be in POP's, check stack pointer SP
+
+
 

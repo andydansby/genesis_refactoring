@@ -1,9 +1,6 @@
 ;;uncontended memory from 32768 to 49151
 ;;look in mmap.inc in /ramlow
 
-SECTION UNCONTENDED
-
-
 ;SECTION data_user
 ;;INCLUDEs are at the bottom
 
@@ -21,20 +18,7 @@ SECTION UNCONTENDED
 
 ;SECTION rodata_user
 ; rodata_user is for constant data
-
-;;place our tables and variables at the top
-
-;;--------------------------------
-
-;; PLACE VARIABLES HERE
-;SECTION bss_user
-; bss_user is for zeroed ram variables
-
-;;PUBLIC _IM2table
-;;_IM2table:
-;;	defs 257	;;0x101
-	;; 257 byte table for the Interupt Manager
-
+SECTION UNCONTENDED_MAPSTART
 
 ;;original found in test.c C_Code_1-4-2020
 PUBLIC _MAP_START
@@ -47,46 +31,17 @@ defs 0x1000
 ;;-------------------------------
 
 
+SECTION UNCONTENDED
+;;--------------------------------
+
+;;PUBLIC _IM2table
+;;_IM2table:
+;;	defs 257	;;0x101
+	;; 257 byte table for the Interupt Manager
 
 
 
 
-
-
-
-;PUBLIC _isrdummy
-;_isrdummy:
-;	defb 1
-
-;;-------------------------------
-
-
-
-;;-------------------------------
-
-
-	
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-;SECTION rodata_user
-;; SPRITES_BANK	EQU 1
-;PUBLIC _SPRITES_BANK
-;_SPRITES_BANK:
-;	defb 1
 
 ;; ATTENTION, for some reason
 ;;ZCC Does not like having this
@@ -95,12 +50,11 @@ defc _SPRITES_BANK = 1
 
 
 
-
 SECTION UNCONTENDED
 ;;--------------------------------
 ;; PLACE INCLUDEs HERE
 INCLUDE "drawmap.asm"
-INCLUDE "clearMapArea.asm"
+;;INCLUDE "clearMapArea.asm"
 ;;INCLUDE "rambank.asm"
 ;;INCLUDE "gameISR.asm"
 INCLUDE "create_shifted_tables.asm"

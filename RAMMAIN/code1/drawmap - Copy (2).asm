@@ -2,8 +2,7 @@ SECTION UNCONTENDED
 
 
 ;; Routine to paint the map ... may God catch me confessed
-;;91f1 = 37361
-;;b000 = 45056
+
 ;; Entry:
 ;; 	DE: Map + scrolling through the map in tiles
 ;; 	BC: map scrolling; B: chars (0-2), C: pixels (0,1,2,3)
@@ -29,7 +28,7 @@ centertiles:
 PUBLIC _DrawMap
 ;#BEGIN_ASM
 ;;must be in UNCONTENDED
-_DrawMap:		;;#8001
+_DrawMap:		;;#9001
 
 	push de
 
@@ -55,7 +54,8 @@ chars_not_zero:
 	
 dm_save_sp:
 	ld (centertiles),a
-	ld (dm_restoresp+1), SP
+	
+	ld (dm_restoresp+1), SP		
 	;; we play with SP, so there can be no active interruptions
 
 	ld iyh, 16			; 16 characters high 
@@ -78,10 +78,10 @@ dm_save_sp:
 	ld d,h
 	ld e,l
 
-	ld ixl,e
-;; IX is now B000 in GS
 ;;!! ATTENTION
-;	ld ix, TablaTiles;;ix=91ef
+	ld ix, TablaTiles;;ix=91ef
+;;	ld ixl,e
+;; IX is now B000 in GS
 	
 	exx				
 	;; we load the screen address in HL and DE
@@ -122,11 +122,9 @@ draw_loopy_notzero:
 	;; and copy them to C
 	ld a,b
 	and $e0				 
-	ld ixl, a
+	ld ixl, a			
 	;; ixl has yyy00000, then IX has a pointer 
 	;; to the first byte of the tile
-	;;ld ix, TablaTiles;;ATTENTION
-	
 	ld a, ixh			
 	and $FC
 	;; we are left with only the 6 most significant bits
@@ -158,22 +156,15 @@ draw_loopy_notzero:
 	;; and in IXL we are exactly in the first of the bytes
 	ld SP, IX
 	;; and there we have the pointer of the stack
-	;;ATTENTION, this may be the cause of our grief, pay attention to where the Stack is pointed to.
-	;; in GOLD STANDARD it goes to B0E8
-	
-	
 
 	ld a, 3
 	sub b
 	;; in A we have the number of columns to paint
 	;; Now we start painting the tile on the screen!
-	exx				;; alternate regset
-
-;;ATTENTION
-;;start of drawing loop
-;;as we pop off the new stack to HL to paint screen
-;;8169 in GS
+	exx				; alternate regset
+	
 leftmost_loop:
+;;halt
 	pop bc
 	ld (hl), c
 	inc h
@@ -192,9 +183,11 @@ leftmost_loop:
 	pop bc
 	ld (hl), c
 	inc h
-	ld (hl), b	;; the 8 bytes of the tile
+	ld (hl), b
+	;; the 8 bytes of the tile
 
-	inc de	;; we go to the next pixel
+	inc de
+	;; we go to the next pixel
 	ld h,d
 	ld l,e			
 	dec a
@@ -211,6 +204,8 @@ go_to_center:
 	
 	ld a, (centertiles)
 	ld iyl, a
+	
+	
 
 draw_center_tiles:	
 	ld a, (de)			; we take the tile
@@ -228,6 +223,7 @@ draw_center_tiles:
 	ld l,e
 	jp continue_center_loop
 ;; that is all we do!
+	
 	
 
 draw_center_notzero:
@@ -379,7 +375,7 @@ continue_center_loop:
 	dec iyl				; we continue with the loop
 	jp nz, draw_center_tiles
 	
-;;gs 8220 new 911e
+
 
 ;; Here you would have to go to the right tile at all. For not rolling it anymore, we leave it for now
 
@@ -569,10 +565,10 @@ b_not_zero:
 
 
 dm_restoresp: 
-	ld sp, 0;;#91b9	
+	ld sp, 0	
 	;; This value is modified at the beginning!
 	
-
+;;halt	
 ret
 ;#END_ASM
 

@@ -546,7 +546,16 @@ ret			; Total: 143 T-states for a cache hit
 
 ;;---------------------------------
 
-;;#AA71
+;; Definitions for sprite cache addresses
+;;used in drawsprite.asm
+;; sprite cache table, 1K	
+;;SprCacheTable 	EQU $8C00
+PUBLIC SprCacheTable
+SprCacheTable:
+	defs 1024 ;;0x400
+	
+	
+;;$A4D7
 ;; Initialize sprite cache list
 ;; No entry, no output
 ;; Modifies: BC, DE, HL, A
@@ -555,9 +564,6 @@ PUBLIC _InitSprCacheList
 ;#BEGIN_ASM
 _InitSprCacheList:
 	;; First, initialize the Sprite Cache Table with 255
-	
-
-
 
 	ld hl, SprCacheTable
 	ld de, SprCacheTable+1
@@ -565,7 +571,13 @@ _InitSprCacheList:
 	ld bc, 1023
 	ldir
 	
-	;;aa7e
+	;;ldir=
+	;;HL = source address
+	;;DE = target address
+	;;BC = countdown number
+	;;increments HL and DE
+	;;and
+	;;deincrements BC until BC = 0
 	
 	;; Second, pre-populate the LRU_next and LRU_prev arrays
 	;;unsigned char LRU_next[43]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,0};
@@ -590,18 +602,8 @@ loop_InitSprCache:
 	ld (LRU_prev), a
 	xor a
 	ld (de), a
-	
-;;	halt
-	
-	
+
+
 ret
 ;#END_ASM
 
-
-;; Definitions for sprite cache addresses
-;;used in drawsprite.asm
-;; sprite cache table, 1K	
-;;SprCacheTable 	EQU $8C00
-PUBLIC SprCacheTable
-SprCacheTable:
-	defs 1024 ;;0x400

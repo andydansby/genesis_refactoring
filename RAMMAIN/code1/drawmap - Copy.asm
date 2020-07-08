@@ -1,15 +1,21 @@
+;;attention - need to translate
+
+
+
+;;section code_user
+
 SECTION UNCONTENDED
 
+PUBLIC centertiles
+centertiles:
+	defb 0
 
 ;; Routine to paint the map ... may God catch me confessed
-;;91f1 = 37361
-;;b000 = 45056
 ;; Entry:
 ;; 	DE: Map + scrolling through the map in tiles
 ;; 	BC: map scrolling; B: chars (0-2), C: pixels (0,1,2,3)
 ;; 	HL: map width in characters
 ;;	TablaTiles: table with tiles already preshifted (ver create_shifted_tiles.asm), in $B000
-
 ;;-----------------
 ;; Use of registers:
 ;;	IYh: height counter (16)
@@ -22,19 +28,18 @@ SECTION UNCONTENDED
 ;;	BC': it is used as a temporary variable
 ;;-----------------
 ;; IMPORTANT: ENTER WITH DISABLED INTERRUPTIONS!!!!!!!
-;;PUBLIC centertiles
-centertiles:
-	defb 0
+
 
 PUBLIC _DrawMap
 ;#BEGIN_ASM
 ;;must be in UNCONTENDED
-_DrawMap:		;;#8001
+_DrawMap:		;;#9001
 
+
+;;EXTERN _ClearMapArea
 	push de
-
 	call _ClearMapArea
-;; clean the screen OK
+;; clean the screen
 
 	ld de, -11
 	add hl, de			
@@ -42,58 +47,57 @@ _DrawMap:		;;#8001
 	;; we calculate the width of the map - 11, to add it later
 
 	ld a, b
-	and a
+	and a				
 ;; if b == 0, we will take 3 tiles already, so one less is done
 
+
+
 	jp z, chars_not_zero
-	ld a, 10
+
+	ld a, 10			
 ;;if it isn't, you have to do one more tile (10)
 	jr dm_save_sp
-	
+
+
 chars_not_zero:
 	ld a,9
 	
 dm_save_sp:
+
 	ld (centertiles),a
-	ld (dm_restoresp+1), SP
-	;; we play with SP, so there can be no active interruptions
+	
+	ld (dm_restoresp+1), SP		
+;; we play with SP, so there can be no active interruptions
 
 	ld iyh, 16			; 16 characters high 
 	ld a, c
 	rlca
 	rlca				
-	;; we move the displacement in pixels to 0000xx00
+;; we move the displacement in pixels to 0000xx00
+
 	or $b0
 
 	ld ixh, a
 
-	exx				;; alternate regset	
-
-	;;!!ATTENTION TEMP
-	;;should be #C000 not 4000
-	ld hl, $4000	;;	ld hl, 16384	;;$4000	$C000
-	ld de, $4000	;;	ld de, 16384	$C000
-	;;addresses to write to
+	exx				; alternate regset
 	
+	;;ld hl, 16384
+	;;ld de, 16384
+	ld hl, $C000
+	ld de, $C000
 	ld d,h
 	ld e,l
-
 	ld ixl,e
-;; IX is now B000 in GS
-;;!! ATTENTION
-;	ld ix, TablaTiles;;ix=91ef
-	
-	exx				
-	;; we load the screen address in HL and DE
+	exx				; we load the screen address in HL and DE
 
 draw_loopy:				
-	;; Tile more to the left
+;; Tile more to the left
 	ld a, (de)			
-	;; we take the first tile
+;; we take the first tile
 	inc de
 	
 	and a
-	;; for empty tiles, we follow a different path
+;; for empty tiles, we follow a different path
 	jp nz, draw_loopy_notzero
 
 	ld a, 3
@@ -109,6 +113,8 @@ draw_loopy_zero:
 	
 	jp go_to_center
 
+
+
 draw_loopy_notzero:
 	exx				;; alternate regset
 	rrca
@@ -121,18 +127,16 @@ draw_loopy_notzero:
 	ld c, a				
 	;; and copy them to C
 	ld a,b
+
 	and $e0				 
-	ld ixl, a
-	;; ixl has yyy00000, then IX has a pointer 
-	;; to the first byte of the tile
-	;;ld ix, TablaTiles;;ATTENTION
-	
+	ld ixl, a			
+;; ixl has yyy00000, then IX has a pointer to the first byte of the tile
 	ld a, ixh			
 	and $FC
-	;; we are left with only the 6 most significant bits
+;; we are left with only the 6 most significant bits
 	or c				
 	ld ixh, a			
-	;; ixh has now 1111xxyy
+;; ixh has now 1111xxyy
 
 
 ;;   	and $e0            
@@ -143,36 +147,29 @@ draw_loopy_notzero:
 ;;   	ld ixh, a         ; ixh has now 1111xxyy
 ;;   	ld a,b
 ;;	ld ixl, a         ; ixl has yyy00000, then IX has a pointer to the first byte of the tile
-	exx				;; normal regset
-
+	exx				; normal regset
+			
 	ld a, b
 	inc a				
 	rlca
 	rlca
 	rlca				
-	;; in A we have the displacement in chars * 8,
-	;;	to go to the first column
-	;; del tile
+;; in A we have the displacement in chars * 8, to go to the first column
+;; del tile
 	or ixl
 	ld ixl, a
-	;; and in IXL we are exactly in the first of the bytes
+;; and in IXL we are exactly in the first of the bytes
 	ld SP, IX
-	;; and there we have the pointer of the stack
-	;;ATTENTION, this may be the cause of our grief, pay attention to where the Stack is pointed to.
-	;; in GOLD STANDARD it goes to B0E8
-	
-	
+;; and there we have the pointer of the stack
 
 	ld a, 3
 	sub b
-	;; in A we have the number of columns to paint
-	;; Now we start painting the tile on the screen!
-	exx				;; alternate regset
+;; in A we have the number of columns to paint
+;; Now we start painting the tile on the screen!
+	exx				; alternate regset
+	
 
-;;ATTENTION
-;;start of drawing loop
-;;as we pop off the new stack to HL to paint screen
-;;8169 in GS
+	
 leftmost_loop:
 	pop bc
 	ld (hl), c
@@ -192,25 +189,31 @@ leftmost_loop:
 	pop bc
 	ld (hl), c
 	inc h
-	ld (hl), b	;; the 8 bytes of the tile
+	ld (hl), b
+;; the 8 bytes of the tile
 
-	inc de	;; we go to the next pixel
+	inc de
+;; we go to the next pixel
 	ld h,d
 	ld l,e			
 	dec a
 	jp nz, leftmost_loop
-	;; we draw as many columns as necessary
+;; we draw as many columns as necessary
 	
+	
+
 go_to_center:
 	dec de
-	;; the last tile will have to do OR with the first of the next
+;; the last tile will have to do OR with the first of the next
 	dec hl
-	exx				;; normal regset
+	exx				; normal regset
 
 ;; Now it's time to treat the central area. Each tile is 3 characters wide, 32/3 = 10 plus the peaks
 	
 	ld a, (centertiles)
 	ld iyl, a
+	
+	
 
 draw_center_tiles:	
 	ld a, (de)			; we take the tile
@@ -228,6 +231,7 @@ draw_center_tiles:
 	ld l,e
 	jp continue_center_loop
 ;; that is all we do!
+	
 	
 
 draw_center_notzero:
@@ -255,7 +259,9 @@ draw_center_notzero:
 ;;   ld a,b
 ;;   ld ixl, a         ; ixl has yyy00000, then IX has a pointer to the first byte of the tile
 
-	ld SP, IX			;; and there we have the pointer of the stack
+
+
+	ld SP, IX			; and there we have the pointer of the stack
 
 ;; the tile on the left of the whole does OR with whatever is on the screen
 draw_or_left:
@@ -298,7 +304,9 @@ draw_or_left:
 	inc de
 	ld h,d
 	ld l,e		; next character
-
+	
+	
+	
 draw_direct_rest:
 	pop bc
 	ld (hl),c
@@ -379,7 +387,7 @@ continue_center_loop:
 	dec iyl				; we continue with the loop
 	jp nz, draw_center_tiles
 	
-;;gs 8220 new 911e
+
 
 ;; Here you would have to go to the right tile at all. For not rolling it anymore, we leave it for now
 
@@ -435,7 +443,8 @@ draw_right_notzero:
 	and $FC
 ;; we are left with only the 6 most significant bits
 	or c				
-	ld ixh, a	;; ixh has now 1111xxyy
+	ld ixh, a
+;; ixh has now 1111xxyy
  
 ;;  and $e0            
 ;;   ld b, a            ; in B we keep the bottom three bits yyy00000
@@ -446,8 +455,7 @@ draw_right_notzero:
 ;;   ld a,b
 ;;   ld ixl, a         ; ixl has yyy00000, then IX has a pointer to the first byte of the tile
 
-	ld SP, IX			
-	;; and there we have the pointer of the stack
+	ld SP, IX			; and there we have the pointer of the stack
 
 	
 ;; Now we start painting the tile on the screen!
@@ -563,80 +571,10 @@ b_not_zero:
 	jp nz, draw_loopy
 
 
-;;extern _borderTestEndless
-;;call _borderTestEndless
-
-
-
 dm_restoresp: 
-	ld sp, 0;;#91b9	
-	;; This value is modified at the beginning!
-	
-
+	ld sp, 0	
+	;; This value is modified at the beginning!	
 ret
 ;#END_ASM
 
-
-
-PUBLIC _ClearMapArea
-;#BEGIN_ASM
-_ClearMapArea:
-
-;; This little function will clear the map area on screen, via a series of PUSH
-;; We will assume ints are disabled!!!!!
-;; Save DE before calling!!!!!
-
-	ld (cma_restoresp+1),sp
-	ld sp, $c000+4096	
-	;; at the end of the screen area (second third)
-	
-	ld de, 0		; we clean with whites	ld de, 0
-	ld a, b	
-	ld b, 64		; we will make series of 32 push (16 pixels per push), 64x2 lines
-	
-cma_loop:
-	push de	
-	push de	
-	push de
-	push de	
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	
-	push de	
-	push de	
-	push de
-	push de	
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-	push de
-
-	djnz cma_loop
-	
-	
-	cma_restoresp:
-	ld sp,0
-	ld b, a
-ret
-
-
-;#END_ASM
 

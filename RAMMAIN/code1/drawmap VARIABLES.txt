@@ -1,0 +1,16 @@
+;; Entry:
+;; 	DE: Map + scrolling through the map in tiles
+;; 	BC: map scrolling; B: chars (0-2), C: pixels (0,1,2,3)
+;; 	HL: map width in characters
+;;	TablaTiles: table with tiles already preshifted (ver create_shifted_tiles.asm), in $B000
+
+;;-----------------
+;; Use of registers:
+;;	IYh: height counter (16)
+;;	IYl: tile width counter (10)
+;;	IX: Tiles table pointer. Follow the following logic:  1111 XXYY YYYZ ZZZZ, where
+;;		X: pixel offset
+;;		Y: tile number (0-31)
+;;		Z: bytes inside of the tile (32)
+;;	HL', DE': they will move across the screen
+;;	BC': it is used as a temporary variable
