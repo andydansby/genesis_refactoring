@@ -6,8 +6,8 @@ extern _map_xpos
 extern _CurLevel_XLength
 extern _DrawMap
 
-PUBLIC _current_screen
-_current_screen: defb 7
+PUBLIC _setLevelColors
+
 
 PUBLIC _clean_screen
 ;#BEGIN_ASM
@@ -16,8 +16,8 @@ _clean_screen:
 	ld b, 5
 	call _BankRam
 
-	ld hl, $C000
-	ld de, $C001
+	ld hl, $C000	;;
+	ld de, $C001	;;
 	ld bc, 4095		;;top 2 3rds of screen
 	ld (hl),0		;;set pixel to 0
 	ldir
@@ -124,8 +124,6 @@ ret
 ;#END_ASM
 
 
-
-
 PUBLIC _DrawSpriteList1
 ;#BEGIN_ASM
 ;;in CONTENDED
@@ -155,67 +153,104 @@ ret
 
 
 
+
+PUBLIC _border_Switch
+;#BEGIN_ASM
+_border_Switch:
+
+;;	and 7
+	out (254), a
+	
+;;	ld a, _current_screen
+;;	and 7
+;;	out (254), a
+ret
+;#END_ASM
+
+;;this is used to bank switch between bank 5 and 7 to flip-flop between screens
+PUBLIC _current_screen
+_current_screen: defb 7
+;;_MAP_START = $8000
 ;;troubleshooting this 
+
 PUBLIC _DrawGameMap
 ;#BEGIN_ASM
-;;in CONTENDED
+;;in CONTENDED $6785, called by $67BB
 _DrawGameMap:
-
 
 ;;here $7ffd = 0001-0000
 ;;troubleshoot _DrawMap to see if it's erased. $9001
 
 ;;#c046 is where wyz player resides
 
-	ld a, (_current_screen)
-;;#676e $7ffd = 0001-0000
+	ld a, (_current_screen);;$6768
 	;; we load the screen
-
-	ld b, a
-;;#6771 $7ffd = 0001-0000
+;;#676e $7ffd = 0001-0000
 	
-;;b and a are FB = 248 = 1111 1000
-;; so we are in Bank 0, shadow screen is on
+	ld b, a
+;;#676b $7ffd = 0001-0000
+	
+	;;b and a are FB = 248 = 1111 1000	
+	;; so we are in Bank 0, shadow screen is on
 
 ;;#c046 = wyz
 ;;here $7ffd = 0001-0000
 	
-	call _BankRam
-;;#6772 $7ffd = 1111-1011
-	;; we put it on $c000 - $ffff
-	
+	call _BankRam;; we put it on $c000 - $ffff
+;;#676C $7ffd = 1111-1011
+
+
 	;;I believe we are in the shadow screen
 	
-	ld a, (_current_screen)	
+	ld a, (_current_screen);;$676F
 
-	xor 2
+	xor 2;;$6772
 	;; 5 xor 2 = 7; 7 xor 2 = 5
-	
+	;;flip-flop between bank 5 and 7 to achieve animation
 	
 	ld (_current_screen), a
-	;;673d
+	;;#6774
 	;; we exchange the screen on which we are going to write
+	
+;;ATTENTION, this is used to test flip-flop
+call _border_Switch;;$6777
 
 
-
-	ld a, (_CurLevel_XLength)
+	ld a, (_CurLevel_XLength);;$677A
 	ld h,0
 	ld l,a
-	ld d, $a0
+	
+	
+	;;ATTENTION
+	
+	;;problem
+	;;_MAP_START = $8000 = 32768
+	
+	;;de needs to be _MAP_START
+	
+	;;in GS $A000 = 40960
+	;;ld d, $80;;ld d, $a0
+	ld de, _MAP_START
+	
 	ld a, (_map_xpos)
-	ld e, a				
+	ld e, a
 	;; the map will always start at $a000, so the displacement will always be in E
-	ld a, (_map_displacement)
-	and $03
-	ld c, a				
+	;;problem
+	
+	
+	
+	
+	ld a, (_map_displacement);;$6786
+	and $03;;$6789
+	ld c, a;;$678B			
 	;; displacement in pixels within tile
-	ld a, (_map_displacement)
-	and $0C
-	rrca
-	rrca
+	ld a, (_map_displacement);;$678C
+	and $0C;;$678F
+	rrca;;$6791
+	rrca;;$6792
 	
 	
-	ld b, a				
+	ld b, a;;$6793
 	;; displacement in chars within tile
 	
 
@@ -230,16 +265,18 @@ _DrawGameMap:
 ;;	BC': it is used as a temporary variable	
 
 
-;;ATTENTION
-;;by the time it gets here _DrawMap is completely erased
-
-;;	call _DrawMap;; in UNCONTENDED
+	call _DrawMap;; in UNCONTENDED #9001
+	
+;;extern _borderTestEndless
+;;call _borderTestEndless
+	
 
 ret
 ;#END_ASM
 
 
-;;$67B1
+
+;;$67BF
 PUBLIC _screenLoop
 ;#BEGIN_ASM
 _screenLoop:
@@ -250,29 +287,25 @@ EXTERN _WYZ_PLAY
 
 	waitvblank:
 		ld a,r
-		nop
-		nop
 		jp m, waitvblank	
 		;; while the screen has not been switched, we cannot continue
-;;-----------------------
+		
+		;;WE are getting stuck here
+;;----------------------
+
+
 
 	di;;
+	
+	call _DrawGameMap ;;see above
+	
+	
+	;;troubleshoot to see if it's erased. $9001
+	;; _DrawMap, interrupts must be disabled
+	;;will call _DrawMap in drawmap.asm
+	;; _DrawMap will then call _ClearMapArea
+	;;located in RAMMAIN
 
-
-;;troubleshoot _DrawMap to see if it's erased. $9001
-	call _DrawGameMap
-;; draw map, interrupts must be disabled
-;;will call _DrawMap in drawmap.asm
-;;located in RAMMAIN
-
-;; _DrawMap will then call _ClearMapArea
-;; located in clearMapArea.asm
-;;located in RAMMAIN
-
-ret
-
-;;temp
-;;call _switchscreen
 
 	ld b, 0
 	call _BankRam
@@ -292,33 +325,18 @@ ret
 
 ;;ATTENTION PROBLEM, crash!
 ;;	call _DrawSpriteList1	
-	;; draw player sprite
-	;;ATTENTION PROBLEM, crash!
-	
 
-	ld a,r
-	or $80
-	ld r,a
+
+;;	ld a,r
+;;	or $80
+;;	ld r,a
 	;; set the highest bit of R to 1, so switch screen!!!!
+	;;#67c8
 	
-
 	
 	di
 	ld b, 0
 	call _BankRam
-	
-;;temp
-;;call _switchscreen
-;;call _borderTest
-;;call _screenLoop
-
-
-	ei
-
-
-;;temp
-;;halt
-;;call _screenLoop	
-	
+	ei	
 ret
 ;#END_ASM

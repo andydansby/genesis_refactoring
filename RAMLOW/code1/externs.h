@@ -9,8 +9,6 @@ extern void _move_explosion(struct Entity *e);
 
 extern void gameISR(void);
 
-extern void SetIM2(void);
-
 extern void borderTest (void);
 
 extern void setrambank0 (void);
@@ -22,13 +20,6 @@ extern void DrawGameMap (void);
 extern void unpackLevelPointer (void);
 
 extern void setAddress (void);
-
-
-
-//extern void __FASTCALL__ interuptSetup(void);
-extern void __FASTCALL__ interuptSetup(void);
-
-extern void __FASTCALL__ SetIM2(void);
 
 extern void __FASTCALL__ InitSprCacheList(void);
 
