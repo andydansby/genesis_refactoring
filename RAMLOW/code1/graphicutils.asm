@@ -6,7 +6,53 @@ extern _map_xpos
 extern _CurLevel_XLength
 extern _DrawMap
 
-PUBLIC _setLevelColors
+;;Fastcall linkage allows one parameter to be passed by register in a subset of DEHL.  So if the parameter is 8-bit, the value will be in L.  If the parameter is 16-bit, the value is in HL and if it is 32-bit the value is in DEHL.
+
+;;	1st 3rd		#5800-#58FF		22528-22783
+;;	2nd 3rd		#5900-#59FF		22784-23039	
+;;	3rd 3rd		#5A00-#5Aff		23040-23295
+
+;7   6   5   4   3   2   1  0
+;F   B   p2  p1  p0  i2  i1 i0
+ 
+PUBLIC _colorPlayScreen
+_colorPlayScreen:
+;#BEGIN_ASM
+;	push bc
+;	push hl
+;	push de
+	
+	ld b, l; input send via fastcall is in L, send to b
+	;;ld b, 0b00000100
+	ld hl, 0x5800	;;ld hl, 22528
+	ld de, 0x5801	;ld de, 22529
+	ld (hl), b		;ld (hl), 0
+	ld bc, 0x1FF	;ld bc, 767  attribute blocks to color ;511
+	ldir			;ldir
+	
+;	pop de
+;	pop hl
+;	pop bc
+	
+ret
+;	FF	BB	P2	P1	P0	I2	I1	I0
+;BLACK		000		= 0
+;;BLUE		001		= 1
+;;RED		010		= 2
+;;MAGENTA	011		= 3
+;;GREEN		100		= 4
+;;CYAN		101		= 5
+;;YELLOW	110		= 6
+;;WHITE		111		= 7
+;; 5 = black paper cyan ink
+;;colorPlayScreen(5);// colors the attribues in the top 2/3's of the attributes to a color
+;#END_ASM
+
+
+
+
+
+
 
 
 PUBLIC _clean_screen
@@ -213,7 +259,7 @@ _DrawGameMap:
 	;; we exchange the screen on which we are going to write
 	
 ;;ATTENTION, this is used to test flip-flop
-call _border_Switch;;$6777
+;;call _border_Switch;;$6777
 
 
 	ld a, (_CurLevel_XLength);;$677A
@@ -276,7 +322,7 @@ ret
 
 
 
-;;$67BF
+;;$67C6
 PUBLIC _screenLoop
 ;#BEGIN_ASM
 _screenLoop:
@@ -285,17 +331,14 @@ EXTERN _WYZ_PLAY
 
 ;;uses _current_screen to work with waitvblank
 
+;;#67b2 in GS
 	waitvblank:
 		ld a,r
-		jp m, waitvblank	
+		jp m, waitvblank
 		;; while the screen has not been switched, we cannot continue
+		;;keeps in this loop until the accumlator sign is turned off
 		
-		;;WE are getting stuck here
-;;----------------------
-
-
-
-	di;;
+	di;;#67b7 in GS
 	
 	call _DrawGameMap ;;see above
 	
@@ -305,7 +348,6 @@ EXTERN _WYZ_PLAY
 	;;will call _DrawMap in drawmap.asm
 	;; _DrawMap will then call _ClearMapArea
 	;;located in RAMMAIN
-
 
 	ld b, 0
 	call _BankRam
@@ -323,13 +365,14 @@ EXTERN _WYZ_PLAY
 	ei
 	
 
+;;buggy need to fix
 ;;ATTENTION PROBLEM, crash!
 ;;	call _DrawSpriteList1	
 
-
-;;	ld a,r
-;;	or $80
-;;	ld r,a
+	;;#67d0 in GS
+	ld a,r
+	or $80
+	ld r,a
 	;; set the highest bit of R to 1, so switch screen!!!!
 	;;#67c8
 	

@@ -15,9 +15,17 @@ __asm
 	EXTERN _load_backgroundASM
 	call _load_backgroundASM
 __endasm
-
 }
 
+
+/*void colorPlayScreen (unsigned char colors)
+{
+__asm
+//extern void __fastcall__ colorPlayScreen (unsigned char colors);
+	EXTERN _colorPlayScreen
+	call _colorPlayScreen
+__endasm
+}*/
 
 
 /*void DrawGameMap(void)
