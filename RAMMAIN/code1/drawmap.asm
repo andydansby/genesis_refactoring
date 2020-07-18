@@ -71,8 +71,8 @@ dm_save_sp:
 
 	;;!!ATTENTION TEMP
 	;;should be #C000 not 4000
-	ld hl, $4000	;;	ld hl, 16384	;;$4000	$C000
-	ld de, $4000	;;	ld de, 16384	$C000
+	ld hl, $C000	;;	ld hl, 16384	;;$4000	$C000
+	ld de, $C000	;;	ld de, 16384	$C000
 	;;addresses to write to
 	
 	ld d,h

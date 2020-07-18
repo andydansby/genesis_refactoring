@@ -1,0 +1,70 @@
+;;trying to remove flicker		Gold standard
+;;to prevent flicker
+;;uses waitvblank:
+
+;;#67b2 in GS
+;;_display_loop
+	waitvblank:
+		ld a,r
+		jp m, waitvblank
+		;; while the screen has not been switched, we cannot continue
+		;;keeps in this loop until the accumlator sign is turned off
+		
+	di;;#67b7 in GS
+;;....
+	;;#67d0 in GS
+	ld a,r
+	or $80
+	ld r,a
+	;; set the highest bit of R to 1, so switch screen!!!!
+	;;#67c8
+
+;;debug > Run until > OP Code > ld a,r
+;;set BP at #6018
+;; instances of ld a,r
+
+#6018 start of game 24600
+#6C6F IM1 =	#6C65	_main
+;; this is set just after wyz_load_music(0) in main();
+
+#67B2 IM2 =	#67B2 	_display_loop
+#67D0 IM2 = #67B2	_display_loop
+#6088 IM2 = #6088	_gameISR
+
+#6790 IM2 = #6088	_gameISR
+;	This is kinda mysterious
+jump back to 67B2
+
+#6C6F flows normally (#6C71 ...)
+#67B2 first time flows through because flag S in accumuator is clear goes to #67B7
+
+#67D0
+#67B2
+repeat until sign flag in accumlator is clear
+#67D0
+#67B2
+repeat until sign flag in accumlator is clear
+
+on sinclair 128k 70908 t states per frame
+on sinclair +2 70908 t states per frame
+on sinclair +2a 70908 t states per frame
+on sinclair +3 70908 t states per frame
+on pentagon 71680 t states per frame
+
+t states in a frame, when end of frame is hit, sign flag is still on, but goes to IM2 handler
+@#8A8A
+
+----------
+;; instances of ld r,a
+$6C73
+
+#67D4
+#6094
+REPEAT BACK TO #67D4
+
+http://www.breakintoprogram.co.uk/computers/zx-spectrum/memory-map
+
+gs start 	#6018	24600
+new start 	#6539	25913
+
+

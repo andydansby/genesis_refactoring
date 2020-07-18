@@ -1,19 +1,5 @@
 ;;gameISR.asm
 
-;5 errors occurred during assembly
-;Errors in source file uncontended.asm:
-;Error at file 'gameISR.asm' line 11: symbol 'switchscreen' not defined
-;^ ----       call switchscreen       ; switch screen
-;Error at file 'gameISR.asm' line 18: symbol '_isrdummy' not defined
-;^ ----       ld (_isrdummy), a       ; save current state
-;Error at file 'gameISR.asm' line 20: symbol 'setrambank' not defined
-;^ ----       call setrambank         ; go to rambank 0 for the music ISR
-;Error at file 'gameISR.asm' line 22: symbol '_isrdummy' not defined
-;^ ----       ld a, (_isrdummy)
-;Error at file 'gameISR.asm' line 24: symbol 'setrambank' not defined
-;^ ----       call setrambank         ; go back to normal state
- 
- 
 SECTION code_crt_common
 
 extern WYZ_PLAY
@@ -42,3 +28,11 @@ _noscreenswitch:
 	ld b, a
 	call _setrambank		; go back to normal state
 ret
+
+
+
+
+
+
+
+
