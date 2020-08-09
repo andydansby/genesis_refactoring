@@ -19,6 +19,7 @@ rem	copy "clearMapArea.asm" "..\"
 	copy "drawsprite.asm" "..\"
 	copy "input.asm" "..\"
 	copy "im2.asm" "..\"
+	copy "isr.asm" "..\"
 REM	copy "rambank.asm" "..\"
 REM	copy "gameISR.asm" "..\"
 cd ..
@@ -53,6 +54,7 @@ del "create_shifted_tables.asm"
 del "drawsprite.asm"
 del "input.asm"
 del "im2.asm"
+del "isr.asm"
 
 cd codemaps
 	echo on

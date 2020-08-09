@@ -1,23 +1,7 @@
 ;;uncontended memory from 32768 to 49151
 ;;look in mmap.inc in /ramlow
 
-;SECTION data_user
-;;INCLUDEs are at the bottom
 
-;SECTION code_user
-; code_user is for read-only code
-
-;SECTION bss_user
-; bss_user is for zeroed ram variables
-
-;SECTION data_user
-; data_user is for initially non-zero ram variables
-
-;SECTION smc_user
-; smc_user is for self-modifying code
-
-;SECTION rodata_user
-; rodata_user is for constant data
 SECTION UNCONTENDED_MAPSTART
 
 ;;original found in test.c C_Code_1-4-2020
@@ -31,17 +15,18 @@ defs 0x1000
 ;;-------------------------------
 
 
+;; On the Spectrum 128, interrupt vectors may only
+;; be placed between $80ff and $beff inclusive.  
+;; An interrupt routing itself must exist wholly
+;; between 4000 and $BFFF.
+;; This is because address $c000 to $ffff are pageabe
+;; and should an interrupt occur while the
+;; wrong 16k RAM is paged in, you will get a crash.
+
+
+
 SECTION UNCONTENDED
 ;;--------------------------------
-
-;;PUBLIC _IM2table
-;;_IM2table:
-;;	defs 257	;;0x101
-	;; 257 byte table for the Interupt Manager
-
-
-
-
 
 ;; ATTENTION, for some reason
 ;;ZCC Does not like having this
@@ -60,14 +45,15 @@ INCLUDE "drawmap.asm"
 INCLUDE "create_shifted_tables.asm"
 INCLUDE "drawsprite.asm"
 INCLUDE "input.asm"
+
+
+SECTION ISR_ROUTINE
 INCLUDE "im2.asm"
-
-
-
 
 ;; PLACE CODE HERE
 
 SECTION CODE_END
+;#BEGIN_ASM
 ;;this section places the code close to the end, but not the very end.
 ;;47 bytes from the end in this iteration
 PUBLIC _RAM_marker_MAIN
@@ -79,3 +65,6 @@ _RAM_marker_MAIN:
 	nop
 	halt
 ret
+;#END_ASM
+
+
