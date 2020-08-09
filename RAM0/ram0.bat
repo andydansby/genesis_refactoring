@@ -62,7 +62,7 @@ rem move "compiled_CODE.bin"  "codemaps\"
 rem move "compiled_BANK_00.bin" "codemaps\"
 
 del zcc_opt.def
-del zcc_proj.lst
+rem del zcc_proj.lst
 
 del "parasol.mus.bin"
 del "genesis_gangway.mus.bin"
