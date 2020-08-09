@@ -1,0 +1,27 @@
+ram6\asm\menu.asm
+;ATTENTION - this _SCAN_KEYBOARD routine is localized to RAM 6 now
+;;PUBLIC _SCAN_KEYBOARD
+_SCAN_KEYBOARD:
+
+
+ram6\asm\move.asm
+;;ATTENTION disable public temporialy in _move_left
+;PUBLIC _move_left
+
+;;ATTENTION - temporialy disabled
+;PUBLIC _move_right
+
+;;ATTENTION - temporialy disabled
+;;PUBLIC _move_pingpong
+
+;;ATTENTION - temporialy disabled
+;;PUBLIC _move_explosion
+
+
+
+
+
+
+
+rammain\supportcode\input.asm
+Here are all the key definitions

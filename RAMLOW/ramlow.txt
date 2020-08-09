@@ -1,0 +1,101 @@
+Object  file objects.o at $0000: Z80RMF12
+  Name: objects
+  Section data_compiler: 76 bytes
+  Section code_compiler: 1211 bytes
+  Section bss_compiler: 0 bytes
+  Section code_user: 692 bytes
+  Symbols:
+    G A $0000 _enemy_locations (section data_compiler) (file main.c:17)
+    G A $0002 _active_enemies (section data_compiler) (file main.c:21)
+    G A $0004 _my_active_shoots (section data_compiler) (file main.c:25)
+    G A $0006 _enemy_active_shoots (section data_compiler) (file main.c:29)
+    G A $0008 _current_e (section data_compiler) (file main.c:33)
+    G A $0000 _wtf (section code_compiler) (file main.c:39)
+    G A $000A _level_address (section data_compiler) (file main.c:55)
+    G A $0014 _enemy_address (section data_compiler) (file main.c:63)
+    G A $001E _ship_x (section data_compiler) (file main.c:71)
+    G A $001F _ship_y (section data_compiler) (file main.c:75)
+    G A $0020 _speed_x (section data_compiler) (file main.c:79)
+    G A $0021 _speed_y (section data_compiler) (file main.c:83)
+    G A $0022 _frames_to_shoot (section data_compiler) (file main.c:87)
+    G A $0023 _map_xpos (section data_compiler) (file main.c:91)
+    G A $0024 _map_displacement (section data_compiler) (file main.c:95)
+    G A $0025 _max_shoots (section data_compiler) (file main.c:99)
+    G A $0026 _CurLevel_XLength (section data_compiler) (file main.c:103)
+    G A $0027 _CurLevel_NTiles (section data_compiler) (file main.c:107)
+    G A $0028 _keys (section data_compiler) (file main.c:111)
+    G A $0032 _joy (section data_compiler) (file main.c:119)
+    G A $0033 _new_enemy (section data_compiler) (file main.c:123)
+    G A $0034 _i (section data_compiler) (file main.c:127)
+    G A $0035 _j (section data_compiler) (file main.c:131)
+    G A $0036 _dummy_b (section data_compiler) (file main.c:135)
+    G A $0037 _dummy_i (section data_compiler) (file main.c:139)
+    G A $0039 _dummy_i2 (section data_compiler) (file main.c:143)
+    G A $003B _isrdummy (section data_compiler) (file main.c:147)
+    G A $003C _length_tiles (section data_compiler) (file main.c:151)
+    G A $003E _length_map (section data_compiler) (file main.c:155)
+    G A $0040 _shoot_xchar (section data_compiler) (file main.c:159)
+    G A $0041 _shoot_ychar (section data_compiler) (file main.c:163)
+    G A $0042 _enemy_xchar (section data_compiler) (file main.c:167)
+    G A $0043 _enemy_ychar (section data_compiler) (file main.c:171)
+    G A $0044 _diff_x (section data_compiler) (file main.c:175)
+    G A $0046 _diff_y (section data_compiler) (file main.c:179)
+    G A $0048 _level_pointer (section data_compiler) (file main.c:183)
+    G A $004A _int_pointer (section data_compiler) (file main.c:187)
+    G A $0001 _wyz_load_music (section code_compiler) (file main.c:194)
+    G A $000F _wyz_stop_music (section code_compiler) (file main.c:208)
+    G A $0015 _wyz_play (section code_compiler) (file main.c:218)
+    G A $0019 _load_level (section code_compiler) (file main.c:227)
+    G A $008E _clear_screen (section code_compiler) (file main.c:297)
+    G A $0092 _load_background (section code_compiler) (file main.c:306)
+    G A $0096 _DrawSpriteList (section code_compiler) (file main.c:315)
+    G A $022E _NewShoot (section code_compiler) (file main.c:584)
+    G A $02A5 _NewEnemy (section code_compiler) (file main.c:666)
+    G A $03C3 _initilizeVariables (section code_compiler) (file main.c:863)
+    G A $0484 _gamesetup (section code_compiler) (file main.c:984)
+    G A $0496 _endlessLoop (section code_compiler) (file main.c:999)
+    G A $049B _gameloop (section code_compiler) (file main.c:1010)
+    G A $04A2 _main (section code_compiler) (file main.c:1021)
+    G A $0000 _xyzzy (section code_user) (file ramlow.asm:43)
+    G A $0001 _IM2_Vector_set (section code_user) (file ramlow.asm:53)
+    G A $0012 _copytoAltScreen (section code_user) (file ramlow.asm:84)
+    G A $001E _setnormalRAMstate (section code_user) (file ramlow.asm:95)
+    G A $002E _ScreenSwitchFlipFlagNO (section code_user) (file ramlow.asm:111)
+    G A $0035 _ScreenSwitchFlipFlagYES (section code_user) (file ramlow.asm:122)
+    G A $003C _noscreenswitch (section code_user) (file ramlow.asm:134)
+    G A $0054 _switchscreen (section code_user) (file ramlow.asm:157)
+    G A $0062 _BankRam (section code_user) (file ramlow.asm:174)
+    G A $0071 _bank (section code_user) (file ramlow.asm:192)
+    G A $0080 _BankWTF (section code_user) (file ramlow.asm:211)
+    G A $0090 _borderTest (section code_user) (file ramlow.asm:231)
+    G A $00B0 _borderTestEndless (section code_user) (file ramlow.asm:258)
+    G A $0116 _depack (section code_user) (file depack.asm:11)
+    G A $00B6 _load_levelpart1 (section code_user) (file levelutils.asm:14)
+    G A $00BF _load_levelpart2 (section code_user) (file levelutils.asm:32)
+    G A $00D3 _load_levelpart3 (section code_user) (file levelutils.asm:71)
+    G A $00E1 _load_levelpart4 (section code_user) (file levelutils.asm:95)
+    G A $00FA _unpackMap (section code_user) (file levelutils.asm:161)
+    G A $0114 _unpackLevelPointer (section code_user) (file levelutils.asm:202)
+    G A $0115 _setAddress (section code_user) (file levelutils.asm:211)
+    G A $01B9 _colorPlayScreen (section code_user) (file graphicutils.asm:19)
+    G A $01C7 _clean_screen (section code_user) (file graphicutils.asm:62)
+    G A $020D _load_backgroundASM (section code_user) (file graphicutils.asm:118)
+    G A $0239 _DrawSpriteList1 (section code_user) (file graphicutils.asm:178)
+    G A $0258 _border_Switch (section code_user) (file graphicutils.asm:207)
+    G A $025B _current_screen (section code_user) (file graphicutils.asm:220)
+    G A $025C _DrawGameMap (section code_user) (file graphicutils.asm:227)
+    G A $028A _screenLoop (section code_user) (file graphicutils.asm:330)
+    G A $02B3 _RAM_marker_LOW (section code_user) (file ramlow.asm:296)
+  Externs:
+    U         l_gint
+    U         l_lneg
+    U         l_mult
+    U         _DrawSprite
+    U         _INICIO
+    U         _STOP_PLAYER
+    U         _CARGA_CANCION
+    U         _IM2_Vector
+    U         _CreaTablaTiles
+    U         _MAP_START
+    U         _DrawMap
+    U         _background
