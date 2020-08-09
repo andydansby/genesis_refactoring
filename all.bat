@@ -1,132 +1,95 @@
+SET PATH=c:\z88dk199c;c:\z88dk199c\bin;c:\z88dk199c\lib\;c:\z88dk199c\lib\clibs;c:\z88dk199c\lib\config;C:\Program Files\SDCC\bin
 
-rem mode con lines=32766
+cls
 
-
-rem compiling order will matter
-rem try data only areas first
-rem then move to banked areas with code
-rem moving each object file to the main directory
-rem finally move all object files to the main.c
-rem and then compile the main directory
-
-rem RAM 3 has static screens
-rem RAM 4 has game maps and enemy locations
-rem RAM 1 has sprites data
-rem RAM 0 has the WYZ player and game music
-rem RAM 6 has ASM routines for menu, movement and behavior
-
-rem main memory has all game routines
-
-rem compile order 3,4,1,0,6,MAIN
-
-REM clean up some stuff first
-cd mainRAM	
-	cd banks
-		del "ram3.o"	rem OK
-		del "ram4.o"	rem OK
-		del "ram1.o"	rem OK
-		del "ram0.o"	rem OK
-		del "ram6.o"	rem OK
-	cd ..	
+cd RAMLOADER
+	call loader.bat
 cd ..
-
-rem make a loader
-cd loader
-	call loader
-	move "loader.tap" "..\"
-cd ..
-
-
-rem BANK 3
-cd ram3
-	call ram3.bat	
-	cd codemaps
-		copy "objects.o" "..\"
-	cd ..
-	rename "objects.o" "ram3.o"
-	move "ram3.o" "..\"
-cd ..
-
-
-REM BANK 4
-cd ram4
-	call ram4.bat	
-	cd codemaps
-		copy "objects.o" "..\"
-	cd ..
-	rename "objects.o" "ram4.o"
-	move "ram4.o" "..\"
-cd ..
-
-
-REM BANK 1
-cd ram1
-	call ram1.bat	
-	cd codemaps
-		copy "objects.o" "..\"
-	cd ..
-	rename "objects.o" "ram1.o"
-	move "ram1.o" "..\"
-cd ..
-
-
-REM BANK 0
-cd ram0
-	call ram0.bat	
-	cd codemaps
-		copy "objects.o" "..\"
-	cd ..
-	rename "objects.o" "ram0.o"
-	move "ram0.o" "..\"
-cd ..
-
-
-REM BANK 6
-cd ram6
-	call ram6.bat	
-	cd codemaps
-		copy "objects.o" "..\"
-	cd ..
-	rename "objects.o" "ram6.o"
-	move "ram6.o" "..\"
-cd ..
-
-REM at this point all banks have been compiled
-rem need to move them to main
-rem compile order 3,4,1,0,6,MAIN
-
-echo off
-
-move "ram3.o" "mainRAM\banks\"
-move "ram4.o" "mainRAM\banks\"
-move "ram1.o" "mainRAM\banks\"
-move "ram0.o" "mainRAM\banks\"
-move "ram6.o" "mainRAM\banks\"
 
 @rem pause
 
-echo on
-
-cd mainRAM
-	cd banks
-		z80asm --output=ram99.o ram3.o ram4.o ram6.o ram1.o ram0.o
-		rem z80nm ram99.o
-		z80nm ram99.o > output.txt
-		@rem output.txt will have the listing of routines		
-	cd ..
-	call main.bat
+cd RAM1
+	call ram1.bat
+	echo on
+	REM RAM 1 NOTHING YET
 cd ..
 
-move "compiled_CODE.bin" "magic\"
-move "compiled_BANK_00.bin" "magic\"
-move "compiled_BANK_01.bin" "magic\"
-move "compiled_BANK_03.bin" "magic\"
-move "compiled_BANK_04.bin" "magic\"
-move "compiled_BANK_06.bin" "magic\"
+@rem pause
 
-move "loader.tap" "magic\"
+cd RAM3
+	call ram3.bat
+	echo on
+	REM RAM 1 GRAPHICS
+cd ..
+
+@rem pause
+
+cd RAM4
+	call ram4.bat
+	echo on
+	REM RAM 4 LEVELS and ENEMIES
+cd ..
+
+@rem pause
+
+cd RAM6	
+	call ram6.bat
+	echo on
+	REM RAM 6 GRAPHICS
+cd ..
+
+@rem pause
+
+cd RAM0
+	call ram0.bat
+	echo on
+	REM RAM 0 WYZ FILES
+cd ..
+
+@rem pause
+
+cd RAMMAIN
+	call rammain.bat
+	echo on
+	REM UNCONTENDED MEMORY 32768-49151
+cd ..
 
 
-cd magic
+
+REM Let's move all of our object files into RAMMAGIC
+move "ram0.o" "RAMMAGIC\"
+move "ram1.o" "RAMMAGIC\"
+move "ram3.o" "RAMMAGIC\"
+move "ram4.o" "RAMMAGIC\"
+move "ram6.o" "RAMMAGIC\"
+@rem move "ramlow.o" "RAMMAGIC\"
+move "uncontended.o" "RAMMAGIC\"
+
+REM let's move our loader as well
+move "loader.tap" "RAMMAGIC\"
+
+
+rem HERE we are combining all of our object files into 1 large file
+cd RAMMAGIC
 	call magic.bat
 cd ..
+
+rem exit /b
+
+
+
+
+rem compile lowRAM
+cd RAMLOW
+	call ramlow.bat
+echo on
+cd ..
+
+
+
+cd RAMMAGIC
+ 	call abracadabra.bat
+cd ..
+
+REM Beep when done
+@call beep.bat
