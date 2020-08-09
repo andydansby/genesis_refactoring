@@ -16,8 +16,11 @@ _enemies0:
 ;; the enemy structure has just one byte detailing the number of enemies
 ;; and the locations in struct Enemy format
 
-;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
-	defb  13          ; 13 enemies (for example)
+	;;------------------------------
+	defb  14	;;number of enemies
+	;; 14 enemies (for example)
+	;;------------------------------
+	;; enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
 	defb  5,  0, 20, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 50, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 80, 2, MOVE_PINGPONG, 10, 0, 4
@@ -30,6 +33,9 @@ _enemies0:
 	defb  32, 0, 20, 2, MOVE_LEFT, 10, 4, 0
 	defb  38, 0, 50, 2, MOVE_LEFT, 10, 4, 0
 	defb  40, 0, 80, 2, MOVE_LEFT, 10, 4, 0
+	defb  6, 6, 80, 2, MOVE_LEFT, 10, 4, 0
+
+;; dummy enemy, to mark the end!
 	defb  255, 23, 80, 2, MOVE_LEFT, 10, 4, 0
 ;; dummy enemy, to mark the end!
 ;#END_ASM
@@ -49,8 +55,11 @@ _enemies1:
 ;; the enemy structure has just one byte detailing the number of enemies
 ;; and the locations in struct Enemy format
 
-;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
-	defb  13          ; 13 enemies (for example)
+	;;------------------------------
+	defb  13	;;number of enemies
+	;;------------------------------
+	
+	;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
 	defb  5,  0, 20, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 50, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 80, 2, MOVE_PINGPONG, 10, 0, 4
@@ -63,8 +72,9 @@ _enemies1:
 	defb  32, 0, 20, 2, MOVE_LEFT, 10, 4, 0
 	defb  38, 0, 50, 2, MOVE_LEFT, 10, 4, 0
 	defb  40, 0, 80, 2, MOVE_LEFT, 10, 4, 0
+
+;; dummy enemy, to mark the end!	
 	defb  255, 23, 80, 2, MOVE_LEFT, 10, 4, 0
-;; dummy enemy, to mark the end!
 ;#END_ASM
 
 
@@ -76,11 +86,15 @@ _level2map:
 
 PUBLIC _enemies2
 ;#BEGIN_ASM
-_enemies2:	
+_enemies2:
 ;; the enemy structure has just one byte detailing the number of enemies
 ;; and the locations in struct Enemy format
-;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
-	defb  13          ; 13 enemies (for example)
+
+	;;------------------------------
+	defb  13	;;number of enemies
+	;;------------------------------
+	
+	;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
 	defb  5,  0, 20, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 50, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 80, 2, MOVE_PINGPONG, 10, 0, 4
@@ -93,10 +107,10 @@ _enemies2:
 	defb  32, 0, 20, 2, MOVE_LEFT, 10, 4, 0
 	defb  38, 0, 50, 2, MOVE_LEFT, 10, 4, 0
 	defb  40, 0, 80, 2, MOVE_LEFT, 10, 4, 0
-	defb  255, 23, 80, 2, MOVE_LEFT, 10, 4, 0
-;; dummy enemy, to mark the end!
-;#END_ASM
 
+;; dummy enemy, to mark the end!	
+	defb  255, 23, 80, 2, MOVE_LEFT, 10, 4, 0
+;#END_ASM
 
 PUBLIC _level3map
 ;#BEGIN_ASM
@@ -109,8 +123,12 @@ PUBLIC _enemies3
 _enemies3:
 ;; the enemy structure has just one byte detailing the number of enemies
 ;; and the locations in struct Enemy format
-;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
-	defb  13          ; 13 enemies (for example)
+
+	;;------------------------------
+	defb  13	;;number of enemies
+	;;------------------------------
+	
+	;; First enemy, tile X 5, Y 4, sprite 2, move ping-pong, energy=10, param1=0, param2 (speed) 4
 	defb  5,  0, 20, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 50, 2, MOVE_PINGPONG, 10, 0, 4
 	defb  5,  0, 80, 2, MOVE_PINGPONG, 10, 0, 4
@@ -137,21 +155,6 @@ PUBLIC _level4map
 _level4map:
 PUBLIC _enemies4
 _enemies4:
-
-PUBLIC _level5map
-_level5map:
-PUBLIC _enemies5
-_enemies5:
-
-PUBLIC _level6map
-_level6map:
-PUBLIC _enemies6
-_enemies6:
-
-PUBLIC _level7map
-_level7map:
-PUBLIC _enemies7
-_enemies7:
 
 
 

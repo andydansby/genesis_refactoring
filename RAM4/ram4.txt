@@ -2,23 +2,17 @@ Object  file objects.o at $0000: Z80RMF12
   Name: objects
   Section code_compiler: 1 bytes
   Section bss_compiler: 0 bytes
-  Section BANK_04: 6058 bytes
+  Section BANK_04: 4846 bytes
   Symbols:
     G A $0000 _ram4 (section code_compiler) (file ram4.c:20)
     G A $0000 _level0map (section BANK_04) (file ram4Z.asm:9)
-    G A $065E _enemies0 (section BANK_04) (file ram4Z.asm:15)
-    G A $06C7 _level1map (section BANK_04) (file ram4Z.asm:41)
-    G A $0D25 _enemies1 (section BANK_04) (file ram4Z.asm:48)
-    G A $0D8E _level2map (section BANK_04) (file ram4Z.asm:73)
-    G A $1250 _enemies2 (section BANK_04) (file ram4Z.asm:79)
-    G A $12B9 _level3map (section BANK_04) (file ram4Z.asm:103)
-    G A $1740 _enemies3 (section BANK_04) (file ram4Z.asm:109)
-    G A $17A9 _level4map (section BANK_04) (file ram4Z.asm:137)
-    G A $17A9 _enemies4 (section BANK_04) (file ram4Z.asm:139)
-    G A $17A9 _level5map (section BANK_04) (file ram4Z.asm:142)
-    G A $17A9 _enemies5 (section BANK_04) (file ram4Z.asm:144)
-    G A $17A9 _level6map (section BANK_04) (file ram4Z.asm:147)
-    G A $17A9 _enemies6 (section BANK_04) (file ram4Z.asm:149)
-    G A $17A9 _level7map (section BANK_04) (file ram4Z.asm:152)
-    G A $17A9 _enemies7 (section BANK_04) (file ram4Z.asm:154)
-    G A $17A9 _endmarkerRam4 (section BANK_04) (file ram4Z.asm:176)
+    G A $031B _enemies0 (section BANK_04) (file ram4Z.asm:15)
+    G A $038C _level1map (section BANK_04) (file ram4Z.asm:47)
+    G A $095D _enemies1 (section BANK_04) (file ram4Z.asm:54)
+    G A $09C6 _level2map (section BANK_04) (file ram4Z.asm:83)
+    G A $0D94 _enemies2 (section BANK_04) (file ram4Z.asm:89)
+    G A $0DFD _level3map (section BANK_04) (file ram4Z.asm:117)
+    G A $1284 _enemies3 (section BANK_04) (file ram4Z.asm:123)
+    G A $12ED _level4map (section BANK_04) (file ram4Z.asm:155)
+    G A $12ED _enemies4 (section BANK_04) (file ram4Z.asm:157)
+    G A $12ED _endmarkerRam4 (section BANK_04) (file ram4Z.asm:179)

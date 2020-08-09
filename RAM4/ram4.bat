@@ -45,7 +45,7 @@ move "ram4.o" "..\"
 move "objects.o" "codemaps\"
 
 del zcc_opt.def
-del zcc_proj.lst
+rem del zcc_proj.lst
 
 del "level0map.bin"
 del "level1map.bin"
