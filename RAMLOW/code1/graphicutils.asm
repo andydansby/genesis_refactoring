@@ -17,6 +17,8 @@ extern _DrawMap
  
 PUBLIC _colorPlayScreen
 _colorPlayScreen:
+
+;//need to color bank 5 and 7 attributes area
 ;#BEGIN_ASM
 ;	push bc
 ;	push hl
@@ -380,6 +382,8 @@ EXTERN _WYZ_PLAY
 	di
 	ld b, 0
 	call _BankRam
-	ei	
+	ei
+	
 ret
+;;ret
 ;#END_ASM
