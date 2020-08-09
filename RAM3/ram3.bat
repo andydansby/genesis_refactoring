@@ -25,7 +25,7 @@ rem move "compiled_BANK_03.bin" "binary\"
 rem move "compiled_CODE.bin" "binary\"
 
 del zcc_opt.def
-del zcc_proj.lst
+rem del zcc_proj.lst
 
 
 del "background.bin"
