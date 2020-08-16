@@ -47,8 +47,8 @@ INCLUDE "drawsprite.asm"
 INCLUDE "input.asm"
 
 
-SECTION ISR_ROUTINE
-INCLUDE "im2.asm"
+;;SECTION ISR_ROUTINE
+;;INCLUDE "im2.asm"
 
 ;; PLACE CODE HERE
 

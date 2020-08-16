@@ -20,6 +20,7 @@ rem	copy "clearMapArea.asm" "..\"
 	copy "input.asm" "..\"
 	copy "im2.asm" "..\"
 	copy "isr.asm" "..\"
+	copy "im2Manager.asm" "..\"
 REM	copy "rambank.asm" "..\"
 REM	copy "gameISR.asm" "..\"
 cd ..
@@ -46,15 +47,16 @@ del zcc_opt.def
 
 
 REM Delete our support files
-del "drawmap.asm"
 rem del "clearMapArea.asm"
 REM del "rambank.asm"
 REM del "gameISR.asm"
+del "drawmap.asm"
 del "create_shifted_tables.asm"
 del "drawsprite.asm"
 del "input.asm"
 del "im2.asm"
 del "isr.asm"
+del "im2Manager.asm"
 
 cd codemaps
 	echo on

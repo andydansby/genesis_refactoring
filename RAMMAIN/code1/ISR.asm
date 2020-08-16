@@ -1,6 +1,6 @@
 
 
-SECTION IM_MATRIX
+SECTION IM_MATRIX;0x9e00
 
 PUBLIC _IM2_Vector
 ;#BEGIN_ASM
@@ -10,10 +10,6 @@ _IM2_Vector:
 defs $0101
 
 ;#END_ASM
-
-;;---------------------------------
-
-
 
 
 

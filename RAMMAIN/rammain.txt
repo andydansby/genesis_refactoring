@@ -5,9 +5,10 @@ Object  file objects.o at $0000: Z80RMF12
   Section UNCONTENDED_MAPSTART: 4096 bytes
   Section UNCONTENDED: 2624 bytes
   Section UNCONTENDED_TABLATILES: 4096 bytes
-  Section ISR_ROUTINE: 46 bytes
   Section CODE_END: 7 bytes
   Section IM_MATRIX: 257 bytes
+  Section ISR_ROUTINE: 61 bytes
+  Section IM2_ISR_address: 27 bytes
   Symbols:
     G A $0000 _uncontended (section code_compiler) (file uncontended.c:20)
     G A $0000 _MAP_START (section UNCONTENDED_MAPSTART) (file uncontended.asm:9)
@@ -33,11 +34,14 @@ Object  file objects.o at $0000: Z80RMF12
     G A $092A _SCAN_KEYBOARD (section UNCONTENDED) (file input.asm:19)
     G A $0951 _GET_KEY_STATE (section UNCONTENDED) (file input.asm:59)
     G A $0962 _get_joystick (section UNCONTENDED) (file input.asm:141)
-    G A $0000 _IM2ISR (section ISR_ROUTINE) (file im2.asm:4)
-    G A $0018 _Set_screen_flip_flag (section ISR_ROUTINE) (file im2.asm:35)
-    G A $001F _gameISR1 (section ISR_ROUTINE) (file im2.asm:52)
     G A $0000 _RAM_marker_MAIN (section CODE_END) (file uncontended.asm:60)
     G A $0000 _IM2_Vector (section IM_MATRIX) (file ISR.asm:7)
+    G A $0000 _Set_screen_flip_flag (section ISR_ROUTINE) (file im2.asm:7)
+    G A $0007 _Interrupt_setup (section ISR_ROUTINE) (file im2.asm:18)
+    G A $000F _SET_IM2 (section ISR_ROUTINE) (file im2.asm:35)
+    G A $0017 _IM2_Vector_set (section ISR_ROUTINE) (file im2.asm:51)
+    G A $002E _gameISR1 (section ISR_ROUTINE) (file im2.asm:91)
+    G A $0000 _IM2ISR (section IM2_ISR_address) (file im2Manager.asm:5)
   Externs:
     U         _noscreenswitch
     U         _switchscreen
