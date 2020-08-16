@@ -1,0 +1,19 @@
+#6187	start of bankswitch
+#618E	end of bankswitch
+#C000	can look at level data now
+#61A3	Level_pointer
+#61B3	Curevel_NTiles
+#61C3	Curevel_XLength
+#61CA	int_pointer
+#61D4	length_tiles
+#61DD	int_pointer
+>#61E4	Level_pointer
+#61EE	length_map
+#61F7	level_pointer
+#61F3-620B	depack tiles asm
+#6217	level_pointer
+#6221	depack level asm
+#6236	level_pointer
+#6240	Dummy_i
+#6249	level_pointer
+#6265	end of routine
