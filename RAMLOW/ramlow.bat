@@ -125,6 +125,14 @@ copy "compiled_CODE.bin" "..\RAMMAGIC"
 copy "compiled_UNCONTENDED.bin" "..\RAMMAGIC"
 copy "compiled_UNASSIGNED.bin" "..\RAMMAGIC"
 
+copy "compiled_IM_MATRIX.bin" "..\RAMMAGIC"
+copy "compiled_IM2_ISR_address.bin" "..\RAMMAGIC"
+copy "compiled_ISR_ROUTINE.bin" "..\RAMMAGIC"
+copy "compiled_UNCONTENDED_MAPSTART.bin" "..\RAMMAGIC"
+copy "compiled_UNCONTENDED_TABLATILES.bin" "..\RAMMAGIC"
+
+
+
 move "compiled_BANK_00.bin" "codemaps\"
 move "compiled_BANK_01.bin" "codemaps\"
 move "compiled_BANK_03.bin" "codemaps\"
@@ -134,3 +142,10 @@ move "compiled_CODE.bin" "codemaps\"
 
 move "compiled_UNCONTENDED.bin" "codemaps\"
 move "compiled_UNASSIGNED.bin" "codemaps\"
+
+move "compiled_IM_MATRIX.bin" "codemaps\"
+move "compiled_IM2_ISR_address.bin" "codemaps\"
+move "compiled_ISR_ROUTINE.bin" "codemaps\"
+move "compiled_UNCONTENDED_MAPSTART.bin" "codemaps\"
+move "compiled_UNCONTENDED_TABLATILES.bin" "codemaps\"
+

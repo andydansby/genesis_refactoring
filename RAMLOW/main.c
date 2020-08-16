@@ -286,25 +286,18 @@ void main(void)
 {
 __asm
 	
-	extern _SetIM2
-	extern _ISRsetup
+
 	extern _Set_screen_flip_flag
-	extern _IM2_Vector_set
+	extern _Interrupt_setup
 	
 	;;identifing marker to see where in memory MAIN is located
-	nop
 
-	;//call _Set_screen_flip_flag
-	ld a,r
-	and $7f	
-	ld r,a
+	call _Set_screen_flip_flag
 	
-	
-	;//call _ISRsetup
-	;//call _SetIM2	;//_SetIM2 is overwriting stack at first LDIR which is corrupting return
 	nop;//used as a marker
-
-	call _IM2_Vector_set
+	
+	
+	call _Interrupt_setup
 	
 	nop;//used as a marker
 __endasm

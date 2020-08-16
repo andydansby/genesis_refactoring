@@ -1,9 +1,9 @@
 Object  file objects.o at $0000: Z80RMF12
   Name: objects
   Section data_compiler: 76 bytes
-  Section code_compiler: 1211 bytes
+  Section code_compiler: 1207 bytes
   Section bss_compiler: 0 bytes
-  Section code_user: 692 bytes
+  Section code_user: 675 bytes
   Symbols:
     G A $0000 _enemy_locations (section data_compiler) (file main.c:17)
     G A $0002 _active_enemies (section data_compiler) (file main.c:21)
@@ -57,44 +57,44 @@ Object  file objects.o at $0000: Z80RMF12
     G A $049B _gameloop (section code_compiler) (file main.c:1010)
     G A $04A2 _main (section code_compiler) (file main.c:1021)
     G A $0000 _xyzzy (section code_user) (file ramlow.asm:43)
-    G A $0001 _IM2_Vector_set (section code_user) (file ramlow.asm:53)
-    G A $0012 _copytoAltScreen (section code_user) (file ramlow.asm:84)
-    G A $001E _setnormalRAMstate (section code_user) (file ramlow.asm:95)
-    G A $002E _ScreenSwitchFlipFlagNO (section code_user) (file ramlow.asm:111)
-    G A $0035 _ScreenSwitchFlipFlagYES (section code_user) (file ramlow.asm:122)
-    G A $003C _noscreenswitch (section code_user) (file ramlow.asm:134)
-    G A $0054 _switchscreen (section code_user) (file ramlow.asm:157)
-    G A $0062 _BankRam (section code_user) (file ramlow.asm:174)
-    G A $0071 _bank (section code_user) (file ramlow.asm:192)
-    G A $0080 _BankWTF (section code_user) (file ramlow.asm:211)
-    G A $0090 _borderTest (section code_user) (file ramlow.asm:231)
-    G A $00B0 _borderTestEndless (section code_user) (file ramlow.asm:258)
-    G A $0116 _depack (section code_user) (file depack.asm:11)
-    G A $00B6 _load_levelpart1 (section code_user) (file levelutils.asm:14)
-    G A $00BF _load_levelpart2 (section code_user) (file levelutils.asm:32)
-    G A $00D3 _load_levelpart3 (section code_user) (file levelutils.asm:71)
-    G A $00E1 _load_levelpart4 (section code_user) (file levelutils.asm:95)
-    G A $00FA _unpackMap (section code_user) (file levelutils.asm:161)
-    G A $0114 _unpackLevelPointer (section code_user) (file levelutils.asm:202)
-    G A $0115 _setAddress (section code_user) (file levelutils.asm:211)
-    G A $01B9 _colorPlayScreen (section code_user) (file graphicutils.asm:19)
-    G A $01C7 _clean_screen (section code_user) (file graphicutils.asm:62)
-    G A $020D _load_backgroundASM (section code_user) (file graphicutils.asm:118)
-    G A $0239 _DrawSpriteList1 (section code_user) (file graphicutils.asm:178)
-    G A $0258 _border_Switch (section code_user) (file graphicutils.asm:207)
-    G A $025B _current_screen (section code_user) (file graphicutils.asm:220)
-    G A $025C _DrawGameMap (section code_user) (file graphicutils.asm:227)
-    G A $028A _screenLoop (section code_user) (file graphicutils.asm:330)
-    G A $02B3 _RAM_marker_LOW (section code_user) (file ramlow.asm:296)
+    G A $0001 _copytoAltScreen (section code_user) (file ramlow.asm:61)
+    G A $000D _setnormalRAMstate (section code_user) (file ramlow.asm:72)
+    G A $001D _ScreenSwitchFlipFlagNO (section code_user) (file ramlow.asm:88)
+    G A $0024 _ScreenSwitchFlipFlagYES (section code_user) (file ramlow.asm:99)
+    G A $002B _noscreenswitch (section code_user) (file ramlow.asm:111)
+    G A $0043 _switchscreen (section code_user) (file ramlow.asm:134)
+    G A $0051 _BankRam (section code_user) (file ramlow.asm:151)
+    G A $0060 _bank (section code_user) (file ramlow.asm:169)
+    G A $006F _BankWTF (section code_user) (file ramlow.asm:188)
+    G A $007F _borderTest (section code_user) (file ramlow.asm:208)
+    G A $009F _borderTestEndless (section code_user) (file ramlow.asm:235)
+    G A $0105 _depack (section code_user) (file depack.asm:11)
+    G A $00A5 _load_levelpart1 (section code_user) (file levelutils.asm:14)
+    G A $00AE _load_levelpart2 (section code_user) (file levelutils.asm:32)
+    G A $00C2 _load_levelpart3 (section code_user) (file levelutils.asm:71)
+    G A $00D0 _load_levelpart4 (section code_user) (file levelutils.asm:95)
+    G A $00E9 _unpackMap (section code_user) (file levelutils.asm:161)
+    G A $0103 _unpackLevelPointer (section code_user) (file levelutils.asm:202)
+    G A $0104 _setAddress (section code_user) (file levelutils.asm:211)
+    G A $01A8 _colorPlayScreen (section code_user) (file graphicutils.asm:19)
+    G A $01B6 _clean_screen (section code_user) (file graphicutils.asm:62)
+    G A $01FC _load_backgroundASM (section code_user) (file graphicutils.asm:118)
+    G A $0228 _DrawSpriteList1 (section code_user) (file graphicutils.asm:178)
+    G A $0247 _border_Switch (section code_user) (file graphicutils.asm:207)
+    G A $024A _current_screen (section code_user) (file graphicutils.asm:220)
+    G A $024B _DrawGameMap (section code_user) (file graphicutils.asm:227)
+    G A $0279 _screenLoop (section code_user) (file graphicutils.asm:330)
+    G A $02A2 _RAM_marker_LOW (section code_user) (file ramlow.asm:273)
   Externs:
     U         l_gint
     U         l_lneg
     U         l_mult
     U         _DrawSprite
+    U         _Set_screen_flip_flag
+    U         _Interrupt_setup
     U         _INICIO
     U         _STOP_PLAYER
     U         _CARGA_CANCION
-    U         _IM2_Vector
     U         _CreaTablaTiles
     U         _MAP_START
     U         _DrawMap
