@@ -9,6 +9,12 @@ cd codemaps
 cd ..
 
 cd ..
+cd RAMLOADER
+	call loader.bat
+	cd ..
+move "loader.tap" "RAMMAGIC\"
+
+
 cd RAMMAIN
 	call rammain.bat
 cd ..
@@ -29,7 +35,7 @@ rem cls
 cd ..
 	cd RAMMAGIC
 		call abracadabra.bat
-	cd ..
+cd ..
 cd RAMLOW
 
 REM Beep when done

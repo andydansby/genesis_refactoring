@@ -83,7 +83,7 @@ void DrawSpriteList(void)
 	}
 // Now, display all enemies, shoots, etc
 
-	for(i=0;i<MAX_ENEMIES;i++)
+/*	for(i=0;i<MAX_ENEMIES;i++)
 	{
 		if (active_enemies[i].sprnum)	// This enemy is active
 		{
@@ -126,7 +126,7 @@ void DrawSpriteList(void)
 				call _DrawSprite	;//call drawsprite
 			__endasm
 		}
-	}
+	}*/
 }
 
 

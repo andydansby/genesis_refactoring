@@ -1,9 +1,10 @@
 Object  file objects.o at $0000: Z80RMF12
   Name: objects
   Section data_compiler: 76 bytes
-  Section code_compiler: 1207 bytes
+  Section code_compiler: 859 bytes
   Section bss_compiler: 0 bytes
-  Section code_user: 675 bytes
+  Section code_user: 716 bytes
+  Section LOW_CODE_END: 1 bytes
   Symbols:
     G A $0000 _enemy_locations (section data_compiler) (file main.c:17)
     G A $0002 _active_enemies (section data_compiler) (file main.c:21)
@@ -49,13 +50,13 @@ Object  file objects.o at $0000: Z80RMF12
     G A $008E _clear_screen (section code_compiler) (file main.c:297)
     G A $0092 _load_background (section code_compiler) (file main.c:306)
     G A $0096 _DrawSpriteList (section code_compiler) (file main.c:315)
-    G A $022E _NewShoot (section code_compiler) (file main.c:584)
-    G A $02A5 _NewEnemy (section code_compiler) (file main.c:666)
-    G A $03C3 _initilizeVariables (section code_compiler) (file main.c:863)
-    G A $0484 _gamesetup (section code_compiler) (file main.c:984)
-    G A $0496 _endlessLoop (section code_compiler) (file main.c:999)
-    G A $049B _gameloop (section code_compiler) (file main.c:1010)
-    G A $04A2 _main (section code_compiler) (file main.c:1021)
+    G A $00B5 _NewShoot (section code_compiler) (file main.c:339)
+    G A $012C _NewEnemy (section code_compiler) (file main.c:421)
+    G A $024A _initilizeVariables (section code_compiler) (file main.c:618)
+    G A $030B _gamesetup (section code_compiler) (file main.c:739)
+    G A $031D _endlessLoop (section code_compiler) (file main.c:754)
+    G A $0322 _gameloop (section code_compiler) (file main.c:765)
+    G A $0346 _main (section code_compiler) (file main.c:792)
     G A $0000 _xyzzy (section code_user) (file ramlow.asm:43)
     G A $0001 _copytoAltScreen (section code_user) (file ramlow.asm:61)
     G A $000D _setnormalRAMstate (section code_user) (file ramlow.asm:72)
@@ -76,22 +77,24 @@ Object  file objects.o at $0000: Z80RMF12
     G A $00E9 _unpackMap (section code_user) (file levelutils.asm:161)
     G A $0103 _unpackLevelPointer (section code_user) (file levelutils.asm:202)
     G A $0104 _setAddress (section code_user) (file levelutils.asm:211)
-    G A $01A8 _colorPlayScreen (section code_user) (file graphicutils.asm:19)
-    G A $01B6 _clean_screen (section code_user) (file graphicutils.asm:62)
-    G A $01FC _load_backgroundASM (section code_user) (file graphicutils.asm:118)
-    G A $0228 _DrawSpriteList1 (section code_user) (file graphicutils.asm:178)
-    G A $0247 _border_Switch (section code_user) (file graphicutils.asm:207)
-    G A $024A _current_screen (section code_user) (file graphicutils.asm:220)
-    G A $024B _DrawGameMap (section code_user) (file graphicutils.asm:227)
-    G A $0279 _screenLoop (section code_user) (file graphicutils.asm:330)
-    G A $02A2 _RAM_marker_LOW (section code_user) (file ramlow.asm:273)
+    G A $01A8 _colorPlayScreen (section code_user) (file graphicutils.asm:31)
+    G A $01B6 _clean_screen (section code_user) (file graphicutils.asm:56)
+    G A $01FC _load_backgroundASM (section code_user) (file graphicutils.asm:106)
+    G A $0228 _DrawSpriteList1 (section code_user) (file graphicutils.asm:151)
+    G A $0247 _border_Switch (section code_user) (file graphicutils.asm:176)
+    G A $024A _current_screen (section code_user) (file graphicutils.asm:188)
+    G A $024B _DrawGameMap (section code_user) (file graphicutils.asm:193)
+    G A $0279 _screenLoop (section code_user) (file graphicutils.asm:279)
+    G A $02A5 _Interrupt_setup (section code_user) (file IM2utils.asm:6)
+    G A $02AD _SET_IM2 (section code_user) (file IM2utils.asm:22)
+    G A $02B5 _IM2_Vector_set (section code_user) (file IM2utils.asm:38)
+    G A $0000 _RAM_marker_LOW (section LOW_CODE_END) (file ramlow.asm:270)
   Externs:
     U         l_gint
     U         l_lneg
     U         l_mult
     U         _DrawSprite
     U         _Set_screen_flip_flag
-    U         _Interrupt_setup
     U         _INICIO
     U         _STOP_PLAYER
     U         _CARGA_CANCION
@@ -99,3 +102,5 @@ Object  file objects.o at $0000: Z80RMF12
     U         _MAP_START
     U         _DrawMap
     U         _background
+    U         _IM2_Vector
+    U         _IM2ISR

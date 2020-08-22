@@ -243,6 +243,7 @@ INCLUDE "levelutils.asm"
 INCLUDE "depack.asm"
 
 INCLUDE "graphicutils.asm"
+INCLUDE "IM2utils.asm"
 
 ;;60E9 to 7FFF is empty, why
 ;;should be filled with levelutils.asm and depack.asm
@@ -263,15 +264,12 @@ INCLUDE "graphicutils.asm"
 ;;this SECTION is near the start of the binary
 
 
-;SECTION LOW_CODE_END
-;;this section places the code at the end of compiled SECTION.
+SECTION LOW_CODE_END
 
-
-;;just to identify memory area
-;;#61ae
 PUBLIC _RAM_marker_LOW
 _RAM_marker_LOW:
 	halt
-
+;;this section places the code at the end of compiled SECTION.
+;;just to identify memory area
 
 

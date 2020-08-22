@@ -1,9 +1,11 @@
 #pragma output __MMAP	= -1
 // memory map is provided in file "mmap.inc"
 
-#pragma output CRT_ORG_CODE = 0x5ED0	//24272
+//#pragma output CRT_ORG_CODE = 0x5ED0	//24272
 // main binary program start 24600	0x6018
 
+#pragma output CRT_ORG_CODE = 0x5F40
+//24350	0x5F1E		24370
 
 //$5CCB is the lowest useable memory address
 #pragma output REGISTER_SP = 0x5DCB		//23755 = 0x5E86

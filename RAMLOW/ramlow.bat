@@ -6,7 +6,6 @@ cd codemaps
 	del objects.o
 cd ..
 
-
 echo off
 
 cd code1
@@ -20,8 +19,8 @@ cd code1
 	copy "structs.h" "..\"
 	copy "graphicutils.h" "..\"
 	copy "graphicutils.asm" "..\"
+	copy "IM2utils.asm" "..\"
 cd ..
-
 
 rem cd supportcode
 rem  	copy "engine.h" "..\"
@@ -32,25 +31,17 @@ rem  	copy "externs.h" "..\"
 rem 	copy "depack.asm" "..\"
 rem cd ..
 
-
-
 echo on
 REM -----------------------------
 REM -----------------------------
 
 @rem zcc +zx -v -c -clib=new ram0.o --fsigned-char -o objects @ramlow.lst
 
-
 @rem zcc +zx -v -c -clib=new --fsigned-char ramALL.o -o objects @ramlow.lst
-
-
 
 rem this creates an object file
 REM not used for anything other than creating a map
 zcc +zx -v -c -clib=new --fsigned-char -o objects @ramlow.lst
-
-
-
 
 rem normal compile
 zcc +zx -vn -m -startup=31 -clib=new ramALL.o -o compiled -pragma-include:zpragma.inc @ramlow.lst
@@ -64,7 +55,6 @@ rem this line compiles all files
 
 @rem TROUBLESHOOTING COMPILE
 @rem zcc +zx -v -c -clib=new --fsigned-char -no-cleanup objects @ramlow.lst
-
 
 
 
@@ -97,7 +87,7 @@ del "levelutils.asm"
 del "structs.h"
 del "graphicutils.h"
 del "graphicutils.asm"
-
+del "IM2utils.asm"
 
 cd codemaps
 	echo on
@@ -110,9 +100,7 @@ cd ..
 
 call errorcheck.bat
 
-echo off
-
-rem pause
+rem echo off
 
 
 copy "compiled_BANK_00.bin" "..\RAMMAGIC"
@@ -125,14 +113,20 @@ copy "compiled_CODE.bin" "..\RAMMAGIC"
 copy "compiled_UNCONTENDED.bin" "..\RAMMAGIC"
 copy "compiled_UNASSIGNED.bin" "..\RAMMAGIC"
 
-copy "compiled_IM_MATRIX.bin" "..\RAMMAGIC"
+copy "compiled_IM2_TABLE.bin" "..\RAMMAGIC"
 copy "compiled_IM2_ISR_address.bin" "..\RAMMAGIC"
 copy "compiled_ISR_ROUTINE.bin" "..\RAMMAGIC"
 copy "compiled_UNCONTENDED_MAPSTART.bin" "..\RAMMAGIC"
 copy "compiled_UNCONTENDED_TABLATILES.bin" "..\RAMMAGIC"
 
+copy "compiled_SPRITE_CACHE.bin" "..\RAMMAGIC"
+copy "compiled_LRU_next_Section.bin" "..\RAMMAGIC"
+copy "compiled_LRU_prev_Section.bin" "..\RAMMAGIC"
+
+copy "compiled_Level_Sprites.bin" "..\RAMMAGIC"
 
 
+@REM --------------------------------------------------
 move "compiled_BANK_00.bin" "codemaps\"
 move "compiled_BANK_01.bin" "codemaps\"
 move "compiled_BANK_03.bin" "codemaps\"
@@ -143,9 +137,15 @@ move "compiled_CODE.bin" "codemaps\"
 move "compiled_UNCONTENDED.bin" "codemaps\"
 move "compiled_UNASSIGNED.bin" "codemaps\"
 
-move "compiled_IM_MATRIX.bin" "codemaps\"
+move "compiled_IM2_TABLE.bin" "codemaps\"
 move "compiled_IM2_ISR_address.bin" "codemaps\"
 move "compiled_ISR_ROUTINE.bin" "codemaps\"
 move "compiled_UNCONTENDED_MAPSTART.bin" "codemaps\"
 move "compiled_UNCONTENDED_TABLATILES.bin" "codemaps\"
+move "compiled_SPRITE_CACHE.bin" "codemaps\"
+
+move "compiled_LRU_next_Section.bin" "codemaps\"
+move "compiled_LRU_prev_Section.bin" "codemaps\"
+
+move "compiled_Level_Sprites.bin" "codemaps\"
 
