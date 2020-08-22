@@ -1,7 +1,7 @@
 
 echo on
 
-rem a bit of cleanup
+rem a bit of cleanup.bat
 
 rem get rid of the object files
 rem move "ram0.o" "objects\"
@@ -22,22 +22,24 @@ move "compiled_CODE.bin" "objects\"
 
 move "compiled_UNCONTENDED.bin" "objects\"
 
-move "compiled_IM_MATRIX.bin" "objects\"
+move "compiled_IM2_TABLE.bin" "objects\"
 move "compiled_IM2_ISR_address.bin" "objects\"
 move "compiled_ISR_ROUTINE.bin" "objects\"
 move "compiled_UNCONTENDED_MAPSTART.bin" "objects\"
 move "compiled_UNCONTENDED_TABLATILES.bin" "objects\"
+move "compiled_SPRITE_CACHE.bin" "objects\"
+
+rem move "compiled_UNCONTENDED_TABLATILES.bin" "objects\"
+rem move "compiled_SPRITE_CACHE.bin" "..\RAMMAGIC"
 
 
-
-
-
+move "compiled_Level_Sprites.bin" "objects\"
 
 
 
 REM for some reason ALL.bin does not process
 rem compiled_ISR_ROUTINE.bin
-rem compiled_IM_MATRIX.bin
+rem compiled_IM2_TABLE.bin
 
 
 
@@ -59,13 +61,13 @@ move "uncontended.tap" "objects\"
 move "contended.tap" "objects\"
 move "loader.tap" "objects\"
 
-move "IM_MATRIX.tap" "objects\"
+move "IM2_TABLE.tap" "objects\"
 move "ISR_ROUTINE.tap" "objects\"
-move "IM2-ISR.tap" "objects\"
+move "IM2_ISR.tap" "objects\"
 
 
 move "TABLATILES.tap" "objects\"
 
-
-
 move "MAPSTART.tap" "objects\"
+
+move "SPRITE_CACHE.tap" "objects\"
