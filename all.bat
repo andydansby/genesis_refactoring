@@ -56,6 +56,7 @@ cd ..
 
 
 
+
 REM Let's move all of our object files into RAMMAGIC
 move "ram0.o" "RAMMAGIC\"
 move "ram1.o" "RAMMAGIC\"

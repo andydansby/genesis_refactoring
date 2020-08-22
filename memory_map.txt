@@ -1,0 +1,49 @@
+Principal memory
+--------------------------------------------------------------------------
+Start	End		Size	Name						Compressed?	Comments
+$6017	??		CLEAR											24599
+$6018	$7FFF	8168	Main logic of the game		NO			24600
+$8000	$8100	257		IM2 Table					Runtime
+$8101	$89FF	2302	Engine code					NO
+$8A00	$8A2A	43		LRU_prev					Runtime
+$8A2B	$8A89	95		Free
+$8A8A	$8AA5	27		Basic interrupt routine  	Runtime			
+$8AA6	$8AFF	90		Free	
+$8B00	$8B2A	43		LRU_next					Runtime
+$8B2B	$8BFF	213		Free
+$8C00	$8FFF	1024	Cache sprites				Runtime
+$9000	$9FFF	4096	Level sprites				Runtime
+$A000	$AFFF	4096	Level map					Runtime
+$B000	$BFFF	4096	Level tiles, preshifted		Runtime
+
+			
+RAM 0	WYZ MUSIC player
+--------------------------------------------------------------------------		
+Start	End		Size	Name						Compressed?	Comments
+$C000					WYZ player, music
+			
+RAM 1	Sprites (16K sprites in total!)
+--------------------------------------------------------------------------		
+Start	End		Size	Name						Compressed?	Comments
+$C000 	$CFFF	4096								Sprites of the current level 
+													(up to 64 sprites)
+$D000	$FFFF	12288								Total sprites 
+													(up to 192 sprites in the entire game)
+
+RAM 3	Static displays
+--------------------------------------------------------------------------			
+Start	End		Size	Name						Compressed?	Comments
+$C000	C23B	572		background.bin				YES
+
+
+RAM 4	Game levels
+--------------------------------------------------------------------------			
+Start	End		Size	Name						Compressed?	Comments
+
+RAM 6
+--------------------------------------------------------------------------
+Start	End	Size	Name			Compressed?	Comments
+			
+RAM 7:
+--------------------------------------------------------------------------
+Shadow display
