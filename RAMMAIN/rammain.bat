@@ -21,6 +21,11 @@ rem	copy "clearMapArea.asm" "..\"
 	copy "im2.asm" "..\"
 	copy "isr.asm" "..\"
 	copy "im2Manager.asm" "..\"
+	copy "spriteCache.asm" "..\"
+	copy "LRUprev.asm" "..\"
+	copy "LRUnext.asm" "..\"
+	copy "levelSprites.asm" "..\"
+	
 REM	copy "rambank.asm" "..\"
 REM	copy "gameISR.asm" "..\"
 cd ..
@@ -57,6 +62,10 @@ del "input.asm"
 del "im2.asm"
 del "isr.asm"
 del "im2Manager.asm"
+del "spriteCache.asm"
+del "LRUprev.asm"
+del "LRUnext.asm"
+del "levelSprites.asm"
 
 cd codemaps
 	echo on

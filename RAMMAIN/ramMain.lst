@@ -3,4 +3,7 @@ uncontended.asm
 ISR.asm
 im2.asm
 im2Manager.asm
-
+spriteCache.asm
+LRUprev.asm
+LRUnext.asm
+levelSprites.asm

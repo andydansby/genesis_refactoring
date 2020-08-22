@@ -6,26 +6,6 @@
 
 SECTION UNCONTENDED
 
-;; cache list next pointers
-;;used in drawsprite.asm
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_next	EQU $8B00
-PUBLIC LRU_next
-;#BEGIN_ASM
-LRU_next:
-	defb 43	;;0x2b
-;#END_ASM
-
-;; cache list prev pointers, 
-;; 43 bytes used 
-;; (some bytes wasted!)
-;;LRU_prev	EQU $8A00
-PUBLIC LRU_prev
-;#BEGIN_ASM
-LRU_prev:
-	defb 43 ;;0x2b
-;#END_ASM
 
 
 PUBLIC LRU_first
@@ -81,6 +61,8 @@ SAVE_RAMBANK:
 
 
 
+
+
 ;; Limited to 16x16 sprites, with mask
 ;; Originally taken from a tutorial by dmsmith, then modified
 
@@ -119,7 +101,6 @@ PUBLIC _DrawSprite
 	or e
 	ld e, a					
 	;; HL = (sprnum << 3) | rotation
-
 
 	ld hl, SprCacheTable
 	add hl, de				
@@ -546,15 +527,7 @@ ret			; Total: 143 T-states for a cache hit
 
 ;;---------------------------------
 
-;; Definitions for sprite cache addresses
-;;used in drawsprite.asm
-;; sprite cache table, 1K	
-;;SprCacheTable 	EQU $8C00
-PUBLIC SprCacheTable
-SprCacheTable:
-	defs 1024 ;;0x400
-	
-	
+
 ;;$A4D7
 ;; Initialize sprite cache list
 ;; No entry, no output
@@ -563,6 +536,11 @@ SprCacheTable:
 PUBLIC _InitSprCacheList
 ;#BEGIN_ASM
 _InitSprCacheList:
+
+extern SprCacheTable
+extern LRU_prev
+extern LRU_next
+
 	;; First, initialize the Sprite Cache Table with 255
 
 	ld hl, SprCacheTable

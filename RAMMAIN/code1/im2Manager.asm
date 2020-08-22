@@ -1,6 +1,8 @@
 ;;---------------------------------
-;;NEEDS to be in a seperate file, what a PAIN!!!
-SECTION IM2_ISR_address	;;9d9d	40349
+;;NEEDS to be in uncontended memory
+SECTION IM2_ISR_address
+;;want this to be at $8a8a
+
 PUBLIC _IM2ISR
 _IM2ISR:
 ;#BEGIN_ASM
