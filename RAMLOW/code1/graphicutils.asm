@@ -171,6 +171,9 @@ ret
 ;#END_ASM
 
 
+
+
+
 PUBLIC _border_Switch
 ;#BEGIN_ASM
 _border_Switch:
@@ -309,9 +312,17 @@ extern _DrawSpriteList
 	;; restore the previous paging state
 	ei
 	
+	
+;;	call _DrawEnemies	; draw enemies and enemy shoots (also valid for final enemies and their shoots)
 
-;;buggy need to fix
-;;ATTENTION PROBLEM, crash!
+;;need to concentrate on this next 
+;;	call _DrawShip		; draw ship, my shoots and power ups: at the same time, check ship collision
+
+
+;;        call _CheckShipCollision ; check HERE if the ship hits the background or an enemy
+
+;; add animation of main player
+
 	call _DrawSpriteList
 ;;	call _DrawSpriteList1
 

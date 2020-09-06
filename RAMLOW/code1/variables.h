@@ -63,9 +63,11 @@ _enemies3*/
 
 	unsigned char max_shoots = 1; 	// Maximum number of shoots allowed with the current weapon	//unsigned char max_shoots;
 
-
-
-
+	unsigned char animatePlayer = 0;
+	unsigned char animateDelta = 1;
+	
+	unsigned char titsUP = 0;//	_titsUP
+	unsigned char playerCollision = 0;
 
 	unsigned char CurLevel_XLength = 0;
 	// Length in X of the current level
