@@ -2,15 +2,22 @@ Object  file objects.o at $0000: Z80RMF12
   Name: objects
   Section code_compiler: 1 bytes
   Section bss_compiler: 0 bytes
-  Section BANK_01: 513 bytes
+  Section BANK_01: 704 bytes
   Symbols:
     G A $0000 _ram1 (section code_compiler) (file ram1.c:20)
-    G A $0000 _ship01 (section BANK_01) (file sprites.asm:4)
-    G A $0040 _ship02 (section BANK_01) (file sprites.asm:15)
-    G A $0080 _enemy01 (section BANK_01) (file sprites.asm:26)
-    G A $00C0 _shoot01 (section BANK_01) (file sprites.asm:37)
-    G A $0100 _expl01 (section BANK_01) (file sprites.asm:48)
-    G A $0140 _expl02 (section BANK_01) (file sprites.asm:59)
-    G A $0180 _expl03 (section BANK_01) (file sprites.asm:70)
-    G A $01C0 _expl04 (section BANK_01) (file sprites.asm:81)
-    G A $0200 _endmarkerRam1 (section BANK_01) (file ram1Z.asm:23)
+    G A $0000 _ship00 (section BANK_01) (file sprites.asm:67)
+    G A $0020 _ship01 (section BANK_01) (file sprites.asm:77)
+    G A $0040 _ship02 (section BANK_01) (file sprites.asm:88)
+    G A $0060 _ship03 (section BANK_01) (file sprites.asm:97)
+    G A $0080 _ship04 (section BANK_01) (file sprites.asm:106)
+    G A $00A0 _ship05 (section BANK_01) (file sprites.asm:116)
+    G A $00C0 _ship06 (section BANK_01) (file sprites.asm:124)
+    G A $00E0 _ship07 (section BANK_01) (file sprites.asm:133)
+    G A $0100 _ship08 (section BANK_01) (file sprites.asm:144)
+    G A $0120 _ship09 (section BANK_01) (file sprites.asm:153)
+    G A $0140 _enemy01 (section BANK_01) (file sprites.asm:164)
+    G A $0180 _shoot01 (section BANK_01) (file sprites.asm:175)
+    G A $01C0 _expl01 (section BANK_01) (file sprites.asm:186)
+    G A $0200 _expl02 (section BANK_01) (file sprites.asm:197)
+    G A $0240 _expl03 (section BANK_01) (file sprites.asm:208)
+    G A $0280 _expl04 (section BANK_01) (file sprites.asm:219)
