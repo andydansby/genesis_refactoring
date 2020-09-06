@@ -1,0 +1,409 @@
+header files
+
+**	engine.h
+	header file that has some hard coded addresses which can be eliminated.  Also had definitions which should stay
+
+**	movement.h
+	header file that has definitions and an extern which should stay
+
+**	structs.h
+	header file that defines the structs. which need to stay.
+
+
+*	collision.h
+	NEED to investigate this.  believe this is the orignal collision detection written in C.
+	
+**	constants.h
+	header file that contains many hard coded addresses.
+
+*	displayloop.h
+	IMPORTANT file that should be in non-contended RAM
+
+*	graphicutils.h
+	IMPORTANT file that has various drawing routines that should be in non-contended RAM
+
+*	levelutils.h
+	IMPORTANT file that has the level loading utility.  Contended RAM should be ok.
+
+*	mainmenu.h
+	used for main menu options
+
+*	playercontrols.h
+	single asm routine to get joystick type
+
+**	utils.h
+	contains gameISR (interupt service routine) and the apack routine
+
+**	variables.h
+	game variables - IMPORTANT (perhaps contended)
+
+*	wyzplayer.h
+	how to call the WYZ player
+	
+
+
+*****
+test.c
+
+#include
+	engine.h
+	structs.h
+	movement.h
+	constants.h
+	variables.h
+	utils.h
+	playercontrols.h
+	wyzplayer.h
+	levelutils.h
+	graphicutils.h
+	collision.h
+	displayloop.h
+	mainmenu.h
+
+*****
+movement.c
+
+	NEED to investigate this.  believe this is the orignal movement written in C to move enemies.
+
+#include
+	structs.h
+
+
+
+RAMLOW						(24600-32767) 8167 bytes
+should move _setrambank here as this is not a time sensetive function
+
+**test.c	Keep main pretty short and transfer most to functions in RAMMAIN
+
+
+RAMMAIN final marker before anything else is 2118
+RAMLOW  final marker before anything else is undefined
+--------------------------------------------------------
+RAMMAIN						(32768-49151) 16k
+engine.bin: engine.asm  input.asm rambanks.asm drawmap.asm drawsprite.asm create_shifted_tables.asm
+
+**now includes
+	engine.h
+	structs.h
+	movement.h
+	constants.h
+	variables.h
+	utils.h
+	playercontrols.h
+	wyzplayer.h
+	levelutils.h
+	graphicutils.h
+	collision.h
+	displayloop.h
+	
+	mainmenu.h
+	
+	
+
+G A $0000 _uncontended (section code_compiler)
+G A $0000 _DrawMap (section UNCONTENDED)
+G A $01B9 _ClearMapArea (section UNCONTENDED)
+G A $0388 _setrambank (section UNCONTENDED)
+G A $0397 _switchscreen (section UNCONTENDED)
+G A $03B5 _DrawSprite (section UNCONTENDED)
+G A $0462 _InsertSpriteInCache (section UNCONTENDED)
+G A $054D _MoveSpriteToTop (section UNCONTENDED)
+G A $056D _InitSprCacheList (section UNCONTENDED)
+G A $0619 _SCAN_KEYBOARD (section UNCONTENDED)
+G A $0640 _GET_KEY_STATE (section UNCONTENDED)
+G A $0651 _get_joystick (section UNCONTENDED)
+G A $072F _CreaTablaTiles (section UNCONTENDED)
+G A $080A _SetIM2 (section UNCONTENDED)
+
+**	FUNCTIONS for test.c
+
+--------------------------------------------------------
+RAM 0	WYZ Player			(49152-65535) 16k
+#ram0.bin: wyzplayer.asm
+
+
+G A $0000 _ram0 (section code_compiler)
+G A $003F _INICIO (section BANK_00)
+G A $0063 _CARGA_CANCION (section BANK_00
+G A $0365 _STOP_PLAYER (section BANK_00)
+--------------------------------------------------------
+RAM 1	Sprites (not yet working)	(49152-65535) 16k
+sprites.bin: sprites.asm
+	pasmo sprites.asm sprites.bin sprites.sym
+
+
+G A $0000 _ram1 (section code_compiler)
+G A $0000 _ship01 (section BANK_01)
+G A $0040 _ship02 (section BANK_01)
+G A $0080 _enemy01 (section BANK_01)
+G A $00C0 _shoot01 (section BANK_01)
+G A $0100 _expl01 (section BANK_01)
+G A $0140 _expl02 (section BANK_01)
+G A $0180 _expl03 (section BANK_01)
+G A $01C0 _expl04 (section BANK_01)
+--------------------------------------------------------
+RAM 3						(49152-65535) 16k
+#ram3.bin: ram3.asm background.bin
+
+
+G A $0000 _ram3 (section code_compiler)
+G A $0000 _background (section BANK_03)
+--------------------------------------------------------
+
+RAM 4						(49152-65535) 16k
+#ram4.bin: levels.asm level1.map
+
+
+G A $0000 _ram4 (section code_compiler)
+G A $0000 _level1 (section BANK_04)
+G A $065E _enemies1 (section BANK_04)
+G A $06C7 _level2 (section BANK_04)
+G A $0B89 _enemies2 (section BANK_04)
+G A $0BF2 _level3 (section BANK_04)
+G A $1079 _enemies3 (section BANK_04)
+G A $10E2 _level4 (section BANK_04)
+G A $10E2 _enemies4 (section BANK_04)
+G A $10E2 _level5 (section BANK_04)
+G A $10E2 _enemies5 (section BANK_04)
+G A $10E2 _level6 (section BANK_04)
+G A $10E2 _enemies6 (section BANK_04)
+G A $10E2 _level7 (section BANK_04)
+G A $10E2 _enemies7 (section BANK_04)
+
+--------------------------------------------------------
+RAM 6						(49152-65535) 16k
+G A $0000 _ram6 (section code_compiler)
+G A $0001 _main (section code_compiler)
+G A $0000 _genesis_title (section BANK_06)
+G A $03D4 _title_hiscores (section BANK_06)
+G A $0493 _credits_bkg (section BANK_06)
+
+
+
+
+--------------------------------------------------------
+File test.o at $0000: Z80RMF08
+  Name: test
+  Names:
+G A $07F6 _mainMenu (section code_compiler)
+menu.asm	- ram6
+
+G A $0000 _active_enemies (section bss_compiler)
+represents a struct variable - variables.h	- MAINRAM
+
+G A $0038 _frames_to_shoot (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0039 _i (section bss_compiler)
+represents a variable	- test.c
+
+G A $003A _j (section bss_compiler)
+represents a variable	- test.c
+
+G A $00D8 _read_joystick (section code_compiler)
+found in playercontrols.h	- test.c - inline assembly	-MAINRAM
+
+
+G A $003B _length_map (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+
+G A $003D _shoot_xchar (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+
+G A $003E _shoot_ychar (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $003F _diff_x (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0041 _diff_y (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0043 _map_displacement (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0102 _load_level (section code_compiler)
+found in levelutils.h	- test.c - inline assembly	- MAINRAM
+
+G A $0044 _map_xpos (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0045 _CurLevel_XLength (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $047A _NewEnemy (section code_compiler)
+found in graphicutils.h	- test.c	- MAINRAM
+
+G A $0001 _gameISR (section code_compiler)
+found in utils.h	- test.c	- MAINRAM	- inline assembly
+
+G A $0046 _dummy_i2 (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0048 _max_shoots (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0049 _int_pointer (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $03FA _NewShoot (section code_compiler)
+found in graphicutils.h	- test.c	- MAINRAM
+
+G A $022F _DrawGameMap (section code_compiler)
+found in graphicutils.h	- test.c	- MAINRAM
+
+G A $00F8 _wyz_stop_music (section code_compiler)
+found in wyzplayer.h	- test.c	- MAINRAM
+
+G A $004B _joy (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $004C _enemy_xchar (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $004D _enemy_ychar (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $004E _ship_x (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $004F _ship_y (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0000 _wtf (section code_compiler)
+found in engine.h	- test.c	- MAINRAM
+
+G A $0752 _display_loop (section code_compiler)
+found in displayloop.h	- test.c - inline assembly	- MAINRAM
+
+G A $077E _mainMenuSelection (section code_compiler)
+found in mainmenu.h	- test.c - inline assembly	- MAINRAM - points to bank 6
+
+G A $07F7 _borderColor (section code_compiler)
+found in mainmenu.h	- test.c - inline assembly	- MAINRAM
+
+G A $059B _shoot_hits_enemy (section code_compiler)
+found in collision.h	- test.c -  MAINRAM
+
+
+G A $0050 _length_tiles (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0052 _level_pointer (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0054 _isrdummy (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0055 _current_screen (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $01C3 _clean_screen (section code_compiler)
+found in graphicutils.h	- test.c	- MAINRAM
+
+G A $0056 _dummy_b (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0057 _dummy_i (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0059 _current_e (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $00FE _wyz_play (section code_compiler)
+found in wyzplayer.h	- test.c	- MAINRAM
+
+G A $005B _my_active_shoots (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0093 _enemy_active_shoots (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $00E4 _wyz_load_music (section code_compiler)
+found in wyzplayer.h	- test.c	- MAINRAM
+
+G A $0809 _gameloop (section code_compiler)
+found in test.c	- MAINRAM
+
+G A $0C0A _main (section code_compiler)
+found in test.c	- MAINRAM
+
+G A $06A9 _enemy_hits_ship (section code_compiler)
+found in collision.h	- test.c -  MAINRAM
+
+G A $0014 _keys (section data_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $00CB _new_enemy (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $0000 _level_address (section data_compiler)
+represents a variable	- constants.h	- MAINRAM
+
+G A $00CC _speed_x (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $00CD _speed_y (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $025C _DrawSpriteList (section code_compiler)
+found in graphicutils.h	- inline assembly	-	test.c	- MAINRAM
+
+G A $0209 _load_background (section code_compiler)
+found in graphicutils.h	- inline assembly	-test.c	- MAINRAM
+
+G A $00CE _enemy_locations (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $04CE _CurLevel_NTiles (section bss_compiler)
+represents a variable	- variables.h	- MAINRAM
+
+G A $000E _enemy_address (section data_compiler)
+represents a variable	- constants.h	- MAINRAM
+
+
+
+  External names:
+    U         l_gchar
+    U         l_sxt
+    U         l_gint
+    U         l_or
+    U         l_eq
+    U         l_ne
+    U         l_gt
+    U         l_lt
+    U         l_ult
+    U         l_lneg
+    U         l_case
+    U         l_mult
+    U         l_div_u
+    U         getk
+    U         _movement_funcs
+	
+G A $0000 _ram3 (section code_compiler)
+G A $0000 _background (section BANK_03)
+G A $0001 _ram4 (section code_compiler)
+G A $0000 _level1 (section BANK_04)
+G A $065E _enemies1 (section BANK_04)
+G A $06C7 _level2 (section BANK_04)
+G A $0B89 _enemies2 (section BANK_04)
+G A $0BF2 _level3 (section BANK_04)
+G A $1079 _enemies3 (section BANK_04)
+G A $10E2 _level4 (section BANK_04)
+G A $10E2 _enemies4 (section BANK_04)
+G A $10E2 _level5 (section BANK_04)
+G A $10E2 _enemies5 (section BANK_04)
+G A $10E2 _level6 (section BANK_04)
+G A $10E2 _enemies6 (section BANK_04)
+G A $10E2 _level7 (section BANK_04)
+G A $10E2 _enemies7 (section BANK_04)
+G A $0002 _ram6 (section code_compiler)
+G A $0000 _genesis_title (section BANK_06
+G A $03D4 _title_hiscores (section BANK_0
+G A $0493 _credits_bkg (section BANK_06)
+G A $0003 _ram0 (section code_compiler)
+G A $003F _INICIO (section BANK_00)
+G A $0063 _CARGA_CANCION (section BANK_00
+G A $0365 _STOP_PLAYER (section BANK_00)

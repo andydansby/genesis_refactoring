@@ -46,7 +46,6 @@ cd RAM0
 	REM RAM 0 WYZ FILES
 cd ..
 
-@rem pause
 
 cd RAMMAIN
 	call rammain.bat
@@ -54,7 +53,8 @@ cd RAMMAIN
 	REM UNCONTENDED MEMORY 32768-49151
 cd ..
 
-
+@call beep.bat
+pause
 
 
 REM Let's move all of our object files into RAMMAGIC
@@ -85,7 +85,6 @@ cd RAMLOW
 	call ramlow.bat
 echo on
 cd ..
-
 
 
 cd RAMMAGIC
