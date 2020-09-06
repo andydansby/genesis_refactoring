@@ -7,7 +7,8 @@ SECTION LRU_prev_Section	;;0x8a00
 PUBLIC LRU_prev
 ;#BEGIN_ASM
 LRU_prev:
-	defs 43 ;;0x2b
+	;defs 43	;;0x2b	from C version
+	defs 86		;;from release version
 ;#END_ASM
 
 

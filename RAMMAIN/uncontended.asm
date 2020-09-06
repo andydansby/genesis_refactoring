@@ -24,17 +24,6 @@ defs 0x1000
 ;; wrong 16k RAM is paged in, you will get a crash.
 
 
-
-SECTION UNCONTENDED
-;;--------------------------------
-
-;; ATTENTION, for some reason
-;;ZCC Does not like having this
-;; as rodata_user.  Making it a constant
-defc _SPRITES_BANK = 1
-
-
-
 SECTION UNCONTENDED
 ;;--------------------------------
 ;; PLACE INCLUDEs HERE

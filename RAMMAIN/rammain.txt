@@ -3,15 +3,15 @@ Object  file objects.o at $0000: Z80RMF12
   Section code_compiler: 1 bytes
   Section bss_compiler: 0 bytes
   Section UNCONTENDED_MAPSTART: 4096 bytes
-  Section UNCONTENDED: 1598 bytes
+  Section UNCONTENDED: 1964 bytes
   Section UNCONTENDED_TABLATILES: 4096 bytes
   Section CODE_END: 7 bytes
   Section IM2_TABLE: 257 bytes
   Section ISR_ROUTINE: 22 bytes
   Section IM2_ISR_address: 27 bytes
   Section SPRITE_CACHE: 1024 bytes
-  Section LRU_prev_Section: 43 bytes
-  Section LRU_next_Section: 43 bytes
+  Section LRU_prev_Section: 86 bytes
+  Section LRU_next_Section: 256 bytes
   Section Level_Sprites: 4096 bytes
   Symbols:
     G A $0000 _uncontended (section code_compiler) (file uncontended.c:20)
@@ -21,21 +21,25 @@ Object  file objects.o at $0000: Z80RMF12
     G A $0000 TablaTiles (section UNCONTENDED_TABLATILES) (file create_shifted_tables.asm:3)
     G A $01ED SaveTablaTiles (section UNCONTENDED) (file create_shifted_tables.asm:19)
     G A $01EF _CreaTablaTiles (section UNCONTENDED) (file create_shifted_tables.asm:52)
-    G C $0000 LRU_first (section UNCONTENDED) (file drawsprite.asm:13)
-    G C $002A LRU_last (section UNCONTENDED) (file drawsprite.asm:22)
-    G C $002A LRU_LASTENTRY (section UNCONTENDED) (file drawsprite.asm:32)
-    G A $02C8 Multiply_by_96 (section UNCONTENDED) (file drawsprite.asm:38)
-    G A $031C SCRADD (section UNCONTENDED) (file drawsprite.asm:45)
-    G A $031E LINECOUNT (section UNCONTENDED) (file drawsprite.asm:52)
-    G A $031F SAVE_RAMBANK (section UNCONTENDED) (file drawsprite.asm:58)
-    G A $0320 _DrawSprite (section UNCONTENDED) (file drawsprite.asm:86)
-    G A $03CD _InsertSpriteInCache (section UNCONTENDED) (file drawsprite.asm:258)
-    G A $04B8 _MoveSpriteToTop (section UNCONTENDED) (file drawsprite.asm:488)
-    G A $04D8 _InitSprCacheList (section UNCONTENDED) (file drawsprite.asm:538)
-    G A $0528 _SCAN_KEYBOARD (section UNCONTENDED) (file input.asm:19)
-    G A $054F _GET_KEY_STATE (section UNCONTENDED) (file input.asm:59)
-    G A $0560 _get_joystick (section UNCONTENDED) (file input.asm:141)
-    G A $0000 _RAM_marker_MAIN (section CODE_END) (file uncontended.asm:57)
+    G A $02C8 LRU_first (section UNCONTENDED) (file drawsprite.asm:23)
+    G A $02C9 LRU_last (section UNCONTENDED) (file drawsprite.asm:29)
+    G A $02CA SCRADD (section UNCONTENDED) (file drawsprite.asm:36)
+    G A $02CC LINECOUNT (section UNCONTENDED) (file drawsprite.asm:42)
+    G A $02CD SAVE_RAMBANK (section UNCONTENDED) (file drawsprite.asm:48)
+    G A $02CE Ship_Collision (section UNCONTENDED) (file drawsprite.asm:56)
+    G A $02CF SPRITES_BANK (section UNCONTENDED) (file drawsprite.asm:63)
+    G A $02D0 LRU_LASTENTRY (section UNCONTENDED) (file drawsprite.asm:69)
+    G A $02D1 Multiply_by_48 (section UNCONTENDED) (file drawsprite.asm:84)
+    G A $037F _DrawSprite (section UNCONTENDED) (file drawsprite.asm:116)
+    G A $0474 DrawSprite_Ship (section UNCONTENDED) (file drawsprite.asm:367)
+    G A $051B InsertSpriteInCache (section UNCONTENDED) (file drawsprite.asm:554)
+    G A $05FA calcscreenpos (section UNCONTENDED) (file drawsprite.asm:773)
+    G A $0617 MoveSpriteToTop (section UNCONTENDED) (file drawsprite.asm:822)
+    G A $0646 _InitSprCacheList (section UNCONTENDED) (file drawsprite.asm:887)
+    G A $0696 _SCAN_KEYBOARD (section UNCONTENDED) (file input.asm:19)
+    G A $06BD _GET_KEY_STATE (section UNCONTENDED) (file input.asm:59)
+    G A $06CE _get_joystick (section UNCONTENDED) (file input.asm:141)
+    G A $0000 _RAM_marker_MAIN (section CODE_END) (file uncontended.asm:46)
     G A $0000 _IM2_Vector (section IM2_TABLE) (file ISR.asm:7)
     G A $0000 _Set_screen_flip_flag (section ISR_ROUTINE) (file im2.asm:7)
     G A $0007 _gameISR1 (section ISR_ROUTINE) (file im2.asm:24)
@@ -43,7 +47,9 @@ Object  file objects.o at $0000: Z80RMF12
     G A $0000 SprCacheTable (section SPRITE_CACHE) (file spriteCache.asm:5)
     G A $0000 LRU_prev (section LRU_prev_Section) (file LRUprev.asm:9)
     G A $0000 LRU_next (section LRU_next_Section) (file LRUnext.asm:10)
+    G A $0056 MappingTable (section LRU_next_Section) (file LRUnext.asm:17)
     G A $0000 _Level_Sprites (section Level_Sprites) (file levelSprites.asm:6)
   Externs:
+    U         _playerCollision
     U         _noscreenswitch
     U         _switchscreen
