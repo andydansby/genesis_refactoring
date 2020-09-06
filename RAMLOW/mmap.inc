@@ -12,47 +12,85 @@
 ;; sections defined by Genesis
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
 SECTION BANK_00
-org 0xc000
+org 0xc000		;;//	49152
 
 SECTION BANK_01
-org 0xc000
+org 0xc000		;;//	49152
 
 SECTION BANK_03
-org 0xc000
+org 0xc000		;;//	49152
 
 SECTION BANK_04
-org 0xc000
+org 0xc000		;;//	49152
 
 SECTION BANK_06
-org 0xc000
+org 0xc000		;;//	49152
 
+;;-------------------------------------
+
+;;// ORIGINAL game is 24600 as start $6018
+;;//SECTION CONTENDED
+;;//org 0x5ED0		0x5F1E
 SECTION CONTENDED
-org 0x5ED0
+org 0x5F40		;;//	24384
+
 
 SECTION LOW_CODE_END
-org 0x7fff
+org 0x7fff		;;//	32767
+
+;;-------------------------------------
+SECTION IM2_TABLE
+org 0x8000		;;//	32768
+;;//0x101 long
+;;//IM_MATRIX
 
 SECTION UNCONTENDED
-org 0x8000
+org 0x8102		;;//	33026
+;;need to be reworked
 
 SECTION ISR_ROUTINE
-org 0x9d00
+org 0x8a2b		;;//	35371
+;;//need to be reworked
+
+SECTION LRU_prev_Section
+org 0x8a00		;;//	35328
 
 SECTION IM2_ISR_address
-org 0x9d9d
+org 0x8a8a		;;//	35466
+;;need to be reworked
 
-SECTION IM_MATRIX
-org 0x9e00
+SECTION LRU_next_Section
+org 0x8b00		;;//	35584
 
+SECTION SPRITE_CACHE
+org 0x8C00		;;//	35840
+;;need to be reworked
+
+
+
+
+SECTION Level_Sprites
+org 0x9000		;;//	36864
 
 SECTION UNCONTENDED_MAPSTART
-org 0xa000
+org 0xa000		;;//	40960
+;;matches original
 
 SECTION UNCONTENDED_TABLATILES
-org 0xb000
+org 0xb000		;;//	45056
+;;matches original
+
+
+
+
+
+
+
+
+
+;;-------------------------------------
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

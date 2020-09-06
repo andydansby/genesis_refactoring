@@ -20,10 +20,13 @@ cd RAMMAIN
 cd ..
 move "uncontended.o" "RAMMAGIC\"
 
+
+
 cd RAMMAGIC
 	call magic.bat
 cd ..
 
+rem pause
 
 cd ramlow
 

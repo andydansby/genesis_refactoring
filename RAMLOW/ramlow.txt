@@ -1,7 +1,7 @@
 Object  file objects.o at $0000: Z80RMF12
   Name: objects
-  Section data_compiler: 76 bytes
-  Section code_compiler: 859 bytes
+  Section data_compiler: 80 bytes
+  Section code_compiler: 1084 bytes
   Section bss_compiler: 0 bytes
   Section code_user: 716 bytes
   Section LOW_CODE_END: 1 bytes
@@ -22,41 +22,52 @@ Object  file objects.o at $0000: Z80RMF12
     G A $0023 _map_xpos (section data_compiler) (file main.c:91)
     G A $0024 _map_displacement (section data_compiler) (file main.c:95)
     G A $0025 _max_shoots (section data_compiler) (file main.c:99)
-    G A $0026 _CurLevel_XLength (section data_compiler) (file main.c:103)
-    G A $0027 _CurLevel_NTiles (section data_compiler) (file main.c:107)
-    G A $0028 _keys (section data_compiler) (file main.c:111)
-    G A $0032 _joy (section data_compiler) (file main.c:119)
-    G A $0033 _new_enemy (section data_compiler) (file main.c:123)
-    G A $0034 _i (section data_compiler) (file main.c:127)
-    G A $0035 _j (section data_compiler) (file main.c:131)
-    G A $0036 _dummy_b (section data_compiler) (file main.c:135)
-    G A $0037 _dummy_i (section data_compiler) (file main.c:139)
-    G A $0039 _dummy_i2 (section data_compiler) (file main.c:143)
-    G A $003B _isrdummy (section data_compiler) (file main.c:147)
-    G A $003C _length_tiles (section data_compiler) (file main.c:151)
-    G A $003E _length_map (section data_compiler) (file main.c:155)
-    G A $0040 _shoot_xchar (section data_compiler) (file main.c:159)
-    G A $0041 _shoot_ychar (section data_compiler) (file main.c:163)
-    G A $0042 _enemy_xchar (section data_compiler) (file main.c:167)
-    G A $0043 _enemy_ychar (section data_compiler) (file main.c:171)
-    G A $0044 _diff_x (section data_compiler) (file main.c:175)
-    G A $0046 _diff_y (section data_compiler) (file main.c:179)
-    G A $0048 _level_pointer (section data_compiler) (file main.c:183)
-    G A $004A _int_pointer (section data_compiler) (file main.c:187)
-    G A $0001 _wyz_load_music (section code_compiler) (file main.c:194)
-    G A $000F _wyz_stop_music (section code_compiler) (file main.c:208)
-    G A $0015 _wyz_play (section code_compiler) (file main.c:218)
-    G A $0019 _load_level (section code_compiler) (file main.c:227)
-    G A $008E _clear_screen (section code_compiler) (file main.c:297)
-    G A $0092 _load_background (section code_compiler) (file main.c:306)
-    G A $0096 _DrawSpriteList (section code_compiler) (file main.c:315)
-    G A $00B5 _NewShoot (section code_compiler) (file main.c:339)
-    G A $012C _NewEnemy (section code_compiler) (file main.c:421)
-    G A $024A _initilizeVariables (section code_compiler) (file main.c:618)
-    G A $030B _gamesetup (section code_compiler) (file main.c:739)
-    G A $031D _endlessLoop (section code_compiler) (file main.c:754)
-    G A $0322 _gameloop (section code_compiler) (file main.c:765)
-    G A $0346 _main (section code_compiler) (file main.c:792)
+    G A $0026 _animatePlayer (section data_compiler) (file main.c:103)
+    G A $0027 _animateDelta (section data_compiler) (file main.c:107)
+    G A $0028 _titsUP (section data_compiler) (file main.c:111)
+    G A $0029 _playerCollision (section data_compiler) (file main.c:115)
+    G A $002A _CurLevel_XLength (section data_compiler) (file main.c:119)
+    G A $002B _CurLevel_NTiles (section data_compiler) (file main.c:123)
+    G A $002C _keys (section data_compiler) (file main.c:127)
+    G A $0036 _joy (section data_compiler) (file main.c:135)
+    G A $0037 _new_enemy (section data_compiler) (file main.c:139)
+    G A $0038 _i (section data_compiler) (file main.c:143)
+    G A $0039 _j (section data_compiler) (file main.c:147)
+    G A $003A _dummy_b (section data_compiler) (file main.c:151)
+    G A $003B _dummy_i (section data_compiler) (file main.c:155)
+    G A $003D _dummy_i2 (section data_compiler) (file main.c:159)
+    G A $003F _isrdummy (section data_compiler) (file main.c:163)
+    G A $0040 _length_tiles (section data_compiler) (file main.c:167)
+    G A $0042 _length_map (section data_compiler) (file main.c:171)
+    G A $0044 _shoot_xchar (section data_compiler) (file main.c:175)
+    G A $0045 _shoot_ychar (section data_compiler) (file main.c:179)
+    G A $0046 _enemy_xchar (section data_compiler) (file main.c:183)
+    G A $0047 _enemy_ychar (section data_compiler) (file main.c:187)
+    G A $0048 _diff_x (section data_compiler) (file main.c:191)
+    G A $004A _diff_y (section data_compiler) (file main.c:195)
+    G A $004C _level_pointer (section data_compiler) (file main.c:199)
+    G A $004E _int_pointer (section data_compiler) (file main.c:203)
+    G A $0001 _wyz_load_music (section code_compiler) (file main.c:210)
+    G A $000F _wyz_stop_music (section code_compiler) (file main.c:224)
+    G A $0015 _wyz_play (section code_compiler) (file main.c:234)
+    G A $0019 _load_level (section code_compiler) (file main.c:243)
+    G A $008E _clear_screen (section code_compiler) (file main.c:313)
+    G A $0092 _load_background (section code_compiler) (file main.c:322)
+    G A $0096 _drawFrontofShip (section code_compiler) (file main.c:331)
+    G A $00A0 _drawBackofShip (section code_compiler) (file main.c:343)
+    G A $00AC _drawplayer11 (section code_compiler) (file main.c:356)
+    G A $00BF _drawplayer12 (section code_compiler) (file main.c:374)
+    G A $00D2 _drawplayer13 (section code_compiler) (file main.c:392)
+    G A $00E5 _drawplayer14 (section code_compiler) (file main.c:410)
+    G A $00F8 _drawplayer15 (section code_compiler) (file main.c:428)
+    G A $010B _DrawSpriteList (section code_compiler) (file main.c:446)
+    G A $018E _NewShoot (section code_compiler) (file main.c:519)
+    G A $0205 _NewEnemy (section code_compiler) (file main.c:601)
+    G A $0323 _initilizeVariables (section code_compiler) (file main.c:798)
+    G A $03E9 _gamesetup (section code_compiler) (file main.c:921)
+    G A $03FB _endlessLoop (section code_compiler) (file main.c:936)
+    G A $0400 _gameloop (section code_compiler) (file main.c:947)
+    G A $0424 _main (section code_compiler) (file main.c:974)
     G A $0000 _xyzzy (section code_user) (file ramlow.asm:43)
     G A $0001 _copytoAltScreen (section code_user) (file ramlow.asm:61)
     G A $000D _setnormalRAMstate (section code_user) (file ramlow.asm:72)
@@ -81,20 +92,23 @@ Object  file objects.o at $0000: Z80RMF12
     G A $01B6 _clean_screen (section code_user) (file graphicutils.asm:56)
     G A $01FC _load_backgroundASM (section code_user) (file graphicutils.asm:106)
     G A $0228 _DrawSpriteList1 (section code_user) (file graphicutils.asm:151)
-    G A $0247 _border_Switch (section code_user) (file graphicutils.asm:176)
-    G A $024A _current_screen (section code_user) (file graphicutils.asm:188)
-    G A $024B _DrawGameMap (section code_user) (file graphicutils.asm:193)
-    G A $0279 _screenLoop (section code_user) (file graphicutils.asm:279)
+    G A $0247 _border_Switch (section code_user) (file graphicutils.asm:179)
+    G A $024A _current_screen (section code_user) (file graphicutils.asm:191)
+    G A $024B _DrawGameMap (section code_user) (file graphicutils.asm:196)
+    G A $0279 _screenLoop (section code_user) (file graphicutils.asm:282)
     G A $02A5 _Interrupt_setup (section code_user) (file IM2utils.asm:6)
     G A $02AD _SET_IM2 (section code_user) (file IM2utils.asm:22)
     G A $02B5 _IM2_Vector_set (section code_user) (file IM2utils.asm:38)
     G A $0000 _RAM_marker_LOW (section LOW_CODE_END) (file ramlow.asm:270)
   Externs:
     U         l_gint
+    U         l_neg
     U         l_lneg
     U         l_mult
-    U         _DrawSprite
+    U         DrawSprite_Ship
     U         _Set_screen_flip_flag
+    U         zx_border
+    U         _InitSprCacheList
     U         _INICIO
     U         _STOP_PLAYER
     U         _CARGA_CANCION
@@ -102,5 +116,6 @@ Object  file objects.o at $0000: Z80RMF12
     U         _MAP_START
     U         _DrawMap
     U         _background
+    U         _DrawSprite
     U         _IM2_Vector
     U         _IM2ISR

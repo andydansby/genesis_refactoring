@@ -103,8 +103,8 @@ void initilizeVariables(void)
 	//set game start variables
 	//including lives, energy etc
 	//where we set up score, lives, energy etc.
-	ship_x = 0;
-	ship_y = 0;
+	ship_x = 20;
+	ship_y = 50;
 	map_xpos = 0;
 	map_displacement = 0;
 	
@@ -119,6 +119,8 @@ void initilizeVariables(void)
 	
 
 	level_pointer = 0;
+	
+	animatePlayer = 0;
 	
 	
 	for (i = 0; i < MAX_ENEMIES; i++);
@@ -228,20 +230,22 @@ void gameloop (void)
 		//ScreenSwitchFlipFlagNO ();//$6585
 		
 		
-		//_screenLoop
-		screenLoop();
+		screenLoop();	//found in graphicutils.asm
 		
 		//joystick controls go here
 		
 		
 		
 		// Move map to new position
-		/*map_displacement++;
+		map_displacement++;
 		if (map_displacement > 0xb)
 		{
 			map_displacement = 0;
 			map_xpos++;
-		}*/
+		}
+		
+		
+		
 		
 		//with im2 off, uncomment below
 		//ScreenSwitchFlipFlagYES ();//$658C
@@ -308,7 +312,7 @@ __endasm
 	////mainMenuSelection();
 	
 	
-	//InitSprCacheList();
+	InitSprCacheList();
 	//spriteCache();	//call $654B
 	//_DrawMap routine OK here
 	
